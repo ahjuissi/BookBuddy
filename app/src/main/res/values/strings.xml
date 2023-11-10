@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">BookBuddy</string>
-</resources>
+
+    <string-array name="city_options">
+        <item>Poznań</item>
+        <item>Łódź</item>
+        <item>Koło</item>
+    </string-array>
+    <string-array name="role_options">
+        <item>User</item>
+        <item>Admin</item>
+    </string-array>
+    </resources>

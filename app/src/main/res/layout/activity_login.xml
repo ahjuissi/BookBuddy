@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="#441f"
+    android:background="#aabbff"
     android:padding="16dp"
     tools:context=".MainActivity">
 
@@ -17,6 +17,7 @@
         android:layout_marginBottom="7dp"
         android:background="#444444"
         android:orientation="vertical"
+        android:gravity="center"
         android:padding="20dp">
 
 
@@ -26,7 +27,7 @@
             android:gravity="center"
             android:padding="50dp"
             android:text="Login"
-            android:textColor="#6dffbf"
+            android:textColor="#6bfff7"
             android:textSize="25sp" />
 
 
@@ -35,10 +36,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Mail"
-            android:paddingBottom="20dp"
+            android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="#6bfff7"
-            android:textColorHint="#52afaa" />
+            android:background="#aabbff"
+            android:textColor="#000000"
+            android:textColorHint="#000000" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="10dp" />
 
         <EditText
             android:id="@+id/et_password"
@@ -46,10 +52,11 @@
             android:layout_height="wrap_content"
             android:hint="Password"
             android:inputType="textPassword"
-            android:paddingBottom="20dp"
+            android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="#6bfff7"
-            android:textColorHint="#52afaa" />
+            android:background="#aabbff"
+            android:textColor="#000000"
+            android:textColorHint="#000000" />
 
         <View
             android:layout_width="0dp"
@@ -63,7 +70,8 @@
             android:text="Submit"
             android:textAllCaps="false"
             android:padding="10dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:backgroundTint="#566395"/>
 
         <TextView
             android:id="@+id/signupRedirectText"

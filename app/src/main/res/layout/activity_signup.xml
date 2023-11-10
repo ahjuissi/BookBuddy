@@ -12,21 +12,61 @@
         android:id="@+id/ll_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="7dp"
         android:layout_marginTop="7dp"
         android:background="#444444"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:gravity="center"
+        android:padding="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="50dp"
+            android:padding="20dp"
             android:text="Sign up"
             android:textColor="#6dffbf"
-            android:textSize="25sp" />
+            android:textSize="25sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#444444"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/et_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Name"
+            android:padding="12dp"
+            android:textAlignment="center"
+            android:background="#aabbff"
+            android:textColor="#000000"
+            android:textColorHint="#000000" />
+        <View
+            android:layout_width="8dp"
+            android:layout_height="0dp" />
+
+        <EditText
+            android:id="@+id/et_user_surname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Surname"
+            android:padding="12dp"
+            android:textAlignment="center"
+            android:background="#aabbff"
+            android:textColor="#000000"
+            android:textColorHint="#000000" />
+
+    </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="8dp" />
 
 
         <EditText
@@ -34,32 +74,83 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Mail"
-            android:paddingBottom="20dp"
+            android:padding="12dp"
             android:textAlignment="center"
-            android:textColor="#6bfff7"
-            android:textColorHint="#52afaa" />
+            android:background="#aabbff"
+            android:textColor="#000000"
+            android:textColorHint="#000000" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="8dp" />
 
         <EditText
             android:id="@+id/et_password_first"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:inputType="textPassword"
-            android:paddingBottom="20dp"
+            android:padding="12dp"
             android:textAlignment="center"
-            android:textColor="#6bfff7"
-            android:textColorHint="#52afaa" />
+            android:background="#aabbff"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            android:inputType="textPassword" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="8dp" />
 
         <EditText
             android:id="@+id/et_password_second"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Repeat password"
-            android:inputType="textPassword"
-            android:paddingBottom="20dp"
+            android:padding="12dp"
             android:textAlignment="center"
-            android:textColor="#6bfff7"
-            android:textColorHint="#52afaa" />
+            android:background="#aabbff"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            android:inputType="textPassword"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#444444"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Spinner
+                android:id="@+id/spinner_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="13dp"
+                android:textAlignment="center"
+                android:background="#aabbff"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                android:popupBackground="#aabbff"
+                android:entries="@array/city_options"/>
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="0dp" />
+
+            <Spinner
+            android:id="@+id/spinner_role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="13dp"
+            android:textAlignment="center"
+            android:background="#aabbff"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            android:popupBackground="#aabbff"
+            android:entries="@array/role_options"/>
+         </LinearLayout>
 
         <View
             android:layout_width="0dp"
@@ -80,7 +171,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="8dp"
+            android:padding="10dp"
             android:text="Already a user? Sign in."
             android:layout_marginTop="8dp"
             android:textSize="18sp"
