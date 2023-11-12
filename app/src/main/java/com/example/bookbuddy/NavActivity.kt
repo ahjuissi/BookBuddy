@@ -8,28 +8,28 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class NavActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val homeFragment=HomeFragment()
-        val voteFragment=VoteFragment()
-        val searchFragment=SearchFragment()
-        val profileFragment=ProfileFragment()
-
-        setCurrentFragment(homeFragment)
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigationView.setOnItemSelectedListener { item->
-            when(item.itemId){
-                R.id.home->setCurrentFragment(homeFragment)
-                R.id.vote->setCurrentFragment(voteFragment)
-                R.id.search->setCurrentFragment(searchFragment)
-                R.id.profile->setCurrentFragment(profileFragment)
-            }
-            true
-        }
+//        setContentView(R.layout.activity_main)
+//
+//        val homeFragment=HomeFragment()
+//        val voteFragment=VoteFragment()
+//        val searchFragment=SearchFragment()
+//        val profileFragment=ProfileFragment()
+//
+//        setCurrentFragment(homeFragment)
+//        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+//        bottomNavigationView.setOnItemSelectedListener { item->
+//            when(item.itemId){
+//                R.id.home->setCurrentFragment(homeFragment)
+//                R.id.vote->setCurrentFragment(voteFragment)
+//                R.id.search->setCurrentFragment(searchFragment)
+//                R.id.profile->setCurrentFragment(profileFragment)
+//            }
+//            true
+//        }
     }
-    private fun setCurrentFragment(fragment:Fragment)=
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment,fragment)
-            commit()
-    }
+//    private fun setCurrentFragment(fragment:Fragment)=
+//        supportFragmentManager.beginTransaction().apply {
+//            replace(R.id.flFragment,fragment)
+//            commit()
+//    }
 }

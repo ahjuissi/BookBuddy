@@ -20,20 +20,20 @@ class SignupActivity : AppCompatActivity() {
         bindingSignup = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(bindingSignup.root)
 
-        bindingSignup.btnSignupSubmit.setOnClickListener {
-        val name = bindingSignup.etUserName.text.toString()
-        val surname = bindingSignup.etUserSurname.text.toString()
-        val mail = bindingSignup.etUserMail.text.toString()
-        val password = bindingSignup.etUserMail.text.toString()
-        val password2 = bindingSignup.etUserMail.text.toString()
-        val city = bindingSignup.spinnerCity.toString()
-        val role = bindingSignup.spinnerRole.toString()
-            val connection=connection()
-        }
-        bindingSignup.loginRedirectText.setOnClickListener {
-            val signupIntent = Intent(this, MainActivity::class.java)
-            startActivity(signupIntent)
-        }
+//        bindingSignup.btnSignupSubmit.setOnClickListener {
+//        val name = bindingSignup.etUserName.text.toString()
+//        val surname = bindingSignup.etUserSurname.text.toString()
+//        val mail = bindingSignup.etUserMail.text.toString()
+//        val password = bindingSignup.etUserMail.text.toString()
+//        val password2 = bindingSignup.etUserMail.text.toString()
+//        val city = bindingSignup.spinnerCity.toString()
+//        val role = bindingSignup.spinnerRole.toString()
+//            val connection=connection()
+//        }
+//        bindingSignup.loginRedirectText.setOnClickListener {
+//            val signupIntent = Intent(this, MainActivity::class.java)
+//            startActivity(signupIntent)
+//        }
     }
 }
 
