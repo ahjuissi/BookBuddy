@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.bookbuddy.databinding.ActivitySignupBinding
 import java.sql.Connection
-import com.example.bookbuddy.connection
+//import com.example.bookbuddy.connection
 
 
 

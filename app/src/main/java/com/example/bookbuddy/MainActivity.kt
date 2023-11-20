@@ -17,34 +17,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bindingLogin: ActivityLoginBinding
 
-    private lateinit var bindingMain: ActivityMainBinding
 
-    private fun setCurrentFragment(fragment: Fragment)=
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment,fragment)
-            commit()
-        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        bindingMain = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(bindingMain.root)
-        val homeFragment=HomeFragment()
-        val voteFragment=VoteFragment()
-        val searchFragment=SearchFragment()
-        val profileFragment=ProfileFragment()
+        //test NavBar
+        val NavIntent = Intent(this, NavActivity::class.java)
+        startActivity(NavIntent)
 
-        setCurrentFragment(homeFragment)
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigationView.setOnItemSelectedListener { item->
-            when(item.itemId){
-                R.id.home->setCurrentFragment(homeFragment)
-                R.id.vote->setCurrentFragment(voteFragment)
-                R.id.search->setCurrentFragment(searchFragment)
-                R.id.profile->setCurrentFragment(profileFragment)
-            }
-            true
-        }
+
 
 //        bindingLogin = ActivityLoginBinding.inflate(layoutInflater)
 //        setContentView(bindingLogin.root)
