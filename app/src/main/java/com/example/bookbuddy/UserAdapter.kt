@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import android.util.Log
+import android.widget.ExpandableListView.OnChildClickListener
+import androidx.appcompat.view.menu.MenuView.ItemView
 
 class UserAdapter(private val mList: MutableList<UserViewModel>) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 

@@ -9,6 +9,19 @@ import android.view.ViewGroup
 import com.example.bookbuddy.databinding.FragmentProfileBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bookbuddy.databinding.ActivityMainBinding
+import android.annotation.SuppressLint
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.widget.CalendarView
+import android.widget.TextView
+import android.widget.CalendarView.OnDateChangeListener
+import android.icu.util.Calendar
+import android.os.Build
+import android.text.Editable
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,34 +33,58 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var bindingProfile: FragmentProfileBinding
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: UserAdapter
 
 //    private var param1: String? = null
 //    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindingProfile = FragmentProfileBinding.inflate(layoutInflater)
+//        bindingProfile = FragmentProfileBinding.inflate(layoutInflater)
+//        recyclerView = bindingProfile.recyclerView
+//        val templist: List<UserViewModel> = emptyList()
+//        val data: MutableList<UserViewModel> = templist.toMutableList()
+//        adapter = UserAdapter(data)
+//        recyclerView.layoutManager = LinearLayoutManager(requireContext()) // Use requireContext() for the context
+//        recyclerView.adapter = adapter
+//
+//        println("1")
+//        //recyclerview.layoutManager = LinearLayoutManager(this)
+//        for (i in 0 .. 5){
+//            data.add(UserViewModel("a",i))
+//            Log.w("FetchLog", "tr")
+//        }
+//        adapter.notifyDataSetChanged()
+//
+//
+////        arguments?.let {
+////            param1 = it.getString(ARG_PARAM1)
+////            param2 = it.getString(ARG_PARAM2)
+////        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindingProfile = FragmentProfileBinding.bind(view)
+        recyclerView = bindingProfile.recyclerView
 
         val templist: List<UserViewModel> = emptyList()
         val data: MutableList<UserViewModel> = templist.toMutableList()
-        val recyclerview = bindingProfile.recyclerView
+        adapter = UserAdapter(data)
 
-        println("1")
-        //recyclerview.layoutManager = LinearLayoutManager(this)
-        for (i in 0 .. 5){
-            data.add(UserViewModel("a",i))
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = adapter
+
+        for (i in 0 until 5) {
+            data.add(UserViewModel("a", i))
             Log.w("FetchLog", "tr")
         }
-        val adapter = UserAdapter(data)
-        recyclerview.adapter = adapter
-
-
-//        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-//        }
+        adapter.notifyDataSetChanged()
     }
 
     override fun onCreateView(

@@ -9,8 +9,6 @@ import com.example.bookbuddy.databinding.ActivityLoginBinding
 
 // import kotlinx.android.synthetic.main.activity_main.*
 
-
-
 import com.example.bookbuddy.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
