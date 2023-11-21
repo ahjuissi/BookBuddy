@@ -17,24 +17,21 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bindingLogin: ActivityLoginBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //test NavBar
-        val NavIntent = Intent(this, NavActivity::class.java)
-        startActivity(NavIntent)
+        bindingLogin = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(bindingLogin.root)
+        
+        bindingLogin.signupRedirectText.setOnClickListener {
+            val signupIntent = Intent(this, SignupActivity::class.java)
+            startActivity(signupIntent)
+        }
+        bindingLogin.btnLoginSubmit.setOnClickListener {
+            val NavIntent = Intent(this, NavActivity::class.java)
+            startActivity(NavIntent)
+        }
 
 
-
-//        bindingLogin = ActivityLoginBinding.inflate(layoutInflater)
-//        setContentView(bindingLogin.root)
-
-//        setContentView(R.layout.activity_login)
-//        bindingLogin.btnLoginSubmit.setOnClickListener {}
-//        bindingLogin.signupRedirectText.setOnClickListener {
-//            val signupIntent = Intent(this, SignupActivity::class.java)
-//            startActivity(signupIntent)
-//        }
     }
 }
