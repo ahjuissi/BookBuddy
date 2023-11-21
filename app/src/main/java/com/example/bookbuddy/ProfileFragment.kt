@@ -44,23 +44,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        bindingProfile = FragmentProfileBinding.inflate(layoutInflater)
-//        recyclerView = bindingProfile.recyclerView
-//        val templist: List<UserViewModel> = emptyList()
-//        val data: MutableList<UserViewModel> = templist.toMutableList()
-//        adapter = UserAdapter(data)
-//        recyclerView.layoutManager = LinearLayoutManager(requireContext()) // Use requireContext() for the context
-//        recyclerView.adapter = adapter
-//
-//        println("1")
-//        //recyclerview.layoutManager = LinearLayoutManager(this)
-//        for (i in 0 .. 5){
-//            data.add(UserViewModel("a",i))
-//            Log.w("FetchLog", "tr")
-//        }
-//        adapter.notifyDataSetChanged()
-//
-//
 ////        arguments?.let {
 ////            param1 = it.getString(ARG_PARAM1)
 ////            param2 = it.getString(ARG_PARAM2)
