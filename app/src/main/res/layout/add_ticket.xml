@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:background="#C9CFDDFA"
+    android:layoutDirection="rtl"
+    android:textAlignment="center"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:layout_margin="10dp"
+    android:padding="10dp">
+
+        <!-- Górne pole tekstowe do wprowadzania treści posta -->
+    <EditText
+        android:id="@+id/editTextPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:hint="Co słychać?"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:background="#aabbff"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:padding="5dp"
+            tools:ignore="RtlHardcoded">
+    <ImageView
+        android:id="@+id/imageViewAddPhoto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_link_btt_foreground"/>
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="0dp"/>
+
+    <!-- Ikona do dodawania filmu -->
+    <ImageView
+        android:id="@+id/imageViewAddVideo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_send_btt_foreground"/>
+</LinearLayout>
+</LinearLayout>
