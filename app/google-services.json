@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "599923344376",
+    "firebase_url": "https://bookbuddy-7bc97-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "bookbuddy-7bc97",
+    "storage_bucket": "bookbuddy-7bc97.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599923344376:android:5f95893fd2ed48087bcc0d",
+        "android_client_info": {
+          "package_name": "com.example.bookbuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlPdOtYRlKNoZFHK7FmoBNgYPWsCFDrC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
