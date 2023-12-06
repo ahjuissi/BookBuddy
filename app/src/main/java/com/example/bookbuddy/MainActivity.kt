@@ -3,9 +3,15 @@ package com.example.bookbuddy
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.service.autofill.UserData
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.bookbuddy.databinding.ActivityLoginBinding
 
@@ -20,60 +26,53 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.protobuf.Value
+import com.shashank.sony.fancytoastlib.FancyToast
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var bindingLogin: ActivityLoginBinding
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val firebase : DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
+        val firebase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
+        setContentView(R.layout.activity_loading)
 
-        //test NavBar
-       // val NavIntent = Intent(this, NavActivity::class.java)
-        //startActivity(NavIntent)
+        val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        val textView = findViewById<TextView>(R.id.textView)
 
+        progressBar.max = 100
+        progressBar.scaleY=3F
+        val anim=ProgressBarAnimation(
+            this,progressBar,textView,0F,100F
 
+        )
+        anim.duration=8000
+        progressBar.animation=anim
 
-
-        bindingLogin = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(bindingLogin.root)
-
-    //    setContentView(R.layout.activity_login)
-        bindingLogin.btnLoginSubmit.setOnClickListener {
-            val email = bindingLogin .etUserName.text.toString() //mail
-            val password = bindingLogin.etPassword.text.toString() // haslo
-            firebase.orderByChild("userEmail").equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if(snapshot.exists()){
-                        for(userSnapshot in snapshot.children){
-                            val userData= userSnapshot.getValue(UserModel ::class.java)
-
-                            if(userData != null && userData.userPassword == password){
-                                Toast.makeText(this@MainActivity,"Login Successful",Toast.LENGTH_LONG).show()
-                                startActivity(Intent(this@MainActivity, NavActivity::class.java))
-                                finish()
-                            }
-                        }
-                    }
-                    Toast.makeText(this@MainActivity, "Login Failed", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Toast.makeText(this@MainActivity,"Database Error: ${databaseError.message}",Toast.LENGTH_SHORT).show()
-                }
-
-            })
-
-
-        }
-        bindingLogin.signupRedirectText.setOnClickListener {
-            val signupIntent = Intent(this, SignupActivity::class.java)
-            startActivity(signupIntent)
-        }
     }
 
+
+    class ProgressBarAnimation (
+        var context: Context,
+        var progressBar:ProgressBar,
+        var textView:TextView,
+        var from:Float,
+        var to:Float
+    ) : Animation()
+
+    {
+
+        override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+            super.applyTransformation(interpolatedTime, t)
+            val value = from + (to - from) * interpolatedTime
+            progressBar.progress=value.toInt()
+            textView.text="Loding ${value.toInt()} %"
+            if (value ==to)
+            {
+                context.startActivity(Intent(context, LoginActivity::class.java))
+            }
+        }
+
+
+    }
 }

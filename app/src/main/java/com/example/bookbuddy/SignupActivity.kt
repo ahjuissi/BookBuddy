@@ -35,21 +35,21 @@ class SignupActivity : AppCompatActivity() {
         val role = bindingSignup.spinnerRole.toString()
             if(name.isEmpty() || surname.isEmpty() || mail.isEmpty() || password.isEmpty())
             {
-                Toast.makeText(this, "Please insert all the data", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please insert all the data", Toast.LENGTH_SHORT).show()
             }else
             {
                 if(password != password2)
                 {
-                    Toast.makeText(this, "Your passwords must be the same", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Your passwords must be the same", Toast.LENGTH_SHORT).show()
                 }else
                 {
                     val userId = firebase.push().key!!
 
                     val user= UserModel(userId,name,surname,mail,password,1,0)
                     firebase.child(userId).setValue(user).addOnCompleteListener {
-                        Toast.makeText(this, "Data inserted good", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Successfull register", Toast.LENGTH_SHORT).show()
                     }.addOnFailureListener{err->
-                        Toast.makeText(this, "Data insert fail, ${err.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Data insert fail, ${err.message}", Toast.LENGTH_SHORT).show()
 
                     }
                 }
