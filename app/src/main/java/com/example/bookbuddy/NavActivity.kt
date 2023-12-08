@@ -15,7 +15,8 @@ class NavActivity : AppCompatActivity() {
         val homeFragment=HomeFragment()
         val voteFragment=VoteFragment()
         val searchFragment=SearchFragment()
-        val profileFragment=ProfileFragment()
+        val adminFragment=AdminFragment()
+//        val profileFragment=ProfileFragment()
 
         setCurrentFragment(homeFragment)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
@@ -24,7 +25,8 @@ class NavActivity : AppCompatActivity() {
                 R.id.home->setCurrentFragment(homeFragment)
                 R.id.vote->setCurrentFragment(voteFragment)
                 R.id.search->setCurrentFragment(searchFragment)
-                R.id.profile->setCurrentFragment(profileFragment)
+                R.id.profile->setCurrentFragment(adminFragment)
+//                R.id.profile->setCurrentFragment(profileFragment)
             }
             true
         }
