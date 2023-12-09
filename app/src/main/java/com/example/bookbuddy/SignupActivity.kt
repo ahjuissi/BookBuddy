@@ -70,7 +70,8 @@ class SignupActivity : AppCompatActivity() {
                                     "name" to name,
                                     "surname" to surname,
                                     "city" to city,
-                                    "role" to role
+                                    "role" to role,
+                                    "active" to 0
 
                                 )
                                 db.collection("userInfo").document().set(userMap)
