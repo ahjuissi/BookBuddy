@@ -17,40 +17,49 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
     private lateinit var bindingAdmin: FragmentAdminBinding
     private lateinit var bindingAdminAdd: FragmentAdminAddBinding
 
+    private var adminView: View? = null
+    private var adminAddView: View? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        println("onCreate")
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        println("onViewCreated")
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        bindingAdmin = FragmentAdminBinding.inflate(layoutInflater)
-        return bindingAdmin.root
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        bindingAdmin = FragmentAdminBinding.inflate(layoutInflater)
+        bindingAdmin = FragmentAdminBinding.inflate(inflater, container, false)
+        bindingAdminAdd = FragmentAdminAddBinding.inflate(inflater, container, false)
+
+        adminView = bindingAdmin.root
+        adminAddView = bindingAdminAdd.root
+
         bindingAdmin.idImgBtnAddUser.setOnClickListener {
-            // Kliknięto przycisk w fragmencie FragmentAdmin
             println("4")
             showAddView()
         }
-    }
-    private fun showAddView() {
-        bindingAdmin = FragmentAdminBinding.inflate(layoutInflater)
-        bindingAdminAdd = FragmentAdminAddBinding.inflate(layoutInflater)
-        bindingAdmin.root.removeAllViews() // Usuń istniejące widoki z widoku "admin"
-        bindingAdmin.root.addView(bindingAdminAdd.root) // Dodaj widok "add"
-
-        // Dodaj obsługę kliknięcia przycisku "Wróć do admin" w widoku "add"
         bindingAdminAdd.backBtn.setOnClickListener {
-            // Zmiana widoku na "profil admin" bez zmiany fragmentu
-            bindingAdmin.root.removeAllViews() // Usuń istniejące widoki z widoku "add"
-            bindingAdmin.root.addView(bindingAdmin.root) // Dodaj widok "admin" z powrotem
+            showAdminView()
         }
+        return adminView
     }
 
+    private fun showAddView() {
+        val parent = adminView?.parent as? ViewGroup
+        parent?.removeView(adminView)
+        parent?.addView(adminAddView)
+    }
+
+    private fun showAdminView() {
+        val parent = adminAddView?.parent as? ViewGroup
+        parent?.removeView(adminAddView)
+        parent?.addView(adminView)
+    }
 
 
 }
