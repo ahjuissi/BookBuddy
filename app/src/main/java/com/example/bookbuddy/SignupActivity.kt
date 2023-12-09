@@ -82,6 +82,7 @@ class SignupActivity : AppCompatActivity() {
                                 "userId" to userId,
                                 "name" to name,
                                 "surname" to surname,
+                                "mail" to mail,
                                 "city" to city,
                                 "role" to role,
                                 "active" to 0
