@@ -6,21 +6,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bookbuddy.databinding.ActivityLoginBinding
-import com.example.bookbuddy.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
-import com.google.firebase.database.ValueEventListener
-import com.google.protobuf.Value
+import com.google.firebase.auth.FirebaseAuth
 import com.shashank.sony.fancytoastlib.FancyToast
 
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var bindingLogin: ActivityLoginBinding
+    private lateinit var firebaseAuth:FirebaseAuth
 
 
 
@@ -28,8 +21,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bindingLogin = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(bindingLogin.root)
-        val firebase : DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
-
+        firebaseAuth=FirebaseAuth.getInstance()
         //test NavBar
         // val NavIntent = Intent(this, NavActivity::class.java)
         //startActivity(NavIntent)
@@ -41,30 +33,44 @@ class LoginActivity : AppCompatActivity() {
 
         //    setContentView(R.layout.activity_login)
         bindingLogin.btnLoginSubmit.setOnClickListener {
-            val email = bindingLogin .etUserName.text.toString() //mail
+            val email = bindingLogin.etUserName.text.toString() //mail
             val password = bindingLogin.etPassword.text.toString() // haslo
-            firebase.orderByChild("userEmail").equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if(snapshot.exists()){
-                        for(userSnapshot in snapshot.children){
-                            val userData= userSnapshot.getValue(UserModel ::class.java)
-
-                            if(userData != null && userData.userPassword == password){
-                                FancyToast.makeText(this@LoginActivity,"Login Successful",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show()
-                                startActivity(Intent(this@LoginActivity, NavActivity::class.java))
-                                finish()
-                            }
-                        }
+            if(email.isNotEmpty() && password.isNotEmpty())
+            {
+                firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
+                    if(it.isSuccessful)
+                    {
+                        FancyToast.makeText(
+                            this@LoginActivity,
+                            "Login Successful",
+                            FancyToast.LENGTH_SHORT,
+                            FancyToast.SUCCESS,
+                            false
+                        ).show()
+                        val intent=Intent(this,NavActivity::class.java)
+                        startActivity(intent)
                     }
-                    FancyToast.makeText(this@LoginActivity, "Login Failed", FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show()
-                }
+                    else{
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    FancyToast.makeText(this@LoginActivity,"Database Error: ${databaseError.message}",
-                        Toast.LENGTH_SHORT).show()
+                        FancyToast.makeText(
+                            this@LoginActivity,
+                            it.exception.toString(),
+                            FancyToast.LENGTH_LONG,
+                            FancyToast.ERROR,
+                            false
+                        ).show()
+                    }
                 }
+            }else{
+                FancyToast.makeText(
+                    this@LoginActivity,
+                    "Please insert all the data",
+                    FancyToast.LENGTH_SHORT,
+                    FancyToast.ERROR,
+                    false
+                ).show()
+            }
 
-            })
 
 
         }
