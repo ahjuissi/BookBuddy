@@ -26,11 +26,7 @@ class LoginActivity : AppCompatActivity() {
         // val NavIntent = Intent(this, NavActivity::class.java)
         //startActivity(NavIntent)
 
-
-
-
-
-
+        
         //    setContentView(R.layout.activity_login)
         bindingLogin.btnLoginSubmit.setOnClickListener {
             val email = bindingLogin.etUserName.text.toString() //mail
