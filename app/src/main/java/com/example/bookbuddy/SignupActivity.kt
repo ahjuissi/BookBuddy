@@ -47,7 +47,7 @@ class SignupActivity : AppCompatActivity() {
                     "Please insert all the data",
                     FancyToast.LENGTH_SHORT,
                     FancyToast.ERROR,
-                    false
+                    true
                 ).show()
             } else if (!isEmailValid(mail)) {
                 FancyToast.makeText(
@@ -55,7 +55,7 @@ class SignupActivity : AppCompatActivity() {
                     "Please enter a valid email address",
                     FancyToast.LENGTH_SHORT,
                     FancyToast.ERROR,
-                    false
+                    true
                 ).show()
             } else if (password.length < 6) {
                 FancyToast.makeText(
@@ -63,7 +63,7 @@ class SignupActivity : AppCompatActivity() {
                     "Your password must be at least 6 characters long",
                     FancyToast.LENGTH_SHORT,
                     FancyToast.ERROR,
-                    false
+                    true
                 ).show()
             } else if (password != password2) {
                 FancyToast.makeText(
@@ -71,12 +71,14 @@ class SignupActivity : AppCompatActivity() {
                     "Your passwords must match",
                     FancyToast.LENGTH_SHORT,
                     FancyToast.ERROR,
-                    false
+                    true
                 ).show()
             } else {
                 firebaseAuth.createUserWithEmailAndPassword(mail, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            firebaseAuth.currentUser?.sendEmailVerification()?.addOnCompleteListener{task ->
+                                if(task.isSuccessful){
                             val userId = firebaseAuth.currentUser?.uid
                             val userMap = hashMapOf(
                                 "userId" to userId,
@@ -85,15 +87,26 @@ class SignupActivity : AppCompatActivity() {
                                 "mail" to mail,
                                 "city" to city,
                                 "role" to role,
-                                "active" to 0
                             )
-                            db.collection("userInfo").document().set(userMap)
+                                    if (userId != null) {
+                                        db.collection("userInfo").document(userId).set(userMap)
+                                    }
                             val intent = Intent(this, LoginActivity::class.java)
                             startActivity(intent)
+
+                                }
+                            }
+                            FancyToast.makeText(
+                                this,
+                                "Please click link on your email to verify your account",
+                                FancyToast.LENGTH_LONG,
+                                FancyToast.CONFUSING,
+                                false
+                            ).show()
                         } else {
                             FancyToast.makeText(
                                 this,
-                                task.exception.toString(),
+                                "Error while creating user, try again",
                                 FancyToast.LENGTH_SHORT,
                                 FancyToast.ERROR,
                                 false
@@ -101,8 +114,6 @@ class SignupActivity : AppCompatActivity() {
                         }
                     }
             }
-
-
         }
         bindingSignup.loginRedirectText.setOnClickListener {
             val loginIntent = Intent(this, LoginActivity::class.java)

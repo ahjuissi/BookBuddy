@@ -27,8 +27,6 @@ import java.time.format.DateTimeFormatter
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var bindingProfile: FragmentProfileBinding
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: UserAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,20 +38,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindingProfile = FragmentProfileBinding.bind(view)
-        recyclerView = bindingProfile.recyclerView
-
-        val templist: List<UserViewModel> = emptyList()
-        val data: MutableList<UserViewModel> = templist.toMutableList()
-        adapter = UserAdapter(data)
-
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = adapter
-
-        for (i in 0 until 5) {
-            data.add(UserViewModel("a", i))
-            Log.w("FetchLog", "tr")
-        }
-        adapter.notifyDataSetChanged()
     }
 
     override fun onCreateView(

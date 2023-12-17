@@ -31,13 +31,10 @@ class UserAdapter(private val mList: MutableList<UserViewModel>) : RecyclerView.
             mList.removeAt(position)
             notifyDataSetChanged()
         }
-        holder.deleteButton.setOnClickListener{
-
-        }
 
         // sets the text to the textview from our itemHolder class
-        holder.nameView.text = UserViewModel.name.toString()
-
+        holder.nameView.text = UserViewModel.name
+        holder.mailView.text = UserViewModel.mail
     }
 
     // return the number of the items in the list
@@ -48,8 +45,8 @@ class UserAdapter(private val mList: MutableList<UserViewModel>) : RecyclerView.
     // Holds the views for adding it to image and text
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         val nameView: TextView = itemView.findViewById(R.id.usernameView)
+        val mailView: TextView = itemView.findViewById(R.id.usermailView)
         val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
-        val addButton: Button = itemView.findViewById(R.id.addButton)
     }
 
 }
