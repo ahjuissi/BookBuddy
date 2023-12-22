@@ -12,6 +12,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -21,7 +22,7 @@ import com.example.bookbuddy.searchView.BookRVModal
 
 //TODO: poprawić bo nie działa, activity pewnie trzeba, test
 
-class SearchFragment : Fragment(R.layout.fragment_search) {
+class SearchFragment : Fragment(R.layout.fragment_search){
 //    private lateinit var bindingSearch: FragmentSearchBinding
 
     lateinit var mRequestQueue: RequestQueue
@@ -60,6 +61,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         return rootView
     }
     private fun getBooksData(searchQuery: String) {
+
         // creating a new array list.
         booksList = ArrayList()
         // below line is use to initialize

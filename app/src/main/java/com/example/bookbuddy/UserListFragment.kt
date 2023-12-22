@@ -1,6 +1,7 @@
 package com.example.bookbuddy
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,7 +11,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookbuddy.databinding.FragmentUserListBinding
-
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 
 class UserListFragment : Fragment() {
@@ -19,8 +23,6 @@ class UserListFragment : Fragment() {
     private lateinit var adapter: UserAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -34,6 +36,7 @@ class UserListFragment : Fragment() {
             setCurrentFragment(adminFragment)
 
         }
+
         userList()
         // Inflate the layout for this fragment
         return bindingUserList.root
@@ -43,28 +46,61 @@ class UserListFragment : Fragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun userList(){
-
+    private fun userList() {
         recyclerView = bindingUserList.recyclerView
 
+        val db = FirebaseFirestore.getInstance()
         val templist: List<UserViewModel> = emptyList()
         val data: MutableList<UserViewModel> = templist.toMutableList()
         adapter = UserAdapter(data)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
-        for (i in 0 until 15) {
-            data.add(UserViewModel("Patryk Luczak","ziomkowski14gmail.com"))
-            Log.w("FetchLog", "tr")
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val userId = firebaseAuth.currentUser?.uid
+
+        if (userId != null) {
+            db.collection("userInfo")
+                .document(userId)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val userCity = documentSnapshot.getString("city")
+
+                    // Użyj pobranej wartości "city" w zapytaniu whereEqualTo
+                    db.collection("userInfo")
+                        .whereEqualTo("city", userCity)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                // Dla każdego użytkownika w pobranym "city"
+                                val id = document.getString("userId")
+                                val name = document.getString("name")
+                                val surname = document.getString("surname")
+                                val mail = document.getString("mail")
+                                data.add(UserViewModel(id,name, surname, mail))
+                            }
+                            adapter.notifyDataSetChanged()
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting document: ", exception)
+                }
         }
-        adapter.notifyDataSetChanged()
-
-
     }
+
+
+
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
           //  addToBackStack(null)
             commit()
         }
-}
+
+
+
+
+    }

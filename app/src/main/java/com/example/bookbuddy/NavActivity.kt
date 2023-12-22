@@ -17,7 +17,7 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 
-class NavActivity : AppCompatActivity() ,SwipeRefreshLayout.OnRefreshListener{
+class NavActivity : AppCompatActivity(){
     private lateinit var bindingMain: ActivityMainBinding
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var firebaseAuth: FirebaseAuth
@@ -34,8 +34,6 @@ class NavActivity : AppCompatActivity() ,SwipeRefreshLayout.OnRefreshListener{
         val searchFragment=SearchFragment()
         val adminFragment=AdminFragment()
 //        val profileFragment=ProfileFragment()
-        swipeRefreshLayout=findViewById(R.id.swipe_ly)
-        swipeRefreshLayout.setOnRefreshListener(this)
         setCurrentFragment(homeFragment)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { item->
@@ -73,9 +71,6 @@ class NavActivity : AppCompatActivity() ,SwipeRefreshLayout.OnRefreshListener{
             commit()
         }
 
-    override fun onRefresh() {
-        swipeRefreshLayout.isRefreshing=false
-    }
     private fun fetchUserInfo()
     {
         val userId= firebaseAuth.currentUser?.uid
