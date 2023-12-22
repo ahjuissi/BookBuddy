@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-// TODO: Rename parameter arguments, choose names that match
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var bindingProfile: FragmentProfileBinding
