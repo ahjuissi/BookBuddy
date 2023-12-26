@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookbuddy.databinding.FragmentUserListBinding
@@ -21,6 +22,8 @@ class UserListFragment : Fragment() {
     private lateinit var bindingUserList: FragmentUserListBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: UserAdapter
+    private var db = FirebaseFirestore.getInstance()
+    private var firebaseAuth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -29,8 +32,23 @@ class UserListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         bindingUserList = FragmentUserListBinding.inflate(inflater, container, false)
         val adminFragment=AdminFragment()
+            //    val db = FirebaseFirestore.getInstance()
+      //  val firebaseAuth = FirebaseAuth.getInstance()
+        val userId = firebaseAuth.currentUser?.uid
+
+        if (userId != null) {
+            db.collection("userInfo")
+                .document(userId)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val userCity = documentSnapshot.getString("city")
+                    bindingUserList.userList.text = "User List of ${userCity}"
+                }
+        }
+
         bindingUserList.backBtn.setOnClickListener {
 
             setCurrentFragment(adminFragment)

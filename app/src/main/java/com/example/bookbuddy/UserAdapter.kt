@@ -33,36 +33,7 @@ class UserAdapter(private val mList: MutableList<UserViewModel>) : RecyclerView.
         holder.nameView.text = UserViewModel.name
         holder.surnameView.text = UserViewModel.surname
         holder.mailView.text = UserViewModel.mail
-        holder.deleteButton.setOnClickListener{
-            val userId = UserViewModel.userId // Załóżmy, że masz pole userId w UserViewModel
-            val db = FirebaseFirestore.getInstance()
-            // Sprawdź, czy identyfikator użytkownika nie jest null
-            if (userId != null) {
 
-
-                // Usuń użytkownika z bazy danych Firestore
-                db.collection("userInfo")
-                    .document(userId)
-                    .delete()
-                    .addOnSuccessListener {
-                        // Usunięcie użytkownika z listy i poinformowanie adaptera
-                        mList.removeAt(position)
-                        notifyItemRemoved(position)
-                        notifyItemRangeChanged(position, mList.size)
-                        // Możesz również dodać komunikat potwierdzający usunięcie
-                        Toast.makeText(holder.itemView.context, "Użytkownik został usunięty", Toast.LENGTH_SHORT).show()
-
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(ContentValues.TAG, "Błąd podczas usuwania użytkownika z bazy danych Firestore", exception)
-                    }
-            }
-        }
-
-        // sets the text to the textview from our itemHolder class
-        holder.nameView.text = UserViewModel.name
-        holder.surnameView.text = UserViewModel.surname
-        holder.mailView.text = UserViewModel.mail
     }
 
     // return the number of the items in the list
@@ -76,7 +47,6 @@ class UserAdapter(private val mList: MutableList<UserViewModel>) : RecyclerView.
         val nameView: TextView = itemView.findViewById(R.id.usernameView)
         val mailView: TextView = itemView.findViewById(R.id.usermailView)
         val surnameView: TextView = itemView.findViewById(R.id.usersurnameView)
-        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
     }
 
 }

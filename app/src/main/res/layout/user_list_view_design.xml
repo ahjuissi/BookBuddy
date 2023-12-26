@@ -54,17 +54,6 @@
         </LinearLayout>
 
 
-        <Button
-            android:id="@+id/deleteButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:gravity="center_vertical"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintWidth_percent=".08"
-            android:background="@drawable/ic_delete_btt_foreground"/>
-
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

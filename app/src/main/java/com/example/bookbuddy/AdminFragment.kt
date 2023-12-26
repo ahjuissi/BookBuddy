@@ -38,10 +38,14 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
 
 
         bindingAdmin.idImgBtnAddUser.setOnClickListener {
-            println("4")
             val userListFragment=UserListFragment()
             setCurrentFragment(userListFragment)
           //  showAddView()
+        }
+        bindingAdmin.idImgBtnProfile.setOnClickListener {
+            val userProfileFragment=UserProfileFragment()
+            setCurrentFragment(userProfileFragment)
+            //  showAddView()
         }
         return bindingAdmin.root
        // return inflater.inflate(R.layout.fragment_admin, container, false)

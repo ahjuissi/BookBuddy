@@ -4,16 +4,12 @@ import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.bookbuddy.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlin.random.Random
 import com.google.firebase.Firebase
-import com.shashank.sony.fancytoastlib.FancyToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 
@@ -21,30 +17,34 @@ class NavActivity : AppCompatActivity(){
     private lateinit var bindingMain: ActivityMainBinding
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var role:String
     private var db= Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingMain = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingMain.root)
         firebaseAuth=FirebaseAuth.getInstance()
-        val role:String = "admin"
         fetchUserInfo()
         val homeFragment=HomeFragment()
         val voteFragment=VoteFragment()
         val searchFragment=SearchFragment()
         val adminFragment=AdminFragment()
+        val userFragment=UserProfileFragment()
 //        val profileFragment=ProfileFragment()
         setCurrentFragment(homeFragment)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { item->
-            when(item.itemId){
-                R.id.home->setCurrentFragment(homeFragment)
-                R.id.vote->setCurrentFragment(voteFragment)
-                R.id.search->setCurrentFragment(searchFragment)
-                if(role=="admin")
-                    R.id.profile else TODO() ->setCurrentFragment(adminFragment)
-           //     else
-                   // R.id.profile->setCurrentFragment(userFragment)
+            when(item.itemId) {
+                R.id.home -> setCurrentFragment(homeFragment)
+                R.id.vote -> setCurrentFragment(voteFragment)
+                R.id.search -> setCurrentFragment(searchFragment)
+                R.id.profile -> {
+                    if (role == "Admin") {
+                        setCurrentFragment(adminFragment)
+                    } else {
+                        setCurrentFragment(userFragment)
+                    }
+                }
 
 //                R.id.profile->setCurrentFragment(profileFragment)
             }
@@ -79,25 +79,17 @@ class NavActivity : AppCompatActivity(){
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         // Retrieve the role from the document data
-                        val roleFromDatabase = document.getString("role")
-
-                        // Check if the role is "admin"
-                        if (roleFromDatabase == "Admin") {
-                            // The user has admin role
-                            Log.d(TAG, "User has admin role")
-                            // You can perform actions specific to admin users here
-                        } else {
-                            // The user does not have admin role
-                            Log.d(TAG, "User does not have admin role")
-                            // You can perform actions specific to non-admin users here
-                        }
+                         role = document.getString("role").toString()
                     } else {
                         Log.d(TAG, "No such document")
                     }
+
                 }
+
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "get failed with ", exception)
                 }
+
         }
     }
 }
