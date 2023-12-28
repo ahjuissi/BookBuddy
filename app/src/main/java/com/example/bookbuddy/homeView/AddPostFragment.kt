@@ -60,40 +60,37 @@ class AddPostFragment : Fragment() {
         val view = bindingAddPost.root
 
         // Inicjalizacja Firebase Auth i pobranie danych użytkownika
-        firebaseAuth = FirebaseAuth.getInstance()
+
         title = bindingAddPost.postTitle
         des = bindingAddPost.pdes
         upload = bindingAddPost.pupload
 
-        val intent = activity?.intent
         bindingAddPost.addPostBackBtn.setOnClickListener{
             val homeFragment = HomeFragment()
             setCurrentFragment(homeFragment)
         }
-        name = "name"
-        email = "email"
-        dp = R.drawable.ic_add_btt_foreground.toString()
 
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Users")
-//        val query: Query = databaseReference.orderByChild("email").equalTo(email)
-//        query.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                for (dataSnapshot1 in dataSnapshot.children) {
-//
-//                    name = dataSnapshot1.child("name").value.toString()
-//                    email = dataSnapshot1.child("email").value.toString()
-//                    dp = dataSnapshot1.child("image").value.toString()
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//
-//            }
-//        })
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users")
+        val query: Query = databaseReference.orderByChild("email").equalTo(email)
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (dataSnapshot1 in dataSnapshot.children) {
+
+                    name = dataSnapshot1.child("name").value.toString()
+                    email = dataSnapshot1.child("email").value.toString()
+                    dp = dataSnapshot1.child("image").value.toString()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
 
         // Obsługa przycisku przesłania postu
         upload.setOnClickListener {
             // Pobranie danych wprowadzonych przez użytkownika
+            val homeFragment = HomeFragment()
+            setCurrentFragment(homeFragment)
             val titl = title.text.toString().trim()
             val description = des.text.toString().trim()
 

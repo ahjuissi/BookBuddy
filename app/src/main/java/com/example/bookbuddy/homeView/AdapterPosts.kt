@@ -58,11 +58,6 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
             } catch (_: Exception) {
             }
 
-            image.visibility = android.view.View.VISIBLE
-            try {
-                Glide.with(context).load(post.uimage).into(image)
-            } catch (_: Exception) {
-            }
 
             like.setOnClickListener {
                 val intent = Intent(holder.itemView.context, PostLikedByActivity::class.java)
@@ -168,7 +163,7 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
 
     inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val picture: ImageView = bindingRowPosts.picturetv
-        val image: ImageView = bindingRowPosts.pimagetv
+       // val image: ImageView = bindingRowPosts.pimagetv
         val name: TextView = bindingRowPosts.unametv
         val time: TextView = bindingRowPosts.utimetv
         val more: ImageButton = bindingRowPosts.morebtn
