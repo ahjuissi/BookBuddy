@@ -8,7 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.FragmentHomeBinding
+import com.example.bookbuddy.profileViewAdmin.UserListFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -34,15 +36,28 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         bindingHome = FragmentHomeBinding.inflate(inflater, container, false)
         recyclerViewPosts = bindingHome.recyclerviewPosts
+
         recyclerViewPosts.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
+
         recyclerViewPosts.setLayoutManager(layoutManager)
+
         posts = ArrayList()
+        bindingHome.homeAddPostBtn.setOnClickListener{
+            val addPostFragment = AddPostFragment()
+            setCurrentFragment(addPostFragment)
+        }
         loadPosts()
         return bindingHome.root
     }
+    private fun setCurrentFragment(fragment: Fragment)=
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment,fragment)
+            //    addToBackStack(null)
+            commit()
+        }
 
     private fun loadPosts() {
         val databaseReference = FirebaseDatabase.getInstance().getReference("Posts")
@@ -54,6 +69,7 @@ class HomeFragment : Fragment() {
                     posts!!.add(modelPost)
                     adapterPosts = AdapterPosts(activity!!, posts)
                     recyclerViewPosts!!.adapter = adapterPosts
+
                 }
             }
 
@@ -63,8 +79,4 @@ class HomeFragment : Fragment() {
         })
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
 }

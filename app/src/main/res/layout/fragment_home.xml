@@ -35,7 +35,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"/>
             <Button
-                android:id="@+id/home_back_btn"
+                android:id="@+id/home_add_post_btn"
                 android:layout_gravity="end"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
