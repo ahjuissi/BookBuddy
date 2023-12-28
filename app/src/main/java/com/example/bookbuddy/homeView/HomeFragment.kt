@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
         recyclerViewPosts.setLayoutManager(layoutManager)
         posts = ArrayList()
         loadPosts()
-        return view
+        return bindingHome.root
     }
 
     private fun loadPosts() {
