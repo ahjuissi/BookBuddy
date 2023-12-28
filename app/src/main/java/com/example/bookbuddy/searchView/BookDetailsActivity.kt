@@ -45,25 +45,25 @@ class BookDetailsActivity : AppCompatActivity() {
         bookIV = findViewById(R.id.idIVbook)
 
         // getting the data which we have passed from our adapter class.
-        val title = getIntent().getStringExtra("title")
-        val subtitle = getIntent().getStringExtra("subtitle")
-        val publisher = getIntent().getStringExtra("publisher")
-        val publishedDate = getIntent().getStringExtra("publishedDate")
-        val description = getIntent().getStringExtra("description")
-        val pageCount = getIntent().getIntExtra("pageCount", 0)
-        val thumbnail = getIntent().getStringExtra("thumbnail")
-        val previewLink = getIntent().getStringExtra("previewLink")
-        val infoLink = getIntent().getStringExtra("infoLink")
-        val buyLink = getIntent().getStringExtra("buyLink")
+        val title = intent.getStringExtra("title")
+        val subtitle = intent.getStringExtra("subtitle")
+        val publisher = intent.getStringExtra("publisher")
+        val publishedDate = intent.getStringExtra("publishedDate")
+        val description = intent.getStringExtra("description")
+        val pageCount = intent.getIntExtra("pageCount", 0)
+        val thumbnail = intent.getStringExtra("thumbnail")
+        val previewLink = intent.getStringExtra("previewLink")
+        val infoLink = intent.getStringExtra("infoLink")
+        val buyLink = intent.getStringExtra("buyLink")
 
         // after getting the data we are setting
         // that data to our text views and image view.
-        titleTV.setText(title)
-        subtitleTV.setText(subtitle)
-        publisherTV.setText(publisher)
-        publisherDateTV.setText("Published On : $publishedDate")
-        descTV.setText(description)
-        pageTV.setText("No Of Pages : $pageCount")
+        titleTV.text = title
+        subtitleTV.text = subtitle
+        publisherTV.text = publisher
+        publisherDateTV.text = "Published On : $publishedDate"
+        descTV.text = description
+        pageTV.text = "No Of Pages : $pageCount"
         Glide.with(this@BookDetailsActivity)
             .load(thumbnail)
             .into(bookIV)
