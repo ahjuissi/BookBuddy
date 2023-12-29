@@ -42,9 +42,7 @@ class AddPostFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var title: EditText
     private lateinit var des: EditText
-    private lateinit var image: ImageView
     private lateinit var upload: Button
-    private lateinit var imageUri: Uri
     private var name: String=""
     private  var email: String=""
     private  var uid: String=""

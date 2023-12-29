@@ -80,19 +80,28 @@ class EditProfileFragment : Fragment() {
         val layout = LinearLayout(requireContext())
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(10, 10, 10, 10)
-        val textInputLayout = TextInputLayout(requireContext())
-        val editText = EditText(requireContext())
-        textInputLayout.hint = "Enter name"
-        textInputLayout.addView(editText)
-        layout.addView(editText)
+
+        val textInputLayoutName = TextInputLayout(requireContext())
+        val editTextName = EditText(requireContext())
+        textInputLayoutName.hint = "Enter name"
+        textInputLayoutName.addView(editTextName)
+        layout.addView(textInputLayoutName)
+
+        val textInputLayoutSurname = TextInputLayout(requireContext())
+        val editTextSurname = EditText(requireContext())
+        textInputLayoutSurname.hint = "Enter surname"
+        textInputLayoutSurname.addView(editTextSurname)
+        layout.addView(textInputLayoutSurname)
+
         builder.setView(layout)
 
         builder.setPositiveButton("Update") { dialog, which ->
-            val value = editText.text.toString().trim()
-            if (value.isNotEmpty()) {
+            val valueName = editTextName.text.toString().trim()
+            val valueSurname = editTextSurname.text.toString().trim()
+
+            if (valueName.isNotEmpty() && valueSurname.isNotEmpty()) {
 
                 // Tutaj aktualizujemy nową nazwę w bazie
-                val result = hashMapOf<String, Any>(key to value)
 //                databaseReference.child(firebaseUser!!.uid).updateChildren(result)
 //                    .addOnSuccessListener {
 //                        // Po aktualizacji wyświetlamy komunikat

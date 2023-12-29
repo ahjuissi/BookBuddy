@@ -121,8 +121,6 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
     }
 
     private fun deltewithImage(pid: String?, image: String?) {
-        val pd = ProgressDialog(context)
-        pd.setMessage("Deleting")
         val picref = FirebaseStorage.getInstance().getReferenceFromUrl(image!!)
         picref.delete().addOnSuccessListener {
             val query = FirebaseDatabase.getInstance().getReference("Posts").orderByChild("ptime")
@@ -132,7 +130,6 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
                     for (dataSnapshot1 in dataSnapshot.children) {
                         dataSnapshot1.ref.removeValue()
                     }
-                    pd.dismiss()
                     Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_LONG).show()
                 }
 
@@ -163,7 +160,6 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
 
     inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val picture: ImageView = bindingRowPosts.picturetv
-       // val image: ImageView = bindingRowPosts.pimagetv
         val name: TextView = bindingRowPosts.unametv
         val time: TextView = bindingRowPosts.utimetv
         val more: ImageButton = bindingRowPosts.morebtn
