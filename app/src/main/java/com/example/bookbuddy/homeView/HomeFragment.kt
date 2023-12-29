@@ -52,12 +52,6 @@ class HomeFragment : Fragment() {
         //loadPosts()
         return bindingHome.root
     }
-    private fun setCurrentFragment(fragment: Fragment)=
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment,fragment)
-            //    addToBackStack(null)
-            commit()
-        }
 
     private fun loadPosts() {
         val databaseReference = FirebaseDatabase.getInstance().getReference("Posts")
@@ -78,5 +72,11 @@ class HomeFragment : Fragment() {
             }
         })
     }
+    private fun setCurrentFragment(fragment: Fragment)=
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment,fragment)
+            //    addToBackStack(null)
+            commit()
+        }
 
 }

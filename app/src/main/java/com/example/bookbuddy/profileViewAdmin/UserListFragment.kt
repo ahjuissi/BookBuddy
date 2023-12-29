@@ -61,9 +61,7 @@ class UserListFragment : Fragment() {
         }
 
         bindingUserList.backBtn.setOnClickListener {
-
             setCurrentFragment(adminFragment)
-
         }
 
         userList()

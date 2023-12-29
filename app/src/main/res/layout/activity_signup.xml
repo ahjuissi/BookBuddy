@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:background="#441f"
     android:animateLayoutChanges="true"
@@ -83,6 +84,12 @@
             android:layout_width="0dp"
             android:layout_height="8dp" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_password_first_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
+
         <EditText
             android:id="@+id/et_password_first"
             android:layout_width="match_parent"
@@ -94,9 +101,17 @@
             android:textColor="#000000"
             android:textColorHint="#000000"
             android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <View
             android:layout_width="0dp"
             android:layout_height="8dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_password_second_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
 
         <EditText
             android:id="@+id/et_password_second"
@@ -109,6 +124,8 @@
             android:textColor="#000000"
             android:textColorHint="#000000"
             android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <View
             android:layout_width="0dp"
