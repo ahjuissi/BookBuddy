@@ -10,6 +10,10 @@ import android.annotation.SuppressLint
 import com.example.bookbuddy.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
@@ -49,14 +53,16 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun fetchUserInfo(userId: String) {
-        db.collection("userInfo")
-            .document(userId)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val name = documentSnapshot.getString("name")
-                    val surname = documentSnapshot.getString("surname")
-                    val email = documentSnapshot.getString("mail")
+        val databaseReference = FirebaseDatabase.getInstance().getReference("userInfo").child(userId)
+
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            @SuppressLint("SetTextI18n")
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    println("test")
+                    val name = dataSnapshot.child("name").getValue(String::class.java)
+                    val surname = dataSnapshot.child("surname").getValue(String::class.java)
+                    val email = dataSnapshot.child("mail").getValue(String::class.java)
 
                     // Ustaw pobrane dane w odpowiednich widokach
                     bindingProfile.textViewName.text = "Name: $name"
@@ -64,9 +70,11 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
                     bindingProfile.textViewEmail.text = "Email: $email"
                 }
             }
-            .addOnFailureListener { exception ->
+
+            override fun onCancelled(databaseError: DatabaseError) {
                 // Obsługa błędów
             }
+        })
     }
 }
 

@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
             val addPostFragment = AddPostFragment()
             setCurrentFragment(addPostFragment)
         }
-        loadPosts()
+        //loadPosts()
         return bindingHome.root
     }
     private fun setCurrentFragment(fragment: Fragment)=

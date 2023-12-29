@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,9 +45,9 @@ class AddPostFragment : Fragment() {
     private lateinit var image: ImageView
     private lateinit var upload: Button
     private lateinit var imageUri: Uri
-    private lateinit var name: String
-    private lateinit var email: String
-    private lateinit var uid: String
+    private var name: String=""
+    private  var email: String=""
+    private  var uid: String=""
     private lateinit var dp: String
     private lateinit var databaseReference: DatabaseReference
 
@@ -58,9 +59,10 @@ class AddPostFragment : Fragment() {
         // Inicjalizacja elementów interfejsu użytkownika
         bindingAddPost = FragmentAddPostBinding.inflate(inflater, container, false)
         val view = bindingAddPost.root
-
+        firebaseAuth = FirebaseAuth.getInstance()
+        val currentUser = firebaseAuth.currentUser
+        uid = currentUser?.uid ?: ""
         // Inicjalizacja Firebase Auth i pobranie danych użytkownika
-
         title = bindingAddPost.postTitle
         des = bindingAddPost.pdes
         upload = bindingAddPost.pupload
@@ -70,19 +72,18 @@ class AddPostFragment : Fragment() {
             setCurrentFragment(homeFragment)
         }
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users")
-        val query: Query = databaseReference.orderByChild("email").equalTo(email)
+        databaseReference = FirebaseDatabase.getInstance().getReference("userInfo")
+        val query: Query = databaseReference.orderByChild("userId").equalTo(uid)
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (dataSnapshot1 in dataSnapshot.children) {
 
-                    name = dataSnapshot1.child("name").value.toString()
-                    email = dataSnapshot1.child("email").value.toString()
-                    dp = dataSnapshot1.child("image").value.toString()
+                    name = dataSnapshot1.child("name").getValue(String::class.java).toString()
+                    email = dataSnapshot1.child("mail").getValue(String::class.java).toString()
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
-
+                Log.e("AddPostFragment", "Error: ${databaseError.message}")
             }
         })
 
@@ -104,6 +105,8 @@ class AddPostFragment : Fragment() {
                 des.error = "Description Cant be empty"
                 Toast.makeText(requireContext(), "Description can't be left empty", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
+            }else{
+                uploadData(titl, description,uid,name, email)
             }
 
         }
@@ -112,52 +115,36 @@ class AddPostFragment : Fragment() {
 
 
     // Metoda przesyłająca dane do Firebase Storage i zapisująca dane do Firebase Database
-    private fun uploadData(titl: String, description: String) {
+    private fun uploadData(titl: String, description: String,uid:String,name:String,email:String) {
         val progressBar = ProgressDialog(requireContext())
+        var uid=uid
+        var name=name
+        var email=email
         progressBar.setMessage("Publishing Post")
         progressBar.show()
 
         val timestamp = System.currentTimeMillis().toString()
-        val filepathname = "Posts/" + "post" + timestamp
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        val data = byteArrayOutputStream.toByteArray()
 
-        val storageReference1: StorageReference =
-            FirebaseStorage.getInstance().getReference().child(filepathname)
-        storageReference1.putBytes(data)
-            .addOnSuccessListener { taskSnapshot ->
-                storageReference1.downloadUrl.addOnSuccessListener { uri ->
-                    val downloadUri = uri.toString()
+        val hashMap: HashMap<String, Any> = HashMap()
+        hashMap["uid"] = uid
+        hashMap["uname"] = name
+        hashMap["uemail"] = email
+        hashMap["title"] = titl
+        hashMap["description"] = description
+        hashMap["ptime"] = timestamp
+        hashMap["plike"] = 0
+        hashMap["pcomments"] = 0
 
-                    val hashMap: HashMap<String, Any> = HashMap()
-                    hashMap["uid"] = uid
-                    hashMap["uname"] = name
-                    hashMap["uemail"] = email
-                    hashMap["udp"] = dp
-                    hashMap["title"] = titl
-                    hashMap["description"] = description
-                    hashMap["ptime"] = timestamp
-                    hashMap["plike"] = 0
-                    hashMap["pcomments"] = 0
-
-                    val databaseReference: DatabaseReference =
-                        FirebaseDatabase.getInstance().getReference("Posts")
-                    databaseReference.child(timestamp).setValue(hashMap)
-                        .addOnSuccessListener {
-                            progressBar.dismiss()
-                            Toast.makeText(requireContext(), "Published", Toast.LENGTH_LONG)
-                                .show()
-                            title.setText("")
-                            des.setText("")
-                            startActivity(Intent(requireContext(), NavActivity::class.java))
-                            requireActivity().finish()
-                        }.addOnFailureListener { e ->
-                            progressBar.dismiss()
-                            Toast.makeText(requireContext(), "Failed", Toast.LENGTH_LONG).show()
-                        }
-                }
-            }
-            .addOnFailureListener { e ->
+        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts")
+        databaseReference.child(timestamp).setValue(hashMap)
+            .addOnSuccessListener {
+                progressBar.dismiss()
+                Toast.makeText(requireContext(), "Published", Toast.LENGTH_LONG).show()
+                title.setText("")
+                des.setText("")
+                startActivity(Intent(requireContext(), NavActivity::class.java))
+                requireActivity().finish()
+            }.addOnFailureListener { e ->
                 progressBar.dismiss()
                 Toast.makeText(requireContext(), "Failed", Toast.LENGTH_LONG).show()
             }

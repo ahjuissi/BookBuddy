@@ -17,6 +17,10 @@ import com.example.bookbuddy.homeView.HomeFragment
 import kotlin.random.Random
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.firestore
 
 class NavActivity : AppCompatActivity(){
@@ -77,25 +81,26 @@ class NavActivity : AppCompatActivity(){
             commit()
         }
 
-    private fun fetchUserInfo()
-    {
-        val userId= firebaseAuth.currentUser?.uid
+    private fun fetchUserInfo() {
+        val userId = firebaseAuth.currentUser?.uid
         if (userId != null) {
-            db.collection("userInfo").document(userId).get()
-                .addOnSuccessListener { document ->
-                    if (document != null && document.exists()) {
-                        // Retrieve the role from the document data
-                         role = document.getString("role").toString()
-                    } else {
+            val databaseReference = FirebaseDatabase.getInstance().getReference("userInfo").child(userId)
+            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        val fetchedRole = dataSnapshot.child("role").getValue(String::class.java)
+                        fetchedRole?.let {
+                            role = it // Przypisanie pobranej roli do zmiennej globalnej
+                            // Tutaj możesz wykorzystać zmienną role według potrzeb
+                        } }else {
                         Log.d(TAG, "No such document")
                     }
-
                 }
 
-                .addOnFailureListener { exception ->
-                    Log.d(TAG, "get failed with ", exception)
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.d(TAG, "get failed with ", databaseError.toException())
                 }
-
+            })
         }
     }
 }

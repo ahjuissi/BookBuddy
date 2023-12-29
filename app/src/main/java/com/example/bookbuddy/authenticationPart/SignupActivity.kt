@@ -9,6 +9,7 @@ import com.example.bookbuddy.databinding.ActivitySignupBinding
 import com.google.firebase.Firebase
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.firestore
 
 //import com.example.bookbuddy.connection
@@ -88,7 +89,8 @@ class SignupActivity : AppCompatActivity() {
                                 "role" to role,
                             )
                                     if (userId != null) {
-                                        db.collection("userInfo").document(userId).set(userMap)
+                                        val databaseReference = FirebaseDatabase.getInstance().getReference("userInfo")
+                                        databaseReference.child(userId).setValue(userMap)
                                     }
                             val intent = Intent(this, LoginActivity::class.java)
                             startActivity(intent)
