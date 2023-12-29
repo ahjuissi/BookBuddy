@@ -87,6 +87,7 @@ class EditProfileFragment : Fragment() {
         textInputLayoutName.addView(editTextName)
         layout.addView(textInputLayoutName)
 
+        // Dodane
         val textInputLayoutSurname = TextInputLayout(requireContext())
         val editTextSurname = EditText(requireContext())
         textInputLayoutSurname.hint = "Enter surname"
