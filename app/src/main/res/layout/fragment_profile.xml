@@ -88,7 +88,16 @@
             android:text="Email: "
             android:textSize="18sp"
             android:textStyle="italic|bold"/>
-
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="95dp"
+            android:layout_height="50dp"
+            android:text="Logout"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/ic_back_btt_background" />
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/edit_profile_fab"
