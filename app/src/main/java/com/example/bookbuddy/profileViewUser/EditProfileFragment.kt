@@ -21,6 +21,7 @@ import com.google.android.material.textfield.TextInputLayout
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
@@ -73,8 +74,9 @@ class EditProfileFragment : Fragment() {
     }
     private fun nameChange() {
         val builder = AlertDialog.Builder(requireContext())
-        var key = "name"
-        builder.setTitle("Update $key")
+        val keyName = "name"
+        val keySurname = "surname"
+        builder.setTitle("Update $keyName and $keySurname")
 
         // Tworzenie układu do wprowadzenia nowej nazwy
         val layout = LinearLayout(requireContext())
@@ -101,22 +103,36 @@ class EditProfileFragment : Fragment() {
             val valueSurname = editTextSurname.text.toString().trim()
 
             if (valueName.isNotEmpty() && valueSurname.isNotEmpty()) {
+                val databaseReference = FirebaseDatabase.getInstance().reference
+                val firebaseUser = FirebaseAuth.getInstance().currentUser
 
-                // Tutaj aktualizujemy nową nazwę w bazie
-//                databaseReference.child(firebaseUser!!.uid).updateChildren(result)
-//                    .addOnSuccessListener {
-//                        // Po aktualizacji wyświetlamy komunikat
-//                        Toast.makeText(requireContext(), "updated", Toast.LENGTH_LONG).show()
-//                    }
-//                    .addOnFailureListener { e ->
-//                        Toast.makeText(requireContext(), "Unable to update", Toast.LENGTH_LONG).show()
-//                    }
+                firebaseUser?.let { user ->
+                    val userId = user.uid
+                    val userInfoRef = databaseReference.child("userInfo").child(userId)
 
-                if (key == "name") {
-//                    val databaseRef, override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val updates = hashMapOf<String, Any>(
+                        keyName to valueName,
+                        keySurname to valueSurname
+                    )
+
+                    userInfoRef.updateChildren(updates)
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                requireContext(),
+                                "Name and Surname updated",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(
+                                requireContext(),
+                                "Unable to update",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                 }
             } else {
-                Toast.makeText(requireContext(), "Unable to update", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Please enter both name and surname", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -159,45 +175,53 @@ class EditProfileFragment : Fragment() {
         builder.setView(layout)
 
         builder.setPositiveButton("Update") { dialog, which ->
-            val value = editTextPass.text.toString().trim()
-            val value2 = editTextPass2.text.toString().trim()
-            if (value.isNotEmpty()) {
-                println(value)
-                println(value2)
-//                TODO: updatePassword(value, value2)
-            } else{
-                println("meh")
+            val newPassword = editTextPass.text.toString().trim()
+            val repeatPassword = editTextPass2.text.toString().trim()
+
+            if (newPassword.isNotEmpty() && newPassword == repeatPassword) {
+                // Firebase Auth instance
+                val auth = FirebaseAuth.getInstance()
+                val user = auth.currentUser
+
+                user?.updatePassword(newPassword)
+                    ?.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Password updated successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to update password",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Passwords do not match or empty",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         val dialog = builder.create()
         dialog.setOnShowListener {
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             positiveButton.setTextColor(Color.WHITE)
-            positiveButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_500))
+            positiveButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.purple_500
+                )
+            )
         }
 
-        dialog.show()
+            dialog.show()
+        }
 
-    }
-    private fun updatePassword(oldp: String, newp: String) {
-//        z neta:
-//        val user = firebaseAuth.currentUser
-//        val authCredential = EmailAuthProvider.getCredential(user!!.email!!, oldp)
-//        user.reauthenticate(authCredential)
-//            .addOnSuccessListener {
-//                user.updatePassword(newp)
-//                    .addOnSuccessListener {
-//                        Toast.makeText(requireContext(), "Changed Password", Toast.LENGTH_LONG).show()
-//                    }
-//                    .addOnFailureListener { e ->
-//                        Toast.makeText(requireContext(), "Failed", Toast.LENGTH_LONG).show()
-//                    }
-//            }
-//            .addOnFailureListener { e ->
-//                Toast.makeText(requireContext(), "Failed", Toast.LENGTH_LONG).show()
-//            }
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

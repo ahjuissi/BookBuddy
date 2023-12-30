@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.bookbuddy.databinding.FragmentProfileBinding
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.widget.Button
 import com.example.bookbuddy.R
+import com.example.bookbuddy.authenticationPart.LoginActivity
 import com.example.bookbuddy.homeView.AddPostFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -64,16 +67,19 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
                     val surname = dataSnapshot.child("surname").getValue(String::class.java)
                     val email = dataSnapshot.child("mail").getValue(String::class.java)
 
-                    // val image = dataSnapshot.child("image").getValue(String::class.java)
-                    // try {
-                    // Glide.with(requireActivity()).load(image).into(avatartv)
-                    // } catch (e: Exception) {}
-                    // Ustaw pobrane dane w odpowiednich widokach
                     bindingProfile.textViewName.text = "Name: $name"
                     bindingProfile.textViewSurname.text = "Surname: $surname"
                     bindingProfile.textViewEmail.text = "Email: $email"
+                    val logoutButton: Button = bindingProfile.logoutButton
+                    logoutButton.setOnClickListener {
+                        FirebaseAuth.getInstance().signOut()
 
-                //TODO: bindingProfile.avatarIv =
+                        val intent = Intent(requireContext(), LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
+
                 }
             }
 
