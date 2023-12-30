@@ -1,5 +1,6 @@
 package com.example.bookbuddy.homeView
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -29,10 +30,11 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
 
     private lateinit var bindingRowPosts: RowPostsBinding
 
+    //TODO: do spr
     private var myuid: String = FirebaseAuth.getInstance().currentUser!!.uid
-    private val liekeref: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Likes")
-    private val postref: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Posts")
-    private var mprocesslike = false
+//    private val liekeref: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Likes")
+//    private val postref: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Posts")
+//    private var mprocesslike = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         bindingRowPosts = RowPostsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -50,53 +52,53 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
             title.text = post.title
             description.text = post.description
             time.text = timedate
-            like.text = "${post.plike} Likes"
-            comments.text = "${post.pcomments} Comments"
+//            like.text = "${post.plike} Likes"
+//            comments.text = "${post.pcomments} Comments"
 
             try {
-                Glide.with(context).load(post.udp).into(picture)
+                Glide.with(context).load(post.upic).into(picture)
             } catch (_: Exception) {
             }
 
 
-            like.setOnClickListener {
-                val intent = Intent(holder.itemView.context, PostLikedByActivity::class.java)
-                intent.putExtra("pid", post.ptime)
-                holder.itemView.context.startActivity(intent)
-            }
+//            like.setOnClickListener {
+//                val intent = Intent(holder.itemView.context, PostLikedByActivity::class.java)
+//                intent.putExtra("pid", post.ptime)
+//                holder.itemView.context.startActivity(intent)
+//            }
 
-            likebtn.setOnClickListener {
-                val plike = post.plike!!.toInt()
-                mprocesslike = true
-                val postid = post.ptime
-                liekeref.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        if (mprocesslike) {
-                            mprocesslike = if (dataSnapshot.child(postid!!).hasChild(myuid)) {
-                                postref.child(postid).child("plike").setValue("" + (plike - 1))
-                                liekeref.child(postid).child(myuid).removeValue()
-                                false
-                            } else {
-                                postref.child(postid).child("plike").setValue("" + (plike + 1))
-                                liekeref.child(postid).child(myuid).setValue("Liked")
-                                false
-                            }
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {}
-                })
-            }
+//            likebtn.setOnClickListener {
+//                val plike = post.plike!!.toInt()
+//                mprocesslike = true
+//                val postid = post.ptime
+//                liekeref.addValueEventListener(object : ValueEventListener {
+//                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                        if (mprocesslike) {
+//                            mprocesslike = if (dataSnapshot.child(postid!!).hasChild(myuid)) {
+//                                postref.child(postid).child("plike").setValue("" + (plike - 1))
+//                                liekeref.child(postid).child(myuid).removeValue()
+//                                false
+//                            } else {
+//                                postref.child(postid).child("plike").setValue("" + (plike + 1))
+//                                liekeref.child(postid).child(myuid).setValue("Liked")
+//                                false
+//                            }
+//                        }
+//                    }
+//
+//                    override fun onCancelled(databaseError: DatabaseError) {}
+//                })
+//            }
 
             more.setOnClickListener {
-                showMoreOptions(more, post.uid, myuid, post.ptime, post.uimage)
+                showMoreOptions(more, post.uid, myuid, post.ptime)
             }
-
-            comment.setOnClickListener {
-                val intent = Intent(context, PostDetailsActivity::class.java)
-                intent.putExtra("pid", post.ptime)
-                context.startActivity(intent)
-            }
+//
+//            comment.setOnClickListener {
+//                val intent = Intent(context, PostDetailsActivity::class.java)
+//                intent.putExtra("pid", post.ptime)
+//                context.startActivity(intent)
+//            }
         }
     }
 
@@ -104,8 +106,7 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
         more: android.widget.ImageButton,
         uid: String?,
         myuid: String,
-        pid: String?,
-        image: String?
+        pid: String?
     ) {
         val popupMenu = PopupMenu(context, more, Gravity.END)
         if (uid == myuid) {
@@ -113,46 +114,35 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
         }
         popupMenu.setOnMenuItemClickListener { item ->
             if (item.itemId == 0) {
-                deltewithImage(pid, image)
+                //TODO: usuń post
             }
             false
         }
         popupMenu.show()
     }
-
-    private fun deltewithImage(pid: String?, image: String?) {
-        val picref = FirebaseStorage.getInstance().getReferenceFromUrl(image!!)
-        picref.delete().addOnSuccessListener {
-            val query = FirebaseDatabase.getInstance().getReference("Posts").orderByChild("ptime")
-                .equalTo(pid)
-            query.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (dataSnapshot1 in dataSnapshot.children) {
-                        dataSnapshot1.ref.removeValue()
-                    }
-                    Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {}
-            })
-        }.addOnFailureListener { }
+    //odświeżenie recycleview
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newPosts: MutableList<ModelPost?>?) {
+        modelPosts = newPosts
+        notifyDataSetChanged()
     }
 
-    private fun setLikes(holder: MyHolder, pid: String?) {
-        liekeref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.child(pid!!).hasChild(myuid)) {
-                    holder.likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_light_focused, 0, 0, 0)
-                    holder.likebtn.text = "Liked"
-                } else {
-                    holder.likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_dark, 0, 0, 0)
-                    holder.likebtn.text = "Like"
-                }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
-    }
+//    private fun setLikes(holder: MyHolder, pid: String?) {
+//        liekeref.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                if (dataSnapshot.child(pid!!).hasChild(myuid)) {
+//                    holder.likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_light_focused, 0, 0, 0)
+//                    holder.likebtn.text = "Liked"
+//                } else {
+//                    holder.likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_dark, 0, 0, 0)
+//                    holder.likebtn.text = "Like"
+//                }
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {}
+//        })
+//    }
 
     override fun getItemCount(): Int {
         return modelPosts!!.size

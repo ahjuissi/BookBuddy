@@ -1,5 +1,6 @@
 package com.example.bookbuddy.homeView
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -49,22 +50,32 @@ class HomeFragment : Fragment() {
             val addPostFragment = AddPostFragment()
             setCurrentFragment(addPostFragment)
         }
-        //loadPosts()
+
+        // Inicjalizacja adaptera
+        adapterPosts = AdapterPosts(requireActivity(), posts)
+        // Połączenie adaptera z RecyclerView
+        recyclerViewPosts.adapter = adapterPosts
+
         return bindingHome.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadPosts()
     }
 
     private fun loadPosts() {
         val databaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         databaseReference.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                posts!!.clear()
-                for (dataSnapshot1 in dataSnapshot.children) {
-                    val modelPost = dataSnapshot1.getValue(ModelPost::class.java)
-                    posts!!.add(modelPost)
-                    adapterPosts = AdapterPosts(activity!!, posts)
-                    recyclerViewPosts!!.adapter = adapterPosts
-
+                posts?.clear()
+                for (dataSnapshot in dataSnapshot.children) {
+                    val modelPost = dataSnapshot.getValue(ModelPost::class.java)
+                    posts?.add(modelPost)
                 }
+                // Aktualizacja danych w adapterze
+                adapterPosts.updateData(posts)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
