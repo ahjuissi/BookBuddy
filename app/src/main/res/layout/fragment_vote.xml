@@ -20,4 +20,74 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/card_frame"
+            android:layout_marginTop="70dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1" android:orientation="vertical">
+                    <com.lorentzos.flingswipe.SwipeFlingAdapterView
+                        android:id="@+id/frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="145dp"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        app:rotation_degrees="15.5"
+                        tools:context=".authenticationPart.MainActivity"></com.lorentzos.flingswipe.SwipeFlingAdapterView>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:id="@+id/dislikebtn"
+                            android:elevation="7dp"
+                            android:padding="10dp"
+                            android:onClick="DisLikeBtn"/>
+                        <ImageButton
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:id="@+id/likebtn"
+                            android:elevation="7dp"
+                            android:padding="10dp"
+                            android:onClick="DisLikeBtn"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+                    
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="All voted!"
+                android:visibility="invisible"/>
+        </FrameLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

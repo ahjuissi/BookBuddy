@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--on below line we are creating a swipe to refresh layout-->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,22 +18,30 @@
 
         <!--edit text for getting the search
             query for book from user-->
+
+        <!--image button for our search button -->
         <EditText
             android:id="@+id/idEdtSearchBooks"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4" />
 
+        <ImageButton
+            android:id="@+id/idBtnSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_search_foreground" />
+    </LinearLayout>
 
-        <!--image button for our search button -->
-    <ImageButton
-        android:id="@+id/idBtnSearch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/ic_search_foreground" />
-
-</LinearLayout>
+    <!-- TextView for displaying the number of selected books -->
+    <TextView
+    android:id="@+id/idTxtSelectedBooksCount"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="40dp"
+    android:text="Liczba wybranych książek: 0"
+    android:textSize="16sp" />
 
 <!--recycler view for displaying our list of books-->
     <androidx.recyclerview.widget.RecyclerView
@@ -43,6 +50,16 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         android:layout_height="match_parent"
         android:layout_below="@id/idLLsearch" />
+    <Button
+        android:id="@+id/idBtnSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idTxtSelectedBooksCount"
+        android:layout_marginTop="550dp"
+        android:layout_marginLeft="150dp"
+        android:text="Wyślij"
+        android:visibility="gone"
+         />
 
     <!--progressbar for displaying our loading indicator-->
     <ProgressBar

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 //import com.example.bookbuddy.databinding.FragmentSearchBinding
 import android.widget.EditText
 import android.widget.ImageButton
@@ -17,16 +18,15 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.bookbuddy.R
-import com.example.bookbuddy.databinding.FragmentAdminBinding
 import com.example.bookbuddy.databinding.FragmentSearchBinding
+import com.google.firebase.auth.FirebaseAuth
 
-//TODO: poprawić bo nie działa, activity pewnie trzeba, test
 
 class SearchFragment : Fragment(R.layout.fragment_search){
 //    private lateinit var bindingSearch: FragmentSearchBinding
-
+    lateinit var sendButton :Button
     private lateinit var bindingSearch: FragmentSearchBinding
-
+    private lateinit var firebaseAuth: FirebaseAuth
     lateinit var mRequestQueue: RequestQueue
     lateinit var booksList: ArrayList<BookRVModal>
     lateinit var loadingPB: ProgressBar
@@ -41,6 +41,19 @@ class SearchFragment : Fragment(R.layout.fragment_search){
 
 //        val rootView = inflater.inflate(R.layout.fragment_search, container, false)
         bindingSearch = FragmentSearchBinding.inflate(inflater, container, false)
+        val numberOfBooks = arguments?.getInt("numberOfBooks", 0)
+        if (numberOfBooks!=null)
+        {
+            sendButton= bindingSearch.idBtnSend
+
+// Ustawiamy widoczność przycisku w zależności od liczby książek
+            if (numberOfBooks == 3) {
+                sendButton.visibility = View.VISIBLE
+            } else {
+                sendButton.visibility = View.GONE
+            }
+        }
+        firebaseAuth= FirebaseAuth.getInstance()
 
 
         // on below line we are initializing
@@ -69,6 +82,8 @@ class SearchFragment : Fragment(R.layout.fragment_search){
         }
         return bindingSearch.root
     }
+
+
     private fun getBooksData(searchQuery: String) {
 
         // creating a new array list.
@@ -121,6 +136,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                         title,
                         subtitle,
                         authorsArrayList,
+                        id,
                         publisher,
                         publishedDate,
                         description,

@@ -57,6 +57,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
+    implementation("com.lorentzos.swipecards:library:1.0.9")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")

@@ -6,6 +6,7 @@ data class BookRVModal(
     var title: String,
     var subtitle: String,
     var authors: ArrayList<String>,
+    var id: Int,
     var publisher: String,
     var publishedDate: String,
     var description: String,
