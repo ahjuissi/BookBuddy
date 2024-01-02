@@ -12,6 +12,8 @@ import android.widget.Button
 import com.example.bookbuddy.R
 import com.example.bookbuddy.authenticationPart.LoginActivity
 import com.example.bookbuddy.homeView.AddPostFragment
+import com.example.bookbuddy.homeView.HomeFragment
+import com.example.bookbuddy.profileViewAdmin.AdminFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -37,6 +39,29 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
 
         // Pobierz UID aktualnie zalogowanego użytkownika
         val userId = firebaseAuth.currentUser?.uid
+        userId?.let { uid ->
+            val userInfoRef =
+                FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
+
+            userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userRole = snapshot.child("role").getValue(String::class.java)
+
+                    if (userRole == "admin") {
+                        bindingProfile.userProfileBackBtn.setOnClickListener {
+                            setCurrentFragment(AdminFragment())
+                        }
+
+                    } else {
+                        bindingProfile.userProfileBackBtn.visibility = View.GONE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Obsługa błędu odczytu danych z bazy danych
+                }
+            })
+        }
 
         userId?.let { fetchUserInfo(it) }
     }
