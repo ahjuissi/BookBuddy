@@ -19,15 +19,6 @@ import android.widget.Toast
 class AdminFragment : Fragment(R.layout.fragment_admin) {
     private lateinit var bindingAdmin: FragmentAdminBinding
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        println("onCreate")
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        println("onViewCreated")
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,6 +76,12 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         return bindingAdmin.root
        // return inflater.inflate(R.layout.fragment_admin, container, false)
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        println("onViewCreated")
+
+    }
+
 
 
     private fun setCurrentFragment(fragment: Fragment)=

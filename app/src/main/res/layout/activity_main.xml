@@ -6,11 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/swipe_ly"
-    >
 
         <FrameLayout
         android:id="@+id/flFragment"
@@ -22,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
         </FrameLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

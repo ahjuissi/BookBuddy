@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation("com.squareup.picasso:picasso:2.71828")
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
@@ -66,6 +67,5 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 
 }

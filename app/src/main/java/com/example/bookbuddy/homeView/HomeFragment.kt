@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.FragmentHomeBinding
 import com.example.bookbuddy.profileViewAdmin.UserListFragment
@@ -29,6 +30,9 @@ class HomeFragment : Fragment() {
     private lateinit var bindingHome: FragmentHomeBinding
     private lateinit var recyclerViewPosts: RecyclerView
     private lateinit var adapterPosts: AdapterPosts
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,17 +55,33 @@ class HomeFragment : Fragment() {
             setCurrentFragment(addPostFragment)
         }
 
+
+
         // Inicjalizacja adaptera
         adapterPosts = AdapterPosts(requireActivity(), posts)
         // Połączenie adaptera z RecyclerView
         recyclerViewPosts.adapter = adapterPosts
 
+
+        swipeRefreshLayout = bindingHome.containerRvHome
+        swipeRefreshLayout.setOnRefreshListener {
+            // on below line we are setting is refreshing to false.
+            swipeRefreshLayout.isRefreshing = false
+            // on below line we are notifying adapter
+            // that data has changed in recycler view.
+            recyclerViewPosts.adapter = adapterPosts
+            adapterPosts.notifyDataSetChanged()
+
+        }
+
         return bindingHome.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadPosts()
+
     }
 
     private fun loadPosts() {
