@@ -40,14 +40,9 @@
             android:text="Search" />
     </LinearLayout>
 
-    <!-- TextView for displaying the number of selected books -->
-    <TextView
-    android:id="@+id/idTxtSelectedBooksCount"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="60dp"
-    android:text="Liczba wybranych książek: 0"
-    android:textSize="16sp" />
+
+
+
 
 <!--recycler view for displaying our list of books-->
     <androidx.recyclerview.widget.RecyclerView
@@ -57,16 +52,17 @@
         android:layout_marginTop="15dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         android:layout_below="@id/idLLsearch" />
-    <Button
-        android:id="@+id/idBtnSend"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/sendVotingfab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/idTxtSelectedBooksCount"
-        android:layout_marginTop="550dp"
-        android:layout_marginLeft="150dp"
-        android:text="Wyślij"
-        android:visibility="gone"
-         />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/ic_edit_profile_foreground" />
 
     <!--progressbar for displaying our loading indicator-->
     <ProgressBar

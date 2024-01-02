@@ -60,20 +60,7 @@ class NavActivity : AppCompatActivity(){
             }
             true
         }
-
-        generateAndDisplayRandomNumber()
     }
-
-
-        private fun generateAndDisplayRandomNumber() {
-            // Generuj losową liczbę w zakresie od 1 do 100 (możesz dostosować zakres według potrzeb)
-            val randomNumber = Random.nextInt(1, 101)
-
-            // Znajdź TextView za pomocą jego ID
-            println(randomNumber)
-            // Ustaw wygenerowaną liczbę jako tekst w TextView
-        }
-
 
     private fun setCurrentFragment(fragment: Fragment)=
         supportFragmentManager.beginTransaction().apply {

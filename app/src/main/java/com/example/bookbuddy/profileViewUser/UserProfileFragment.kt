@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import android.view.ViewGroup
 import com.example.bookbuddy.databinding.FragmentProfileBinding
 import android.annotation.SuppressLint
@@ -11,8 +12,6 @@ import android.content.Intent
 import android.widget.Button
 import com.example.bookbuddy.R
 import com.example.bookbuddy.authenticationPart.LoginActivity
-import com.example.bookbuddy.homeView.AddPostFragment
-import com.example.bookbuddy.homeView.HomeFragment
 import com.example.bookbuddy.profileViewAdmin.AdminFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +35,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
         bindingProfile = FragmentProfileBinding.bind(view)
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-
         // Pobierz UID aktualnie zalogowanego użytkownika
         val userId = firebaseAuth.currentUser?.uid
         userId?.let { uid ->
@@ -47,7 +45,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userRole = snapshot.child("role").getValue(String::class.java)
 
-                    if (userRole == "admin") {
+                    if (userRole == "Admin") {
                         bindingProfile.userProfileBackBtn.setOnClickListener {
                             setCurrentFragment(AdminFragment())
                         }
@@ -65,6 +63,8 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
 
         userId?.let { fetchUserInfo(it) }
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

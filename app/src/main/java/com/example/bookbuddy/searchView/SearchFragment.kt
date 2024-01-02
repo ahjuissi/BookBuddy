@@ -19,12 +19,18 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.FragmentSearchBinding
+import com.example.bookbuddy.voteView.VoteFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
 class SearchFragment : Fragment(R.layout.fragment_search){
 //    private lateinit var bindingSearch: FragmentSearchBinding
-    lateinit var sendButton :Button
+    lateinit var sendButton :FloatingActionButton
     private lateinit var bindingSearch: FragmentSearchBinding
     private lateinit var firebaseAuth: FirebaseAuth
     lateinit var mRequestQueue: RequestQueue
@@ -36,25 +42,34 @@ class SearchFragment : Fragment(R.layout.fragment_search){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-//        bindingSearch = FragmentSearchBinding.inflate(inflater, container, false)
-
-//        val rootView = inflater.inflate(R.layout.fragment_search, container, false)
         bindingSearch = FragmentSearchBinding.inflate(inflater, container, false)
-        val numberOfBooks = arguments?.getInt("numberOfBooks", 0)
-        if (numberOfBooks!=null)
-        {
-            sendButton= bindingSearch.idBtnSend
+        sendButton= bindingSearch.sendVotingfab
+        sendButton.visibility = View.GONE // Ukryj przycisk domyślnie
 
-// Ustawiamy widoczność przycisku w zależności od liczby książek
-            if (numberOfBooks == 3) {
-                sendButton.visibility = View.VISIBLE
-            } else {
-                sendButton.visibility = View.GONE
-            }
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val userId = firebaseAuth.currentUser?.uid
+
+        userId?.let { uid ->
+            val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
+
+            userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userRole = snapshot.child("role").getValue(String::class.java)
+
+                    if (userRole == "Admin") {
+                        // Jeśli użytkownik ma rolę "Admin", pokaż przycisk
+                        sendButton.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
         }
-        firebaseAuth= FirebaseAuth.getInstance()
-
+        sendButton.setOnClickListener{
+            val ListVotingFragment = VoteFragment()
+            setCurrentFragment(ListVotingFragment)
+        }
 
         // on below line we are initializing
         // our variable with their ids.
@@ -174,4 +189,10 @@ class SearchFragment : Fragment(R.layout.fragment_search){
     }
 
 
+    private fun setCurrentFragment(fragment: Fragment)=
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment,fragment)
+            //    addToBackStack(null)
+            commit()
+        }
 }

@@ -5,13 +5,20 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.bookbuddy.R
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class BookDetailsActivity : AppCompatActivity() {
 
@@ -74,11 +81,48 @@ class BookDetailsActivity : AppCompatActivity() {
             .into(bookIV)
 
 
-
-        //TODO: ADD button , spr czy można zmienic admin = visibility.true itp
         addBtn = findViewById(R.id.idBtnAdd)
+
+        addBtn.visibility = View.GONE // Ukryj przycisk domyślnie
+
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val userId = firebaseAuth.currentUser?.uid
+
+        userId?.let { uid ->
+            val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
+
+            userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userRole = snapshot.child("role").getValue(String::class.java)
+
+                    if (userRole == "Admin") {
+                        // Jeśli użytkownik ma rolę "Admin", pokaż przycisk
+                        addBtn.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+        }
+
+
         addBtn.setOnClickListener {
-            println("git .")
+            val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
+            val bookData = HashMap<String, Any>()
+            bookData["title"] = title.toString()
+            bookData["publisher"] = publisher.toString()
+            bookData["for"] = "0"
+            bookData["against"] = "0"
+
+            databaseReference.push().setValue(bookData).addOnSuccessListener {
+                // Tworzenie i ustawienie fragmentu SearchFragment
+                val searchFragment = SearchFragment()
+                // Przejście do fragmentu SearchFragment
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.BookDetails, searchFragment)
+                    .commit()
+            }
         }
 
         // adding on click listener for our preview button.
