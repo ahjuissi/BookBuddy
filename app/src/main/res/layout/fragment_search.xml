@@ -13,7 +13,10 @@
         android:id="@+id/idLLsearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="#aabbccff"
         android:orientation="horizontal"
+        android:padding="4dp"
         android:weightSum="5">
 
         <!--edit text for getting the search
@@ -22,16 +25,19 @@
         <!--image button for our search button -->
         <EditText
             android:id="@+id/idEdtSearchBooks"
-            android:layout_width="0dp"
+            android:layout_width="260dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4" />
+            android:background="@color/white" />
 
-        <ImageButton
+        <Button
             android:id="@+id/idBtnSearch"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/ic_search_foreground" />
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="Search" />
     </LinearLayout>
 
     <!-- TextView for displaying the number of selected books -->
@@ -39,7 +45,7 @@
     android:id="@+id/idTxtSelectedBooksCount"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="40dp"
+    android:layout_marginTop="60dp"
     android:text="Liczba wybranych książek: 0"
     android:textSize="16sp" />
 
@@ -47,6 +53,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/idRVBooks"
         android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         android:layout_height="match_parent"
         android:layout_below="@id/idLLsearch" />

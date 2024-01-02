@@ -65,11 +65,6 @@ class AddPostFragment : Fragment() {
         des = bindingAddPost.pdes
         upload = bindingAddPost.pupload
 
-        bindingAddPost.addPostBackBtn.setOnClickListener{
-            val homeFragment = HomeFragment()
-            setCurrentFragment(homeFragment)
-        }
-
         databaseReference = FirebaseDatabase.getInstance().getReference("userInfo")
         val query: Query = databaseReference.orderByChild("userId").equalTo(uid)
         query.addValueEventListener(object : ValueEventListener {
@@ -85,11 +80,19 @@ class AddPostFragment : Fragment() {
             }
         })
 
+
+
+        return view
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindingAddPost.addPostBackBtn.setOnClickListener{
+            val homeFragment = HomeFragment()
+            setCurrentFragment(homeFragment)
+        }
         // Obsługa przycisku przesłania postu
         upload.setOnClickListener {
             // Pobranie danych wprowadzonych przez użytkownika
-            val homeFragment = HomeFragment()
-            setCurrentFragment(homeFragment)
             val titl = title.text.toString().trim()
             val description = des.text.toString().trim()
 
@@ -108,19 +111,13 @@ class AddPostFragment : Fragment() {
             }
 
         }
-        return view
+
     }
+
 
 
     // Metoda przesyłająca dane do Firebase Storage i zapisująca dane do Firebase Database
     private fun uploadData(titl: String, description: String,uid:String,name:String,email:String) {
-        val progressBar = ProgressDialog(requireContext())
-        var uid=uid
-        var name=name
-        var email=email
-        progressBar.setMessage("Publishing Post")
-        progressBar.show()
-
         val timestamp = System.currentTimeMillis().toString()
 
         val hashMap: HashMap<String, Any> = HashMap()
@@ -136,21 +133,23 @@ class AddPostFragment : Fragment() {
         val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         databaseReference.child(timestamp).setValue(hashMap)
             .addOnSuccessListener {
-                progressBar.dismiss()
                 Toast.makeText(requireContext(), "Published", Toast.LENGTH_LONG).show()
                 title.setText("")
                 des.setText("")
-                startActivity(Intent(requireContext(), NavActivity::class.java))
-                requireActivity().finish()
+                //startActivity(Intent(requireContext(), NavActivity::class.java))
+                //requireActivity().finish()
+                //to psuło ^ , tera git
+                val homeFragment = HomeFragment()
+                setCurrentFragment(homeFragment)
+
             }.addOnFailureListener { e ->
-                progressBar.dismiss()
                 Toast.makeText(requireContext(), "Failed", Toast.LENGTH_LONG).show()
             }
     }
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
-            //    addToBackStack(null)
+            addToBackStack(null)
             commit()
         }
 

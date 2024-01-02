@@ -31,7 +31,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
     lateinit var booksList: ArrayList<BookRVModal>
     lateinit var loadingPB: ProgressBar
     lateinit var searchEdt: EditText
-    lateinit var searchBtn: ImageButton
+    lateinit var searchBtn: Button
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
