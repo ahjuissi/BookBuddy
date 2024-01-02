@@ -53,9 +53,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/idRVBooks"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="15dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        android:layout_height="match_parent"
         android:layout_below="@id/idLLsearch" />
     <Button
         android:id="@+id/idBtnSend"
