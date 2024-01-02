@@ -102,25 +102,31 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:gravity="center">
 
             <!--button for displaying book preview-->
             <Button
                 android:id="@+id/idBtnPreview"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:layout_weight="1"
                 android:text="Preview"
+                android:textAllCaps="false" />
+            <!--button for dodawanie admin-->
+            <Button
+                android:id="@+id/idBtnAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="Add"
                 android:textAllCaps="false" />
 
             <!--button for opening buying page of the book-->
             <Button
                 android:id="@+id/idBtnBuy"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:layout_weight="1"
                 android:text="Buy"
                 android:textAllCaps="false" />
 

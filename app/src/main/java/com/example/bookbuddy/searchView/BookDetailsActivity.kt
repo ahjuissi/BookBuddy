@@ -26,11 +26,13 @@ class BookDetailsActivity : AppCompatActivity() {
     lateinit var previewBtn: Button
     lateinit var buyBtn: Button
     lateinit var bookIV: ImageView
+    lateinit var addBtn: Button
 
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_book_details)
 
         // initializing our variables.
@@ -43,6 +45,9 @@ class BookDetailsActivity : AppCompatActivity() {
         previewBtn = findViewById(R.id.idBtnPreview)
         buyBtn = findViewById(R.id.idBtnBuy)
         bookIV = findViewById(R.id.idIVbook)
+
+        //Add button
+        addBtn = findViewById(R.id.idBtnAdd)
 
         // getting the data which we have passed from our adapter class.
         val title = intent.getStringExtra("title")
@@ -67,6 +72,14 @@ class BookDetailsActivity : AppCompatActivity() {
         Glide.with(this@BookDetailsActivity)
             .load(thumbnail)
             .into(bookIV)
+
+
+
+        //TODO: ADD button , spr czy można zmienic admin = visibility.true itp
+        addBtn = findViewById(R.id.idBtnAdd)
+        addBtn.setOnClickListener {
+            println("git .")
+        }
 
         // adding on click listener for our preview button.
         previewBtn.setOnClickListener {
