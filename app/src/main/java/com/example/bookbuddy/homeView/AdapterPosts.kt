@@ -1,9 +1,7 @@
 package com.example.bookbuddy.homeView
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Context
-import android.content.Intent
 import android.text.format.DateFormat
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,20 +13,19 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookbuddy.databinding.RowPostsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
 import java.util.*
+
 
 class AdapterPosts(private val context: Context, private var modelPosts: MutableList<ModelPost?>?) :
     RecyclerView.Adapter<AdapterPosts.MyHolder>() {
 
     private lateinit var bindingRowPosts: RowPostsBinding
+
 
     //TODO: do spr
     private var myuid: String = FirebaseAuth.getInstance().currentUser!!.uid
@@ -38,6 +35,7 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         bindingRowPosts = RowPostsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
         return MyHolder(bindingRowPosts.root)
     }
 
@@ -60,47 +58,42 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
             } catch (_: Exception) {
             }
 
+            //TODO: like licznik itp
+            likebtn.setOnClickListener { view ->
+                if (likebtn.isSelected) {
+                    likebtn.isSelected = false
+                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart)
+                    println("un like")
+                } else {
+                    // Jeśli nie jest wybrany,
+                    // pokaż animację.
+                    likebtn.isSelected = true
+                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart_red)
+                    println("like")
 
-//            like.setOnClickListener {
-//                val intent = Intent(holder.itemView.context, PostLikedByActivity::class.java)
-//                intent.putExtra("pid", post.ptime)
-//                holder.itemView.context.startActivity(intent)
-//            }
+                    //TODO: zmiana ikonki
+                }
+            }
 
-//            likebtn.setOnClickListener {
-//                val plike = post.plike!!.toInt()
-//                mprocesslike = true
-//                val postid = post.ptime
-//                liekeref.addValueEventListener(object : ValueEventListener {
-//                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                        if (mprocesslike) {
-//                            mprocesslike = if (dataSnapshot.child(postid!!).hasChild(myuid)) {
-//                                postref.child(postid).child("plike").setValue("" + (plike - 1))
-//                                liekeref.child(postid).child(myuid).removeValue()
-//                                false
-//                            } else {
-//                                postref.child(postid).child("plike").setValue("" + (plike + 1))
-//                                liekeref.child(postid).child(myuid).setValue("Liked")
-//                                false
-//                            }
-//                        }
-//                    }
-//
-//                    override fun onCancelled(databaseError: DatabaseError) {}
-//                })
-//            }
 
+            more.visibility = View.GONE
+
+            if (post.uid == myuid) {
+                more.visibility = View.VISIBLE
+            }
             more.setOnClickListener {
                 showMoreOptions(more, post.uid, myuid, post.ptime)
             }
-//
+
 //            comment.setOnClickListener {
-//                val intent = Intent(context, PostDetailsActivity::class.java)
-//                intent.putExtra("pid", post.ptime)
-//                context.startActivity(intent)
+//                //TODO:jakoś żeby otwierało okno PostDetailsFragment z komentarzami
+//                val newFragment = PostDetailsFragment() // Tutaj zamiast YourNewFragment należy podać docelowy fragment
+//                activity.setCurrentFragment(newFragment)
 //            }
+
         }
     }
+
 
     private fun showMoreOptions(
         more: android.widget.ImageButton,
@@ -109,9 +102,7 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
         pid: String?
     ) {
         val popupMenu = PopupMenu(context, more, Gravity.END)
-        if (uid == myuid) {
-            popupMenu.menu.add(android.view.Menu.NONE, 0, 0, "DELETE")
-        }
+        popupMenu.menu.add(android.view.Menu.NONE, 0, 0, "DELETE")
         popupMenu.setOnMenuItemClickListener { item ->
             if (item.itemId == 0) {
                 //TODO: usuń post
@@ -135,7 +126,7 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
 //                    holder.likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_light_focused, 0, 0, 0)
 //                    holder.likebtn.text = "Liked"
 //                } else {
-//                    holder.likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_dark, 0, 0, 0)
+//                    holder.likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_full_open_on_phone, 0, 0, 0)
 //                    holder.likebtn.text = "Like"
 //                }
 //            }
@@ -157,7 +148,7 @@ class AdapterPosts(private val context: Context, private var modelPosts: Mutable
         val description: TextView = bindingRowPosts.descript
         val like: TextView = bindingRowPosts.plikeb
         val comments: TextView = bindingRowPosts.pcommentco
-        val likebtn: Button = bindingRowPosts.like
+        val likebtn: ImageView = bindingRowPosts.likeIv
         val comment: Button = bindingRowPosts.comment
         val profile: LinearLayout = bindingRowPosts.profilelayout
     }

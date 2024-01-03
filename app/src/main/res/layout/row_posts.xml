@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -44,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:text="Name"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/utimetv"
@@ -56,10 +57,9 @@
 
             <ImageButton
                 android:id="@+id/morebtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@null"
-                android:src="@drawable/ic_more_foreground" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_more_foreground"/>
 
         </LinearLayout>
 
@@ -68,7 +68,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:padding="5dp"
             android:textStyle="bold" />
 
         <TextView
@@ -76,13 +77,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Description"
+            android:padding="5dp"
+            android:textSize="18sp"
             android:textColor="@color/black" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <TextView
                 android:id="@+id/plikeb"
@@ -113,28 +117,25 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/like"
+            <ImageView
+                android:id="@+id/like_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:autoLink="all"
-                android:background="@color/black"
-                android:drawableStart="@drawable/ic_like_foreground"
-                android:drawableLeft="@drawable/ic_like_foreground"
-                android:padding="5dp"
-                android:text="Like" />
+                android:layout_gravity="center"
+                android:src="@drawable/heart_selector" />
+
+
+            <Space
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:orientation="horizontal" />
 
             <Button
                 android:id="@+id/comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:autoLink="all"
-
-                android:background="@color/black"
                 android:drawableStart="@drawable/ic_comment_foreground"
-                android:drawableLeft="@drawable/ic_comment_foreground"
                 android:padding="5dp"
                 android:text="COMMENT" />
         </LinearLayout>

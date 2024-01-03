@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         bindingHome = FragmentHomeBinding.inflate(inflater, container, false)
         recyclerViewPosts = bindingHome.recyclerviewPosts
@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
 
-        recyclerViewPosts.setLayoutManager(layoutManager)
+        recyclerViewPosts.layoutManager = layoutManager
 
         posts = ArrayList()
         bindingHome.homeAddPostBtn.setOnClickListener{
@@ -55,13 +55,10 @@ class HomeFragment : Fragment() {
             setCurrentFragment(addPostFragment)
         }
 
-
-
         // Inicjalizacja adaptera
         adapterPosts = AdapterPosts(requireActivity(), posts)
         // Połączenie adaptera z RecyclerView
         recyclerViewPosts.adapter = adapterPosts
-
 
         swipeRefreshLayout = bindingHome.containerRvHome
         swipeRefreshLayout.setOnRefreshListener {

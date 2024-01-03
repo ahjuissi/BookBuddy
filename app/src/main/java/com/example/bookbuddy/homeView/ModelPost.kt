@@ -12,5 +12,5 @@ class ModelPost(
 //    var plike: String? = null,
 //    var pcomments: String? = null
 ) {
-    constructor() : this("", "", "", "", "", "", "", "")
+    constructor() : this("", "", "", "", "", "","","")
 }
