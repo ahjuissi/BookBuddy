@@ -41,5 +41,4 @@
         android:padding="10dp"
         android:layout_marginTop="60dp"
         tools:listitem="@layout/voting_list_view_design" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
