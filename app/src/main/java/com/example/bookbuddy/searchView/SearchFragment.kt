@@ -28,9 +28,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 
-class SearchFragment : Fragment(R.layout.fragment_search){
-//    private lateinit var bindingSearch: FragmentSearchBinding
-    lateinit var sendButton :FloatingActionButton
+class SearchFragment : Fragment(R.layout.fragment_search) {
+    //    private lateinit var bindingSearch: FragmentSearchBinding
+    lateinit var sendButton: FloatingActionButton
     private lateinit var bindingSearch: FragmentSearchBinding
     private lateinit var firebaseAuth: FirebaseAuth
     lateinit var mRequestQueue: RequestQueue
@@ -43,9 +43,14 @@ class SearchFragment : Fragment(R.layout.fragment_search){
         savedInstanceState: Bundle?
     ): View {
         bindingSearch = FragmentSearchBinding.inflate(inflater, container, false)
-        sendButton= bindingSearch.sendVotingfab
+        sendButton = bindingSearch.sendVotingfab
         sendButton.visibility = View.GONE // Ukryj przycisk domyślnie
+        val title = arguments?.getString("title")
 
+        // Tutaj możesz użyć title w celu wywołania getBooksData(title)
+        if (!title.isNullOrEmpty()) {
+            getBooksData(title)
+        }
         val firebaseAuth = FirebaseAuth.getInstance()
         val userId = firebaseAuth.currentUser?.uid
 
@@ -66,7 +71,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
                 }
             })
         }
-        sendButton.setOnClickListener{
+        sendButton.setOnClickListener {
             val ListVotingFragment = VoteFragment()
             setCurrentFragment(ListVotingFragment)
         }
@@ -99,7 +104,7 @@ class SearchFragment : Fragment(R.layout.fragment_search){
     }
 
 
-    private fun getBooksData(searchQuery: String) {
+    fun getBooksData(searchQuery: String) {
 
         // creating a new array list.
         booksList = ArrayList()
@@ -189,9 +194,9 @@ class SearchFragment : Fragment(R.layout.fragment_search){
     }
 
 
-    private fun setCurrentFragment(fragment: Fragment)=
+    private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment,fragment)
+            replace(R.id.flFragment, fragment)
             //    addToBackStack(null)
             commit()
         }
