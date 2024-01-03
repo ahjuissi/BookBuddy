@@ -1,59 +1,62 @@
 package com.example.bookbuddy.voteView
-
-import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.request.transition.Transition
 import com.example.bookbuddy.R
+import java.util.*
+class VotingAdapter(private var mList: MutableList<VotingViewModel>,
+                    private val onItemClick: (VotingViewModel) -> Unit,
+                    private val onDeleteClick: (VotingViewModel) -> Unit ) : RecyclerView.Adapter<VotingAdapter.ViewHolder>() {
+    private var selectedItem: VotingViewModel? = null
 
-class VotingAdapter(private val mList: MutableList<VotingViewModel>) : RecyclerView.Adapter<VotingAdapter.ViewHolder>(),
-    Transition.ViewAdapter {
 
-    // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // inflates the card_view_design view
-        // that is used to hold list item
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.voting_list_view_design, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.voting_list_view_design, parent, false)
         return ViewHolder(view)
     }
 
-    // binds the list items to a view ::  , payloads: MutableList<Any>
-    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        val VotingViewModel = mList[position]
-        holder.titleView.text = VotingViewModel.title
-        holder.publisherView.text = VotingViewModel.publisher
-
+        val votingItem = mList[position]
+        holder.bind(votingItem)
     }
 
-    // return the number of the items in the list
     override fun getItemCount(): Int {
         return mList.size
     }
 
-    // Holds the views for adding it to image and text
-    class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val titleView: TextView = itemView.findViewById(R.id.titleView)
+        private val publisherView: TextView = itemView.findViewById(R.id.publisherView)
+        init {
+            // Ustawienie nasłuchiwania kliknięć na przycisku delButton
+            itemView.findViewById<Button>(R.id.delButton).setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = mList[position]
+                    mList.removeAt(position) // Usunięcie elementu z listy
+                    notifyDataSetChanged() // Odświeżenie widoku RecyclerView
+                    onDeleteClick.invoke(item) // Wywoł
+                }
+            }
+        }
+        fun bind(item: VotingViewModel) {
+            titleView.text = item.title
+            publisherView.text = item.publisher
 
-        val titleView: TextView = itemView.findViewById(R.id.titleView)
-        val publisherView: TextView = itemView.findViewById(R.id.publisherView)
+            itemView.setOnClickListener {
+                // Zaznacz wybrany element
+                selectedItem = item
+                onItemClick(item)
+            }
+        }
     }
-
-    override fun getView(): View {
-        TODO("Not yet implemented")
-    }
-
-    override fun getCurrentDrawable(): Drawable? {
-        TODO("Not yet implemented")
-    }
-
-    override fun setDrawable(drawable: Drawable?) {
-        TODO("Not yet implemented")
+    fun updateList(newList: List<VotingViewModel>) {
+        mList.clear()
+        mList.addAll(newList)
+        notifyDataSetChanged()
     }
 
 }
