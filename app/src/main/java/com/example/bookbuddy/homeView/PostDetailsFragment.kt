@@ -1,7 +1,9 @@
 package com.example.bookbuddy.homeView
 
+import android.content.ContentValues
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -16,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookbuddy.profileViewAdmin.UserViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -32,6 +35,7 @@ class PostDetailsFragment : Fragment() {
     private var myuid: String = ""
     private var myname: String = ""
     private var myemail: String = ""
+    private var mysurname: String = ""
     private var mydp: String = ""
     private var uimage: String = ""
     private var postId: String = ""
@@ -60,7 +64,6 @@ class PostDetailsFragment : Fragment() {
 
     private lateinit var commentList: MutableList<ModelComment>
     private lateinit var adapterComment: AdapterComment
-
     private lateinit var bindingPostDetails: FragmentPostDetailsBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db= Firebase.firestore
@@ -93,7 +96,7 @@ class PostDetailsFragment : Fragment() {
         progressBar = bindingPostDetails.detailsPB
 
         firebaseAuth = FirebaseAuth.getInstance()
-        val currentUser = firebaseAuth.currentUser
+        databaseReference = FirebaseDatabase.getInstance().reference
         // Extract postId from arguments
         postId = arguments?.getString("pid") ?: ""
 
@@ -102,7 +105,7 @@ class PostDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        currentUserInfo()
         progressBar = bindingPostDetails.detailsPB
         loadPostInfo(postId)
 
@@ -111,7 +114,6 @@ class PostDetailsFragment : Fragment() {
             postComment()
         }
 
-//        loadUserInfo() tylko profilowe wsm i imię
 //        setLikes()
 //        loadComments()
 
@@ -130,7 +132,9 @@ class PostDetailsFragment : Fragment() {
 
         val commentss = typeComment?.text.toString().trim()
         if (commentss.isEmpty()) {
+
             Toast.makeText(requireContext(), "Empty comment", Toast.LENGTH_LONG).show()
+            progressBar?.visibility = View.GONE
             return
         }
         val timestamp = System.currentTimeMillis().toString()
@@ -146,7 +150,7 @@ class PostDetailsFragment : Fragment() {
             .addOnSuccessListener {
                 Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show()
                 pCommentCount?.setText("")
-                updateCommentCount()
+               // updateCommentCount()
             }
             .addOnFailureListener { e ->
 
@@ -154,7 +158,32 @@ class PostDetailsFragment : Fragment() {
             }
         progressBar?.visibility = View.GONE
     }
+    private fun currentUserInfo(){
+        val userId = firebaseAuth.currentUser?.uid
+        userId?.let { uid ->
+            // Referencja do węzła userInfo dla danego użytkownika
+            val userRef = databaseReference.child("userInfo").child(uid)
 
+            // Odczytanie danych z bazy danych
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        // Odczytanie danych i przypisanie do zmiennych
+                         myname = snapshot.child("name").getValue(String::class.java).toString()
+                         myemail = snapshot.child("mail").getValue(String::class.java).toString()
+                        mysurname= snapshot.child("surname").getValue(String::class.java).toString()
+                    } else {
+                        // Jeśli węzeł nie istnieje
+                        Log.d("UserInfo", "User data not found")
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("UserInfo", "Error reading user data: ${error.message}")
+                }
+            })
+        }
+    }
 
     private fun loadPostInfo(postId: String) {
         //TODO: pPicture profilowe
@@ -236,23 +265,23 @@ class PostDetailsFragment : Fragment() {
 
 
     private var count = false
-    private fun updateCommentCount() {
-        count = true
-        val reference = FirebaseDatabase.getInstance().getReference("Posts").child(postId)
-        reference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (count) {
-                    val comments = dataSnapshot.child("pcomments").getValue(String::class.java)
-                    val newcomment = comments?.toInt() ?: 0 + 1
-                    reference.child("pcomments").setValue(newcomment.toString())
-                    count = false
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędów związanych z anulowaniem operacji odczytu z bazy danych
-            }
-
-        })
-    }
+//    private fun updateCommentCount() {
+//        count = true
+//        val reference = FirebaseDatabase.getInstance().getReference("Posts").child(postId)
+//        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                if (count) {
+//                    val comments = dataSnapshot.child("pcomments").getValue(String::class.java)
+//                    val newcomment = comments?.toInt() ?: 0 + 1
+//                    reference.child("pcomments").setValue(newcomment.toString())
+//                    count = false
+//                }
+//            }
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                // Obsługa błędów związanych z anulowaniem operacji odczytu z bazy danych
+//            }
+//
+//        })
+//    }
 
 }

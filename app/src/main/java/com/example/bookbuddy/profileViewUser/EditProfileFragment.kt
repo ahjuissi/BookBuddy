@@ -1,7 +1,11 @@
 package com.example.bookbuddy.profileViewUser
 
+import ImagePicDialog
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
@@ -33,7 +37,7 @@ class EditProfileFragment : Fragment() {
     private lateinit var bindingEditProfile: FragmentEditProfileBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db= Firebase.firestore
-
+    private lateinit var imageDialog: ImagePicDialog
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -42,6 +46,7 @@ class EditProfileFragment : Fragment() {
         bindingEditProfile = FragmentEditProfileBinding.bind(view)
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        imageDialog = ImagePicDialog(requireActivity())
 
         // Pobierz UID aktualnie zalogowanego użytkownika
         val userId = firebaseAuth.currentUser?.uid
@@ -66,11 +71,29 @@ class EditProfileFragment : Fragment() {
             nameChange()
         }
         bindingEditProfile.editProfilepic.setOnClickListener{
-//            ImagePicDialog()
+            ImagePicDialog()
         }
 
 
         return bindingEditProfile.root
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == ImagePicDialog.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+            val selectedImage: Uri? = data.data
+            selectedImage?.let {
+                val imageDialog = ImagePicDialog(requireActivity())
+                imageDialog.uploadImageToFirebaseStorage(selectedImage)
+            }
+        }
+    }
+    private fun ImagePicDialog() {
+        val imageDialog = ImagePicDialog(requireActivity())
+
+        bindingEditProfile.editProfilepic.setOnClickListener {
+            imageDialog.chooseImageFromGallery()
+        }
     }
     private fun nameChange() {
         val builder = AlertDialog.Builder(requireContext())
@@ -219,8 +242,8 @@ class EditProfileFragment : Fragment() {
             )
         }
 
-            dialog.show()
-        }
+        dialog.show()
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
