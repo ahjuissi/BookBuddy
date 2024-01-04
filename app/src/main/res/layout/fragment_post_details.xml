@@ -105,7 +105,7 @@
                         android:padding="5dp">
 
                         <TextView
-                            android:id="@+id/details_plikeb"
+                            android:id="@+id/details_plike_count"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -113,7 +113,7 @@
                             android:textColor="@color/colorPrimary" />
 
                         <TextView
-                            android:id="@+id/details_pcommentco"
+                            android:id="@+id/details_pcomment_count"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -178,17 +178,17 @@
         android:layout_alignParentBottom="true">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/commentimge"
+            android:id="@+id/comment_pic"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/profile_image" />
 
         <EditText
-            android:id="@+id/typecommet"
+            android:id="@+id/type_commet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/sendcomment"
-            android:layout_toEndOf="@id/commentimge"
+            android:layout_toEndOf="@id/comment_pic"
             android:background="@color/white"
             android:hint="Enter Comment..."
             android:inputType="textCapSentences|textMultiLine"

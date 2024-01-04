@@ -1,13 +1,11 @@
 package com.example.bookbuddy.homeView
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.bookbuddy.databinding.FragmentPostDetailsBinding
-import android.app.ProgressDialog
-import android.text.format.DateFormat
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
@@ -18,15 +16,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.bookbuddy.databinding.FragmentVotingBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.firestore
-import kotlinx.coroutines.NonDisposableHandle.parent
+import java.util.Calendar
+import java.util.Locale
 
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -43,19 +39,19 @@ class PostDetailsFragment : Fragment() {
     private var hisdp: String = ""
     private var hisname: String = ""
 
-    private var picture: ImageView? = null
-    private var image: ImageView? = null
-    private var name: TextView? = null
-    private var time: TextView? = null
+    private var pPicture: ImageView? = null
+    private var pName: TextView? = null
+    private var pTime: TextView? = null
     private var more: ImageButton? = null
-    private var title: TextView? = null
-    private var description: TextView? = null
-    private var like: TextView? = null
-    private var tcomment: TextView? = null
+    private var pTitle: TextView? = null
+    private var pDescription: TextView? = null
+    private var pCommentCount: TextView? = null
+    private var pLikeCount: TextView? = null
+    private var typeComment: EditText? = null
     private var likebtn: ImageView? = null
-    private var comment: EditText? = null
+
     private var sendb: ImageButton? = null
-    private var imagep: ImageView? = null
+    private var comPic: ImageView? = null
     private var profile: LinearLayout? = null
     private var recyclerView: RecyclerView? = null
     private var progressBar: ProgressBar? = null
@@ -78,18 +74,21 @@ class PostDetailsFragment : Fragment() {
 
         bindingPostDetails = FragmentPostDetailsBinding.inflate(inflater, container, false)
         recyclerView = bindingPostDetails.recycleComment
-        picture = bindingPostDetails.detailsPictureCo
-        name = bindingPostDetails.detailsUnameCo
-        time = bindingPostDetails.detailsUtimeCo
+
+        pPicture = bindingPostDetails.detailsPictureCo
+        pName = bindingPostDetails.detailsUnameCo
+        pTime = bindingPostDetails.detailsUtimeCo
         more = bindingPostDetails.detailsMorebtnCo
-        title = bindingPostDetails.detailsPtitleCo
-        description = bindingPostDetails.detailsDescriptCo
-        tcomment = bindingPostDetails.detailsPcommentco
-        like = bindingPostDetails.detailsPlikeb
+        pTitle = bindingPostDetails.detailsPtitleCo
+        pDescription = bindingPostDetails.detailsDescriptCo
+        pCommentCount = bindingPostDetails.detailsPcommentCount
+        pLikeCount = bindingPostDetails.detailsPlikeCount
         likebtn = bindingPostDetails.detailsLikeIv
-        comment = bindingPostDetails.typecommet
+
+        comPic = bindingPostDetails.commentPic
+        typeComment = bindingPostDetails.typeCommet
         sendb = bindingPostDetails.sendcomment
-        imagep = bindingPostDetails.commentimge
+
         profile = bindingPostDetails.profilelayoutCo
         progressBar = bindingPostDetails.detailsPB
 
@@ -98,66 +97,102 @@ class PostDetailsFragment : Fragment() {
         // Extract postId from arguments
         postId = arguments?.getString("pid") ?: ""
 
-        if (title != null) {
-            val textView = title
-            textView?.text = "New Text"
-        }
-
         return bindingPostDetails.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadPostInfo(postId)
-//        loadUserInfo()
-//        setLikes()
         progressBar = bindingPostDetails.detailsPB
-        loadComments()
+        loadPostInfo(postId)
+
+
         sendb?.setOnClickListener {
             postComment()
         }
+
+//        loadUserInfo() tylko profilowe wsm i imię
+//        setLikes()
+//        loadComments()
+
 //        likebtn.setOnClickListener {
 //            likepost()
 //        }
-//        like.setOnClickListener {
+//        pLikeCount.setOnClickListener {
 //            val intent = Intent(this@PostDetailsFragment, PostLikedByActivity::class.java)
 //            intent.putExtra("pid", postId)
 //            startActivity(intent)
 //        }
+
     }
+    private fun postComment() {
+        progressBar?.visibility = View.VISIBLE
+
+        val commentss = typeComment?.text.toString().trim()
+        if (commentss.isEmpty()) {
+            Toast.makeText(requireContext(), "Empty comment", Toast.LENGTH_LONG).show()
+            return
+        }
+        val timestamp = System.currentTimeMillis().toString()
+        val datarf = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comments")
+        val hashMap: MutableMap<String, Any> = HashMap()
+        hashMap["cId"] = timestamp
+        hashMap["comment"] = commentss
+        hashMap["uid"] = myuid
+        hashMap["uemail"] = myemail
+        hashMap["udp"] = mydp
+        hashMap["uname"] = myname
+        datarf.child(timestamp).setValue(hashMap)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show()
+                pCommentCount?.setText("")
+                updateCommentCount()
+            }
+            .addOnFailureListener { e ->
+
+                Toast.makeText(requireContext(), "Failed", Toast.LENGTH_LONG).show()
+            }
+        progressBar?.visibility = View.GONE
+    }
+
+
     private fun loadPostInfo(postId: String) {
+        //TODO: pPicture profilowe
         val databaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         val query: Query = databaseReference.orderByChild("ptime").equalTo(postId)
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (dataSnapshot1 in dataSnapshot.children) {
-                    val modelPost = dataSnapshot1.getValue(ModelPost::class.java)
-                    modelPost?.let {
-                        // Pobierz informacje o poście z modelu
-                        val ptitle = it.title
-                        val descriptions = it.description
-                        val uimage = it.upic ?: ""
-                        val hisdp = it.upic ?: ""
-                        val uemail = it.uemail ?: ""
-                        val hisname = it.uname ?: ""
-                        val ptime = it.ptime ?: ""
+                    val post =
+                        dataSnapshot1.getValue(object : GenericTypeIndicator<Map<String, Any>>() {})
+                    if (post != null) {
+                        val ptitle = post["title"] as? String ?: ""
+                        val descriptions = post["description"] as? String ?: ""
+                        val uimage = post["upic"] as? String ?: ""
+                        val uemail = post["uemail"] as? String ?: ""
+                        val hisname = post["uname"] as? String ?: ""
+                        val ptime = post["ptime"] as? String ?: ""
 
-                        // Ustaw informacje o poście w interfejsie użytkownika
-                        title?.text = ptitle
-                        description?.text = descriptions
-                        // Tutaj ustaw inne pola widoku na podstawie danych o poście
-                        // ...
+                        // Użyj wydobytych danych do aktualizacji interfejsu użytkownika
+                        val calendar = Calendar.getInstance(Locale.ENGLISH)
+                        calendar.timeInMillis = ptime.toLong()
+                        val timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString()
+
+                        pName?.text = hisname
+                        pTime?.text = timedate
+                        pTitle?.text = ptitle
+                        pDescription?.text = descriptions
+
                     }
                 }
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędów związanych z anulowaniem operacji odczytu z bazy danych
-            }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Obsługa błędów związanych z anulowaniem operacji odczytu z bazy danych
+                }
+
         })
     }
-
 
     // Funkcja do wczytywania komentarzy
     private fun loadComments() {
@@ -199,36 +234,6 @@ class PostDetailsFragment : Fragment() {
         // Integration of likepost from Java code goes here
     }
 
-    private fun postComment() {
-        progressBar?.visibility = View.VISIBLE
-
-        val commentss = comment?.text.toString().trim()
-        if (commentss.isEmpty()) {
-            Toast.makeText(requireContext(), "Empty comment", Toast.LENGTH_LONG).show()
-            return
-        }
-        val timestamp = System.currentTimeMillis().toString()
-        val datarf = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comments")
-        val hashMap: MutableMap<String, Any> = HashMap()
-        hashMap["cId"] = timestamp
-        hashMap["comment"] = commentss
-        hashMap["ptime"] = timestamp
-        hashMap["uid"] = myuid
-        hashMap["uemail"] = myemail
-        hashMap["udp"] = mydp
-        hashMap["uname"] = myname
-        datarf.child(timestamp).setValue(hashMap)
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show()
-                comment?.setText("")
-                updateCommentCount()
-            }
-            .addOnFailureListener { e ->
-
-                Toast.makeText(requireContext(), "Failed", Toast.LENGTH_LONG).show()
-            }
-        progressBar?.visibility = View.GONE
-    }
 
     private var count = false
     private fun updateCommentCount() {
@@ -243,15 +248,11 @@ class PostDetailsFragment : Fragment() {
                     count = false
                 }
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
                 // Obsługa błędów związanych z anulowaniem operacji odczytu z bazy danych
             }
+
         })
     }
-
-
-
-
 
 }

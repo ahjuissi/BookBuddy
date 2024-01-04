@@ -4,7 +4,6 @@ class ModelPost(
     var description: String? = null,
     var ptime: String? = null,
     var title: String? = null,
-    var pid: String? = null,
     var uid: String? = null,
     var uname: String? = null,
     var upic: String? = null,
@@ -12,5 +11,5 @@ class ModelPost(
 //    var plike: String? = null,
 //    var pcomments: String? = null
 ) {
-    constructor() : this("", "", "", "", "", "","","")
+    constructor() : this("", "", "",  "", "","","")
 }

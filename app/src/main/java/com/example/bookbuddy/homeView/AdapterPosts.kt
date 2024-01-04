@@ -71,14 +71,14 @@ class AdapterPosts(private val context: Context,
                 more.visibility = View.VISIBLE
             }
             more.setOnClickListener {
-                showMoreOptions(more, post.uid, myuid, post.ptime)
+                showMoreOptions(more, post.uid, myuid)
             }
 
             comment.setOnClickListener {
                 val postDetailsFragment = PostDetailsFragment()
                 val bundle = Bundle()
                 // Przekazanie ID posta do PostDetailsFragment
-                bundle.putString("pid", post?.pid)
+                bundle.putString("pid", post.ptime)
                 postDetailsFragment.arguments = bundle
 
                 if (itemView.context is AppCompatActivity) {
@@ -89,14 +89,14 @@ class AdapterPosts(private val context: Context,
                         .commit()
                 }
             }
+
         }
     }
 
     private fun showMoreOptions(
         more: ImageButton,
         uid: String?,
-        myuid: String,
-        pid: String?
+        myuid: String
     ) {
         val popupMenu = PopupMenu(context, more, Gravity.END)
         popupMenu.menu.add(android.view.Menu.NONE, 0, 0, "DELETE")

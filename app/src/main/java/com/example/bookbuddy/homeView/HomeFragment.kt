@@ -87,8 +87,8 @@ class HomeFragment : Fragment() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 posts?.clear()
-                for (dataSnapshot in dataSnapshot.children) {
-                    val modelPost = dataSnapshot.getValue(ModelPost::class.java)
+                for (dataSnapshot1 in dataSnapshot.children) {
+                    val modelPost = dataSnapshot1.getValue(ModelPost::class.java)
                     posts?.add(modelPost)
                 }
                 // Aktualizacja danych w adapterze
