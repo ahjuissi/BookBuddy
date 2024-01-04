@@ -23,6 +23,7 @@ import com.example.bookbuddy.databinding.RowPostsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
+//TODO: imie + nazwisko , to samo w postDetailsFr
 
 class AdapterPosts(private val context: Context,
                    private var modelPosts: MutableList<ModelPost?>?) :
