@@ -1,6 +1,5 @@
 package com.example.bookbuddy.homeView
 
-import android.content.ContentValues
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
@@ -18,7 +17,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookbuddy.profileViewAdmin.UserViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -57,7 +55,7 @@ class PostDetailsFragment : Fragment() {
     private var sendb: ImageButton? = null
     private var comPic: ImageView? = null
     private var profile: LinearLayout? = null
-    private var recyclerView: RecyclerView? = null
+    private var recyclerViewCom: RecyclerView? = null
     private var progressBar: ProgressBar? = null
 
     private var mlike: Boolean = false
@@ -76,7 +74,17 @@ class PostDetailsFragment : Fragment() {
     ): View {
 
         bindingPostDetails = FragmentPostDetailsBinding.inflate(inflater, container, false)
-        recyclerView = bindingPostDetails.recycleComment
+        recyclerViewCom = bindingPostDetails.recycleComment
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        databaseReference = FirebaseDatabase.getInstance().reference
+        // Extract postId from arguments
+        postId = arguments?.getString("pid") ?: ""
+
+        // Po zakończeniu pętli for, aktualizuj adapter RecyclerView raz
+        commentList = ArrayList()
+        adapterComment = AdapterComment(requireContext(), commentList, myuid, postId)
+        recyclerViewCom?.adapter = adapterComment
 
         pPicture = bindingPostDetails.detailsPictureCo
         pName = bindingPostDetails.detailsUnameCo
@@ -95,11 +103,6 @@ class PostDetailsFragment : Fragment() {
         profile = bindingPostDetails.profilelayoutCo
         progressBar = bindingPostDetails.detailsPB
 
-        firebaseAuth = FirebaseAuth.getInstance()
-        databaseReference = FirebaseDatabase.getInstance().reference
-        // Extract postId from arguments
-        postId = arguments?.getString("pid") ?: ""
-
         return bindingPostDetails.root
     }
 
@@ -115,7 +118,9 @@ class PostDetailsFragment : Fragment() {
         }
 
 //        setLikes()
-//        loadComments()
+        recyclerViewCom?.adapter = adapterComment
+        recyclerViewCom?.layoutManager = LinearLayoutManager(requireContext())
+        loadComments()
 
 //        likebtn.setOnClickListener {
 //            likepost()
@@ -140,7 +145,7 @@ class PostDetailsFragment : Fragment() {
         val timestamp = System.currentTimeMillis().toString()
         val datarf = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comments")
         val hashMap: MutableMap<String, Any> = HashMap()
-        hashMap["cId"] = timestamp
+        hashMap["ptime"] = timestamp
         hashMap["comment"] = commentss
         hashMap["uid"] = myuid
         hashMap["uemail"] = myemail
@@ -184,7 +189,6 @@ class PostDetailsFragment : Fragment() {
             })
         }
     }
-
     private fun loadPostInfo(postId: String) {
         //TODO: pPicture profilowe
         val databaseReference = FirebaseDatabase.getInstance().getReference("Posts")
@@ -222,23 +226,17 @@ class PostDetailsFragment : Fragment() {
 
         })
     }
-
-    // Funkcja do wczytywania komentarzy
     private fun loadComments() {
-        val layoutManager = LinearLayoutManager(requireContext())
-        recyclerView?.layoutManager = layoutManager
-        commentList = ArrayList()
         val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comments")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                commentList.clear()
+                val comments: MutableList<ModelComment> = ArrayList()
                 for (dataSnapshot1 in dataSnapshot.children) {
                     val modelComment: ModelComment? = dataSnapshot1.getValue(ModelComment::class.java)
-                    modelComment?.let { commentList.add(it) }
+                    modelComment?.let { comments.add(it) }
                 }
-                // Po zakończeniu pętli for, aktualizuj adapter RecyclerView raz
-                adapterComment = AdapterComment(requireContext(), commentList, myuid, postId)
-                recyclerView?.adapter = adapterComment
+                // Przekazanie nowej listy komentarzy do adaptera
+                adapterComment.updateComments(comments)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -247,24 +245,13 @@ class PostDetailsFragment : Fragment() {
         })
     }
 
-    private fun loadUserInfo() {
-        val userId = firebaseAuth.currentUser?.uid
-        if (userId != null) {
-            val databaseReference =
-                FirebaseDatabase.getInstance().getReference("userInfo").child(userId)
-        }
-    }
 
-    private fun setLikes() {
-        // Integration of setLikes from Java code goes here
+    private fun setLikesCount() {
     }
-
     private fun likepost() {
-        // Integration of likepost from Java code goes here
     }
-
-
     private var count = false
+
 //    private fun updateCommentCount() {
 //        count = true
 //        val reference = FirebaseDatabase.getInstance().getReference("Posts").child(postId)
