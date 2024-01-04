@@ -14,7 +14,8 @@ import com.example.bookbuddy.searchView.SearchFragment
 import java.util.*
 class VotingAdapter(private var mList: MutableList<VotingViewModel>,
                     private val onItemClick: (VotingViewModel) -> Unit,
-                    private val onDeleteClick: (VotingViewModel) -> Unit ) : RecyclerView.Adapter<VotingAdapter.ViewHolder>() {
+                    private val onDeleteClick: (VotingViewModel) -> Unit ) :
+    RecyclerView.Adapter<VotingAdapter.ViewHolder>() {
     private var selectedItem: VotingViewModel? = null
 
 
