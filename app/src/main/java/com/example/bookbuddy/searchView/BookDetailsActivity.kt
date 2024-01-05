@@ -101,7 +101,6 @@ class BookDetailsActivity : AppCompatActivity() {
                         addBtn.visibility = View.VISIBLE
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
