@@ -89,7 +89,7 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/plikeb"
+                android:id="@+id/plike_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -97,7 +97,7 @@
                 android:textColor="@color/colorPrimary" />
 
             <TextView
-                android:id="@+id/pcommentco"
+                android:id="@+id/pcomment_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

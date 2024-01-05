@@ -14,8 +14,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookbuddy.R
@@ -44,6 +44,10 @@ class AdapterPosts(private val context: Context,
         calendar.timeInMillis = post?.ptime!!.toLong()
         val timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString()
 
+        getLikesCount(post.ptime!!, holder.like_count)
+        getCommentsCount(post.ptime!!, holder.comments_count)
+        checkIfLiked(post.ptime!!, holder.likebtn)
+
         with(holder) {
             name.text = post.uname
             title.text = post.title
@@ -55,24 +59,12 @@ class AdapterPosts(private val context: Context,
             } catch (_: Exception) {
             }
 
-            likebtn.setOnClickListener { view ->
-                if (likebtn.isSelected) {
-                    likebtn.isSelected = false
-                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart)
-                    println("un like")
-                } else {
-                    likebtn.isSelected = true
-                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart_red)
-                    println("like")
-                }
-            }
-
             more.visibility = View.GONE
             if (post.uid == myuid) {
                 more.visibility = View.VISIBLE
             }
             more.setOnClickListener {
-                showMoreOptions(more, post.uid, myuid)
+                showMoreOptions(more, post.uid, position)
             }
 
             comment.setOnClickListener {
@@ -80,6 +72,7 @@ class AdapterPosts(private val context: Context,
                 val bundle = Bundle()
                 // Przekazanie ID posta do PostDetailsFragment
                 bundle.putString("pid", post.ptime)
+                bundle.putString("uid", post.uid)
                 postDetailsFragment.arguments = bundle
 
                 if (itemView.context is AppCompatActivity) {
@@ -90,25 +83,114 @@ class AdapterPosts(private val context: Context,
                         .commit()
                 }
             }
-
+            likebtn.setOnClickListener { view ->
+                likePost(post.ptime!!)
+            }
         }
     }
+    fun getLikesCount(pid: String, likeCountTextView: TextView) {
+        val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes")
+        likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val likesCount = dataSnapshot.childrenCount
+                likeCountTextView.text = likesCount.toString()
+            }
 
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Obsługa błędu
+                likeCountTextView.text = "Error"
+            }
+        })
+    }
+    fun getCommentsCount(pid: String, commentsCountTextView: TextView) {
+        val commentsRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Comments")
+        commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val commentsCount = dataSnapshot.childrenCount
+                commentsCountTextView.text = commentsCount.toString()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Obsługa błędu
+                commentsCountTextView.text = "Error"
+            }
+        })
+    }
+    private fun likePost(pid: String) {
+        val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes").child(myuid)
+        likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Użytkownik już polubił post, usuń polubienie
+                    likesRef.removeValue()
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Unliked", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(context, "Failed to unlike: $e", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    // Użytkownik nie polubił jeszcze postu, polub post
+                    likesRef.setValue(true)
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(context, "Failed to like: $e", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Obsługa błędu w bazie danych
+                Toast.makeText(context, "Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    fun checkIfLiked(pid: String, likebtn: ImageView) {
+        val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes").child(myuid)
+        likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart_red)
+                } else {
+                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Obsługa błędu w bazie danych
+                Toast.makeText(context, "Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
     private fun showMoreOptions(
         more: ImageButton,
         uid: String?,
-        myuid: String
+        position: Int
     ) {
         val popupMenu = PopupMenu(context, more, Gravity.END)
         popupMenu.menu.add(android.view.Menu.NONE, 0, 0, "DELETE")
         popupMenu.setOnMenuItemClickListener { item ->
             if (item.itemId == 0) {
-                //TODO: usuń post
+                // Delete the post from the database
+                val postIdToDelete = modelPosts!![position]?.ptime ?: ""
+                deletePost(postIdToDelete)
             }
             false
         }
         popupMenu.show()
     }
+    private fun deletePost(postId: String) {
+        val postsRef = FirebaseDatabase.getInstance().getReference("Posts").child(postId)
+        postsRef.removeValue()
+            .addOnSuccessListener {
+                Toast.makeText(context, "Post deleted successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Failed to delete post: $e", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newPosts: MutableList<ModelPost?>?) {
@@ -127,8 +209,8 @@ class AdapterPosts(private val context: Context,
         val more: ImageButton = itemView.findViewById(R.id.morebtn)
         val title: TextView = itemView.findViewById(R.id.ptitletv)
         val description: TextView = itemView.findViewById(R.id.descript)
-        val like: TextView = itemView.findViewById(R.id.plikeb)
-        val comments: TextView = itemView.findViewById(R.id.pcommentco)
+        val like_count: TextView = itemView.findViewById(R.id.plike_count)
+        val comments_count: TextView = itemView.findViewById(R.id.pcomment_count)
         val likebtn: ImageView = itemView.findViewById(R.id.like_iv)
         val comment: Button = itemView.findViewById(R.id.comment)
         val profile: LinearLayout = itemView.findViewById(R.id.profilelayout)
