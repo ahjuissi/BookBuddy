@@ -9,6 +9,7 @@ import com.example.bookbuddy.R
 import com.example.bookbuddy.profileViewUser.UserProfileFragment
 import com.example.bookbuddy.databinding.FragmentAdminBinding
 import com.example.bookbuddy.searchView.SearchFragment
+import com.example.bookbuddy.voteView.VoteFragment
 
 
 class AdminFragment : Fragment(R.layout.fragment_admin) {
@@ -33,7 +34,7 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
             //  showAddView()
         }
         bindingAdmin.idImgBtnAddVote.setOnClickListener {
-            val votingFragment = SearchFragment()
+            val votingFragment = VoteFragment()
             // Ustawiamy fragment w aktywności
             setCurrentFragment(votingFragment)
         }

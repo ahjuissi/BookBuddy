@@ -112,55 +112,51 @@ class BookDetailsActivity : AppCompatActivity() {
             val bookData = HashMap<String, Any>()
             bookData["title"] = title.toString()
             bookData["publisher"] = publisher.toString()
-            bookData["for"] = "0"
-            bookData["against"] = "0"
-
             databaseReference.push().setValue(bookData).addOnSuccessListener {
                 // Tworzenie i ustawienie fragmentu SearchFragment
                 val searchFragment = SearchFragment()
-                // Przejście do fragmentu SearchFragment
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.BookDetails, searchFragment)
+                    .replace(R.id.flFragment, searchFragment)
                     .commit()
             }
-        }
 
-        // adding on click listener for our preview button.
-        previewBtn.setOnClickListener {
-            if (previewLink.isNullOrEmpty()) {
-                // below toast message is displayed
-                // when preview link is not present.
-                Toast.makeText(
-                    this@BookDetailsActivity,
-                    "No preview Link present",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+            // adding on click listener for our preview button.
+            previewBtn.setOnClickListener {
+                if (previewLink.isNullOrEmpty()) {
+                    // below toast message is displayed
+                    // when preview link is not present.
+                    Toast.makeText(
+                        this@BookDetailsActivity,
+                        "No preview Link present",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+                // if the link is present we are opening
+                // that link via an intent.
+                val uri: Uri = Uri.parse(previewLink)
+                val i = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(i)
             }
-            // if the link is present we are opening
-            // that link via an intent.
-            val uri: Uri = Uri.parse(previewLink)
-            val i = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(i)
-        }
 
-        // adding click listener for buy button
-        buyBtn.setOnClickListener {
-            if (buyLink.isNullOrEmpty()) {
-                // below toast message is displaying
-                // when buy link is empty.
-                Toast.makeText(
-                    this@BookDetailsActivity,
-                    "No buy page present for this book",
-                    Toast.LENGTH_SHORT
-                ).show()
+            // adding click listener for buy button
+            buyBtn.setOnClickListener {
+                if (buyLink.isNullOrEmpty()) {
+                    // below toast message is displaying
+                    // when buy link is empty.
+                    Toast.makeText(
+                        this@BookDetailsActivity,
+                        "No buy page present for this book",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                // if the link is present we are opening
+                // the link via an intent.
+                val uri = Uri.parse(buyLink)
+                val i = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(i)
             }
-            // if the link is present we are opening
-            // the link via an intent.
-            val uri = Uri.parse(buyLink)
-            val i = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(i)
-        }
 
+        }
     }
 }
