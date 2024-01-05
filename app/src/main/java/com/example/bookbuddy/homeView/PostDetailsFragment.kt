@@ -344,7 +344,6 @@ class PostDetailsFragment : Fragment() {
         progressBar?.visibility = View.GONE
         callback.invoke()
     }
-
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
