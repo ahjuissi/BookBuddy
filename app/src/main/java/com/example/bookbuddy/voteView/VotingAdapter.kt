@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookbuddy.R
 import com.example.bookbuddy.searchView.SearchFragment
+import com.squareup.picasso.Picasso
 import java.util.*
 class VotingAdapter(private var mList: MutableList<VotingViewModel>,
                     private val onItemClick: (VotingViewModel) -> Unit,
@@ -37,7 +39,8 @@ class VotingAdapter(private var mList: MutableList<VotingViewModel>,
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleView: TextView = itemView.findViewById(R.id.titleView)
         private val publisherView: TextView = itemView.findViewById(R.id.publisherView)
-
+        private val imageView: ImageView = itemView.findViewById(R.id.idIVBook)
+        private val bookLayout: LinearLayout = itemView.findViewById(R.id.Book)
         init {
             // Ustawienie nasłuchiwania kliknięć na przycisku delButton
             itemView.findViewById<Button>(R.id.delButton).setOnClickListener {
@@ -72,7 +75,7 @@ class VotingAdapter(private var mList: MutableList<VotingViewModel>,
             fun bind(item: VotingViewModel) {
                 titleView.text = item.title
                 publisherView.text = item.publisher
-
+                Picasso.get().load(item.thumbnail).into(imageView)
                 itemView.setOnClickListener {
                     // Zaznacz wybrany element
                     selectedItem = item

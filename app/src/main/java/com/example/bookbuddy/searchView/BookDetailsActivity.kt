@@ -112,8 +112,8 @@ class BookDetailsActivity : AppCompatActivity() {
             val bookData = HashMap<String, Any>()
             bookData["title"] = title.toString()
             bookData["publisher"] = publisher.toString()
-            bookData["for"] = "0"
-            bookData["against"] = "0"
+            bookData["authors"] = authors.toString()
+            bookData["thumbnail"]=thumbnail.toString()
 
             databaseReference.push().setValue(bookData)
         }
