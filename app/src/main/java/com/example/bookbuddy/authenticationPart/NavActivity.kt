@@ -14,6 +14,7 @@ import com.example.bookbuddy.searchView.SearchFragment
 import com.example.bookbuddy.profileViewUser.UserProfileFragment
 import com.example.bookbuddy.voteView.VoteFragment
 import com.example.bookbuddy.homeView.HomeFragment
+import com.example.bookbuddy.voteView.UserVoteFragment
 import kotlin.random.Random
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +37,7 @@ class NavActivity : AppCompatActivity(){
         firebaseAuth=FirebaseAuth.getInstance()
         fetchUserInfo()
         val homeFragment= HomeFragment()
-        val voteFragment= VoteFragment()
+        val voteFragment= UserVoteFragment()
         val searchFragment= SearchFragment()
         val adminFragment= AdminFragment()
         val userFragment= UserProfileFragment()
