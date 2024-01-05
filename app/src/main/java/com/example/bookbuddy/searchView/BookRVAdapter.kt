@@ -48,7 +48,7 @@ class BookRVAdapter(
             val i = Intent(ctx, BookDetailsActivity::class.java)
             i.putExtra("title", bookInfo.title)
             i.putExtra("subtitle", bookInfo.subtitle)
-            i.putExtra("authors", bookInfo.authors)
+            i.putExtra("authors", bookInfo.authors.joinToString())
             i.putExtra("publisher", bookInfo.publisher)
             i.putExtra("publishedDate", bookInfo.publishedDate)
             i.putExtra("description", bookInfo.description)

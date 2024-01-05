@@ -60,6 +60,7 @@ class BookDetailsActivity : AppCompatActivity() {
         val title = intent.getStringExtra("title")
         val subtitle = intent.getStringExtra("subtitle")
         val publisher = intent.getStringExtra("publisher")
+        val authors = intent.getStringExtra("authors")?.split(", ")?.toMutableList() //ZMIANA
         val publishedDate = intent.getStringExtra("publishedDate")
         val description = intent.getStringExtra("description")
         val pageCount = intent.getIntExtra("pageCount", 0)
@@ -72,7 +73,7 @@ class BookDetailsActivity : AppCompatActivity() {
         // that data to our text views and image view.
         titleTV.text = title
         subtitleTV.text = subtitle
-        publisherTV.text = publisher
+        publisherTV.text = "$publisher\n${authors?.joinToString("\n")}"
         publisherDateTV.text = "Published On : $publishedDate"
         descTV.text = description
         pageTV.text = "No Of Pages : $pageCount"
@@ -115,14 +116,7 @@ class BookDetailsActivity : AppCompatActivity() {
             bookData["for"] = "0"
             bookData["against"] = "0"
 
-            databaseReference.push().setValue(bookData).addOnSuccessListener {
-                // Tworzenie i ustawienie fragmentu SearchFragment
-                val searchFragment = SearchFragment()
-                // Przejście do fragmentu SearchFragment
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.BookDetails, searchFragment)
-                    .commit()
-            }
+            databaseReference.push().setValue(bookData)
         }
 
         // adding on click listener for our preview button.
