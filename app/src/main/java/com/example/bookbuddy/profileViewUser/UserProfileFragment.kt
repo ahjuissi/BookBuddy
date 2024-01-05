@@ -29,10 +29,13 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
     private var db= Firebase.firestore
 
 
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        bindingProfile = FragmentProfileBinding.bind(view)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        bindingProfile = FragmentProfileBinding.inflate(inflater, container, false)
+
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         // Pobierz UID aktualnie zalogowanego użytkownika
@@ -44,41 +47,40 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
             userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userRole = snapshot.child("role").getValue(String::class.java)
-
                     if (userRole == "Admin") {
                         bindingProfile.userProfileBackBtn.setOnClickListener {
                             setCurrentFragment(AdminFragment())
                         }
-
                     } else {
                         bindingProfile.userProfileBackBtn.visibility = View.GONE
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                     // Obsługa błędu odczytu danych z bazy danych
                 }
             })
         }
-
         userId?.let { fetchUserInfo(it) }
-    }
 
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        bindingProfile = FragmentProfileBinding.inflate(inflater, container, false)
-        bindingProfile.editProfileFab.setOnClickListener{
-            //TODO: editUserProfile()
-             val editProfileFragment = EditProfileFragment()
-             setCurrentFragment(editProfileFragment)
-        }
         return bindingProfile.root
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        bindingProfile = FragmentProfileBinding.bind(view)
+
+        bindingProfile.editProfileFab.setOnClickListener{
+            val editProfileFragment = EditProfileFragment()
+            setCurrentFragment(editProfileFragment)
         }
+        bindingProfile.logoutButton.setOnClickListener{
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            requireActivity().finish()
+        }
+    }
 
     private fun fetchUserInfo(userId: String) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("userInfo").child(userId)

@@ -22,7 +22,6 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         // Inflate the layout for this fragment
         bindingAdmin = FragmentAdminBinding.inflate(inflater, container, false)
 
-
         bindingAdmin.idImgBtnAddUser.setOnClickListener {
             val userListFragment = UserListFragment()
             setCurrentFragment(userListFragment)
@@ -45,16 +44,10 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         println("onViewCreated")
 
     }
-
-
-
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
         //    addToBackStack(null)
             commit()
         }
-
-
-
 }

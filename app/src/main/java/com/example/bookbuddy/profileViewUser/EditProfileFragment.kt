@@ -39,11 +39,12 @@ class EditProfileFragment : Fragment() {
     private var db= Firebase.firestore
     private lateinit var imageDialog: ImagePicDialog
 
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        bindingEditProfile = FragmentEditProfileBinding.bind(view)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        bindingEditProfile = FragmentEditProfileBinding.inflate(inflater, container, false)
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         imageDialog = ImagePicDialog(requireActivity())
@@ -51,19 +52,17 @@ class EditProfileFragment : Fragment() {
         // Pobierz UID aktualnie zalogowanego użytkownika
         val userId = firebaseAuth.currentUser?.uid
         userId?.let {}  //TODO
-    }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        bindingEditProfile = FragmentEditProfileBinding.inflate(inflater, container, false)
 
+        return bindingEditProfile.root
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         bindingEditProfile.editProfileBackBtn.setOnClickListener{
             val userProfileFragment = UserProfileFragment()
             setCurrentFragment(userProfileFragment)
         }
-
         bindingEditProfile.editPassword.setOnClickListener{
             passwordChangeDialog()
         }
@@ -73,9 +72,6 @@ class EditProfileFragment : Fragment() {
         bindingEditProfile.editProfilepic.setOnClickListener{
             ImagePicDialog()
         }
-
-
-        return bindingEditProfile.root
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -246,9 +242,6 @@ class EditProfileFragment : Fragment() {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)

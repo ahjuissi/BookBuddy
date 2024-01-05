@@ -101,16 +101,13 @@ class PostDetailsFragment : Fragment() {
         profile = bindingPostDetails.profilelayoutCo
         progressBar = bindingPostDetails.detailsPB
 
-        getCommentsCount(postId, pCommentCount!!)
-        getLikesCount(postId, pLikeCount!!)
-        checkIfLiked(postId, likebtn!!)
+        getCommentsCount()
+        getLikesCount()
+        checkIfLiked()
 
         more?.visibility = View.GONE
         if (uId == myuid) {
             more?.visibility = View.VISIBLE
-        }
-        more?.setOnClickListener {
-            showMoreOptions(more!!, postId)
         }
 
         return bindingPostDetails.root
@@ -126,23 +123,24 @@ class PostDetailsFragment : Fragment() {
         loadPostInfo()
 
         likebtn?.setOnClickListener {
-            likePost(postId) { // Po kliknięciu polubienia, przekażemy funkcję zwrotną do aktualizacji licznika polubień
-                getLikesCount(postId, pLikeCount!!)
-                checkIfLiked(postId, likebtn!!)
+            likePost() { // Po kliknięciu polubienia, przekażemy funkcję zwrotną do aktualizacji licznika polubień
+                getLikesCount()
+                checkIfLiked()
             }
         }
         sendb?.setOnClickListener {
             postComment { // Po dodaniu komentarza, przekażemy funkcję zwrotną do aktualizacji licznika komentarzy
-                getCommentsCount(postId, pCommentCount!!)
+                typeComment?.setText("") // Wyczyszczenie pola tekstowego po dodaniu komentarza
+                getCommentsCount()
             }
+        }
+        more?.setOnClickListener {
+            showMoreOptions()
         }
 
     }
-    private fun showMoreOptions(
-        more: ImageButton,
-        uid: String?
-    ) {
-        val popupMenu = PopupMenu(context, more, Gravity.END)
+    private fun showMoreOptions() {
+        val popupMenu = PopupMenu(context, more!!, Gravity.END)
         popupMenu.menu.add(android.view.Menu.NONE, 0, 0, "DELETE")
         popupMenu.setOnMenuItemClickListener { item ->
             if (item.itemId == 0) {
@@ -221,8 +219,8 @@ class PostDetailsFragment : Fragment() {
 
         })
     }
-    private fun likePost(pid: String, callback: () -> Unit) {
-        val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes").child(myuid)
+    private fun likePost(callback: () -> Unit) {
+        val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Likes").child(myuid)
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -253,14 +251,14 @@ class PostDetailsFragment : Fragment() {
             }
         })
     }
-    fun checkIfLiked(pid: String, likebtn: ImageView) {
+    private fun checkIfLiked() {
         val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Likes").child(myuid)
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart_red)
+                    likebtn?.setImageResource(com.example.bookbuddy.R.drawable.heart_red)
                 } else {
-                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart)
+                    likebtn?.setImageResource(com.example.bookbuddy.R.drawable.heart)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -269,31 +267,30 @@ class PostDetailsFragment : Fragment() {
             }
         })
     }
-    fun getLikesCount(pid: String, likeCountTextView: TextView) {
-        val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes")
+    private fun getLikesCount() {
+        val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Likes")
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val likesCount = dataSnapshot.childrenCount
-                likeCountTextView.text = likesCount.toString()
+                pLikeCount!!.text = likesCount.toString()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Obsługa błędu
-                likeCountTextView.text = "Error"
+                pLikeCount!!.text = "Error"
             }
         })
     }
-    fun getCommentsCount(pid: String, commentsCountTextView: TextView) {
-        val commentsRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Comments")
+    private fun getCommentsCount() {
+        val commentsRef = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comments")
         commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val commentsCount = dataSnapshot.childrenCount
-                commentsCountTextView.text = commentsCount.toString()
+                pCommentCount!!.text = commentsCount.toString()
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
                 // Obsługa błędu
-                commentsCountTextView.text = "Error"
+                pCommentCount!!.text = "Error"
             }
         })
     }

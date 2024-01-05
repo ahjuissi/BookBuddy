@@ -96,7 +96,9 @@ class HomeFragment : Fragment() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(activity, databaseError.message, Toast.LENGTH_LONG).show()
+                activity?.let {
+                    Toast.makeText(it, databaseError.message, Toast.LENGTH_LONG).show()
+                }
             }
         })
     }
