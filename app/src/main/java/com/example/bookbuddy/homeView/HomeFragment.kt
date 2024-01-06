@@ -69,8 +69,6 @@ class HomeFragment : Fragment() {
 
         return bindingHome.root
     }
-
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
