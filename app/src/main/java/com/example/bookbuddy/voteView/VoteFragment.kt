@@ -95,7 +95,7 @@ class VoteFragment : Fragment() {
                                     winnerBookId = bookId ?: ""
                                 }
                             }
-
+//test
                             winnerBookId.takeIf { it.isNotEmpty() }?.let {
                                 val winner = WinnerInfo(userId, userCity, it, maxLikes)
                                 winnerData.add(winner)
