@@ -92,9 +92,10 @@ class UserVoteFragment : Fragment() {
                                 if (userVoted!="true") {
                                     val title = childSnapshot.child("title").getValue(String::class.java)
                                     val publisher = childSnapshot.child("publisher").getValue(String::class.java)
+                                    val thumbnail=childSnapshot.child("thumbnail").getValue(String::class.java).toString()
                                     title?.let { safeTitle ->
                                         publisher?.let { safePublisher ->
-                                            data.add(VotingViewModel(safeTitle, safePublisher, 0, 0, bookId))
+                                            data.add(VotingViewModel(safeTitle, safePublisher, 0, 0, bookId,thumbnail))
                                         }
                                     }
                                 }
