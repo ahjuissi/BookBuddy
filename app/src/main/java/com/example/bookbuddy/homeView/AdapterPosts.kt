@@ -28,16 +28,13 @@ import java.util.*
 class AdapterPosts(private val context: Context,
                    private var modelPosts: MutableList<ModelPost?>?) :
     RecyclerView.Adapter<AdapterPosts.MyHolder>() {
-    private lateinit var bindingRowPosts: RowPostsBinding
 
     private var myuid: String = FirebaseAuth.getInstance().currentUser!!.uid
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(com.example.bookbuddy.R.layout.row_posts, parent, false)
         return MyHolder(view)
     }
-
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         val post = modelPosts!![position]
         val calendar = Calendar.getInstance(Locale.ENGLISH)
@@ -64,7 +61,7 @@ class AdapterPosts(private val context: Context,
                 more.visibility = View.VISIBLE
             }
             more.setOnClickListener {
-                showMoreOptions(more, post.uid, position)
+                showMoreOptions(more, position)
             }
 
             comment.setOnClickListener {
@@ -88,12 +85,12 @@ class AdapterPosts(private val context: Context,
             }
         }
     }
-    fun getLikesCount(pid: String, likeCountTextView: TextView) {
+    private fun getLikesCount(pid: String, likeCountTextView: TextView) {
         val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes")
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val likesCount = dataSnapshot.childrenCount
-                likeCountTextView.text = likesCount.toString()
+                likeCountTextView.text = "Likes: $likesCount"
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -102,12 +99,12 @@ class AdapterPosts(private val context: Context,
             }
         })
     }
-    fun getCommentsCount(pid: String, commentsCountTextView: TextView) {
+    private fun getCommentsCount(pid: String, commentsCountTextView: TextView) {
         val commentsRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Comments")
         commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val commentsCount = dataSnapshot.childrenCount
-                commentsCountTextView.text = commentsCount.toString()
+                commentsCountTextView.text = "Comments: $commentsCount"
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -147,7 +144,7 @@ class AdapterPosts(private val context: Context,
             }
         })
     }
-    fun checkIfLiked(pid: String, likebtn: ImageView) {
+    private fun checkIfLiked(pid: String, likebtn: ImageView) {
         val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes").child(myuid)
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -163,11 +160,7 @@ class AdapterPosts(private val context: Context,
             }
         })
     }
-    private fun showMoreOptions(
-        more: ImageButton,
-        uid: String?,
-        position: Int
-    ) {
+    private fun showMoreOptions(more: ImageButton, position: Int) {
         val popupMenu = PopupMenu(context, more, Gravity.END)
         popupMenu.menu.add(android.view.Menu.NONE, 0, 0, "DELETE")
         popupMenu.setOnMenuItemClickListener { item ->
@@ -190,18 +183,14 @@ class AdapterPosts(private val context: Context,
                 Toast.makeText(context, "Failed to delete post: $e", Toast.LENGTH_SHORT).show()
             }
     }
-
-
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newPosts: MutableList<ModelPost?>?) {
         modelPosts = newPosts
         notifyDataSetChanged()
     }
-
     override fun getItemCount(): Int {
-        return modelPosts!!.size
+        return modelPosts?.size ?: 0
     }
-
     inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val picture: ImageView = itemView.findViewById(R.id.picturetv)
         val name: TextView = itemView.findViewById(R.id.unametv)

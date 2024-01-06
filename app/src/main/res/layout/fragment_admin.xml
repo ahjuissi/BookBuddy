@@ -22,6 +22,7 @@
         android:padding="20dp"
         tools:ignore="UselessParent">
 
+
         <FrameLayout
             android:id="@+id/idFrame_add_user"
             android:layout_width="wrap_content"
@@ -30,14 +31,12 @@
             android:paddingRight="15dp">
             <ImageButton
                 android:id="@+id/idImgBtnAddUser"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#aabbff"
+                android:padding="10dp"
                 android:src="@drawable/ic_add_btt_foreground"
-                android:padding="10dp"/>
-
-            <!--on below line we are creating a
-                 text for our image button-->
+                android:importantForAccessibility="no"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +63,7 @@
                 android:src="@drawable/ic_vote_foreground"
                 android:importantForAccessibility="no"/>
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="45dp"
@@ -75,31 +74,70 @@
                 android:paddingTop="5dp"/>
         </FrameLayout>
     </LinearLayout>
-        <FrameLayout
-            android:id="@+id/idFrame_profile"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_gravity="center"
-            android:paddingLeft="15dp">
-            <ImageButton
-                android:id="@+id/idImgBtnProfile"
+            android:padding="20dp"
+            tools:ignore="UselessParent">
+
+            <FrameLayout
+                android:id="@+id/idFrame_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#aabbff"
-                android:padding="10dp"
-                android:src="@drawable/ic_profile_foreground"
-                android:importantForAccessibility="no"/>
-            <TextView
-                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:paddingRight="15dp">
+
+                <ImageButton
+                    android:id="@+id/idImgBtnProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#aabbff"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_profile_foreground"
+                    android:importantForAccessibility="no"/>
+
+                <!--on below line we are creating a
+                     text for our image button-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="45dp"
+                    android:clickable="false"
+                    android:text="Your Profile"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:paddingTop="5dp"/>
+
+            </FrameLayout>
+            <FrameLayout
+                android:id="@+id/idFrame_add_date"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="45dp"
-                android:clickable="false"
-                android:text="Your Profile"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:paddingTop="5dp"/>
-        </FrameLayout>
+                android:paddingLeft="15dp">
+                <ImageButton
+                    android:id="@+id/idImgBtnAddDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#aabbff"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_calendar_foreground"
+                    android:importantForAccessibility="no"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="45dp"
+                    android:clickable="false"
+                    android:text="Add Date"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:paddingTop="5dp"/>
+            </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 
 

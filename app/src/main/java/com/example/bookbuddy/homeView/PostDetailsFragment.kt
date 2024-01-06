@@ -272,7 +272,7 @@ class PostDetailsFragment : Fragment() {
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val likesCount = dataSnapshot.childrenCount
-                pLikeCount!!.text = likesCount.toString()
+                pLikeCount!!.text = "Likes: $likesCount"
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -286,7 +286,7 @@ class PostDetailsFragment : Fragment() {
         commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val commentsCount = dataSnapshot.childrenCount
-                pCommentCount!!.text = commentsCount.toString()
+                pCommentCount!!.text = "Comments: $commentsCount"
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Obsługa błędu

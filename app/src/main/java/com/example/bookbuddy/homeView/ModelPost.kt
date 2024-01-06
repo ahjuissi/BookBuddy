@@ -8,8 +8,8 @@ class ModelPost(
     var uname: String? = null,
     var upic: String? = null,
     var uemail: String? = null,
-//    var plike: String? = null,
-//    var pcomments: String? = null
+    var city: String? = null
 ) {
-    constructor() : this("", "", "",  "", "","","")
+    constructor() : this("", "", "", "", "", "", "", "")
 }
+
