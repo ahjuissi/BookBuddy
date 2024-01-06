@@ -50,6 +50,7 @@ class BookRVAdapter(
             i.putExtra("subtitle", bookInfo.subtitle)
             i.putExtra("authors", bookInfo.authors.joinToString())
             i.putExtra("publisher", bookInfo.publisher)
+            i.putExtra("id",bookInfo.id)
             i.putExtra("publishedDate", bookInfo.publishedDate)
             i.putExtra("description", bookInfo.description)
             i.putExtra("pageCount", bookInfo.pageCount)

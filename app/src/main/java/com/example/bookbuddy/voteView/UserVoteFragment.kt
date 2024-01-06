@@ -14,19 +14,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
 
 class UserVoteFragment : Fragment() {
     private lateinit var bindingVote: FragmentUserVotingBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: UserVoteAdapter
     private var firebaseAuth = FirebaseAuth.getInstance()
+    private  val bookIds = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         bindingVote = FragmentUserVotingBinding.inflate(inflater, container, false)
+        fetchAllBookIdsFromVoting()
         return bindingVote.root
     }
 
@@ -47,27 +51,70 @@ class UserVoteFragment : Fragment() {
         )
         recyclerView.adapter = adapter
     }
+
+    private fun fetchAllBookIdsFromVoting() {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
+
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (childSnapshot in snapshot.children) {
+                    val bookId = childSnapshot.key
+                    // bookId to nazwa (klucz) dziecka w węźle "Voting"
+                    Log.d("ChildKey", bookId ?: "Key is null")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseError", "Error fetching children: ${error.message}")
+            }
+        })
+    }
     private fun fetchVoteList() {
         val userId = firebaseAuth.currentUser?.uid
-        userId?.let {
+        userId?.let { uid ->
             val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
-            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            val userVotesReference = FirebaseDatabase.getInstance().getReference("Voting")
+
+            userVotesReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(userVotesSnapshot: DataSnapshot) {
                     val data = mutableListOf<VotingViewModel>()
-                    for (childSnapshot in snapshot.children) {
-                        val title = childSnapshot.child("title").getValue(String::class.java)
-                        val publisher = childSnapshot.child("publisher").getValue(String::class.java)
-                        val thumbnail = childSnapshot.child("thumbnail").getValue(String::class.java)
-                        title?.let { data.add(VotingViewModel(it, publisher,0,0,thumbnail?:"")) }
-                    }
-                    adapter.updateList(data)
+
+                    // Pobranie wszystkich książek dostępnych do głosowania
+                    databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for (childSnapshot in snapshot.children) {
+                                val bookId = childSnapshot.key ?: ""
+
+                                // Sprawdzenie czy użytkownik zagłosował na tę konkretną książkę
+                                val userVotedSnapshot = userVotesSnapshot.child(bookId)
+                                val userVoted = userVotedSnapshot.child("usersVoted").child(uid).getValue(String::class.java)
+                                println(userVoted)
+                                if (userVoted!="true") {
+                                    val title = childSnapshot.child("title").getValue(String::class.java)
+                                    val publisher = childSnapshot.child("publisher").getValue(String::class.java)
+                                    val thumbnail=childSnapshot.child("thumbnail").getValue(String::class.java).toString()
+                                    title?.let { safeTitle ->
+                                        publisher?.let { safePublisher ->
+                                            data.add(VotingViewModel(safeTitle, safePublisher, 0, 0, bookId,thumbnail))
+                                        }
+                                    }
+                                }
+                            }
+                            adapter.updateList(data)
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.w(ContentValues.TAG, "Error getting documents: ", databaseError.toException())
+                        }
+                    })
                 }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.w(ContentValues.TAG, "Error getting documents: ", databaseError.toException())
+                override fun onCancelled(userVotesError: DatabaseError) {
+                    Log.e(ContentValues.TAG, "Error getting user votes: ", userVotesError.toException())
                 }
             })
         }
     }
+
 
 }

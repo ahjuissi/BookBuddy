@@ -63,6 +63,7 @@ class BookDetailsActivity : AppCompatActivity() {
         val authors = intent.getStringExtra("authors")?.split(", ")?.toMutableList() //ZMIANA
         val publishedDate = intent.getStringExtra("publishedDate")
         val description = intent.getStringExtra("description")
+        val id = intent.getStringExtra("id")
         val pageCount = intent.getIntExtra("pageCount", 0)
         val thumbnail = intent.getStringExtra("thumbnail")
         val previewLink = intent.getStringExtra("previewLink")
@@ -114,8 +115,8 @@ class BookDetailsActivity : AppCompatActivity() {
             bookData["publisher"] = publisher.toString()
             bookData["authors"] = authors.toString()
             bookData["thumbnail"]=thumbnail.toString()
-
-            databaseReference.push().setValue(bookData)
+            bookData["id"]=id.toString()
+            databaseReference.child(id.toString()).setValue(bookData)
         }
 
         // adding on click listener for our preview button.
