@@ -157,7 +157,6 @@ class EditProfileFragment : Fragment() {
 
         builder.create().show()
     }
-
     private fun passwordChangeDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Change password.")
@@ -240,8 +239,6 @@ class EditProfileFragment : Fragment() {
 
         dialog.show()
     }
-
-
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)

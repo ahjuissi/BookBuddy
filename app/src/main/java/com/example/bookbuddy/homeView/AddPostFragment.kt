@@ -45,6 +45,7 @@ class AddPostFragment : Fragment() {
     private lateinit var upload: Button
     private var name: String=""
     private  var email: String=""
+    private  var city: String=""
     private  var uid: String=""
     private lateinit var dp: String
     private lateinit var databaseReference: DatabaseReference
@@ -73,6 +74,8 @@ class AddPostFragment : Fragment() {
 
                     name = dataSnapshot1.child("name").getValue(String::class.java).toString()
                     email = dataSnapshot1.child("mail").getValue(String::class.java).toString()
+                    city = dataSnapshot1.child("city").getValue(String::class.java).toString()
+
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -107,7 +110,7 @@ class AddPostFragment : Fragment() {
                 Toast.makeText(requireContext(), "Description can't be left empty", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }else{
-                uploadData(titl, description,uid,name, email)
+                uploadData(titl, description,uid,name, email,city)
             }
 
         }
@@ -117,13 +120,14 @@ class AddPostFragment : Fragment() {
 
 
     // Metoda przesyłająca dane do Firebase Storage i zapisująca dane do Firebase Database
-    private fun uploadData(titl: String, description: String,uid:String,name:String,email:String) {
+    private fun uploadData(titl: String, description: String,uid:String,name:String,email:String, city:String) {
         val timestamp = System.currentTimeMillis().toString()
 
         val hashMap: HashMap<String, Any> = HashMap()
         hashMap["uid"] = uid
         hashMap["uname"] = name
         hashMap["uemail"] = email
+        hashMap["city"] = city
         hashMap["title"] = titl
         hashMap["description"] = description
         hashMap["ptime"] = timestamp
