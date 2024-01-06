@@ -1,5 +1,7 @@
 package com.example.bookbuddy.voteView
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookbuddy.R
 import com.example.bookbuddy.searchView.SearchFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 import java.util.*
 class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
                     private val onItemClick: (VotingViewModel) -> Unit,
@@ -21,7 +28,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
     RecyclerView.Adapter<UserVoteAdapter.ViewHolder>() {
     private var selectedItem: VotingViewModel? = null
     private val database = FirebaseDatabase.getInstance()
-    private val votesReference = database.reference.child("Votes")
+    private val votesReference = database.reference.child("Voting")
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -97,22 +104,34 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
     }
 
     private fun updateVotesInDatabase(item: VotingViewModel, voteValue: Int) {
-        val bookId = item.title
-        val votesRef = bookId?.let { votesReference.child(it) }
+        val bookId = item.id
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        userId?.let { uid ->
+            val votesReference = FirebaseDatabase.getInstance().getReference("Voting").child(bookId)
 
-        // Aktualizacja wartości w bazie danych
-        if(voteValue==-1)
-        {
-            if (votesRef != null) {
-                votesRef.child("bookDisikes").setValue(item.bookDislikes + voteValue)
-            }
-        }else
-            if (votesRef != null) {
-                votesRef.child("bookLikes").setValue(item.bookLikes + voteValue)
-            }
+            // Aktualizacja wartości w bazie danych dla pola bookLikes lub bookDislikes
+            votesReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val bookLikes = snapshot.child("bookLikes").getValue(Int::class.java) ?: 0
+                    val bookDislikes = snapshot.child("bookDislikes").getValue(Int::class.java) ?: 0
 
-        // Alternatywnie, jeśli używasz Realtime Database i istnieje wartość bookDislikes
-        // votesRef.child("bookDislikes").setValue(item.bookDislikes + voteValue)
+                    val updatedLikes = if (voteValue == 1) bookLikes + 1 else bookLikes
+                    val updatedDislikes = if (voteValue == -1) bookDislikes + 1 else bookDislikes
+
+                    // Aktualizacja pola bookLikes lub bookDislikes
+                    votesReference.child("bookLikes").setValue(updatedLikes)
+                    votesReference.child("bookDislikes").setValue(updatedDislikes)
+
+                    // Dodanie informacji o użytkowniku oddającym głos
+                    votesReference.child("usersVoted").child(uid).setValue("true")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Obsługa błędu pobierania danych z bazy danych
+                    Log.e(TAG, "Error updating votes in database: ", error.toException())
+                }
+            })
+        }
     }
 
 

@@ -39,7 +39,6 @@ class VotingAdapter(private var mList: MutableList<VotingViewModel>,
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleView: TextView = itemView.findViewById(R.id.titleView)
         private val publisherView: TextView = itemView.findViewById(R.id.publisherView)
-        private val imageView: ImageView = itemView.findViewById(R.id.idIVBook)
         private val bookLayout: LinearLayout = itemView.findViewById(R.id.Book)
         init {
             // Ustawienie nasłuchiwania kliknięć na przycisku delButton
@@ -75,7 +74,6 @@ class VotingAdapter(private var mList: MutableList<VotingViewModel>,
             fun bind(item: VotingViewModel) {
                 titleView.text = item.title
                 publisherView.text = item.publisher
-                Picasso.get().load(item.thumbnail).into(imageView)
                 itemView.setOnClickListener {
                     // Zaznacz wybrany element
                     selectedItem = item

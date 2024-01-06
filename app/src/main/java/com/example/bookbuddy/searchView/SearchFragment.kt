@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 //import com.example.bookbuddy.databinding.FragmentSearchBinding
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -130,6 +129,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 for (i in 0 until itemsArray.length()) {
                     val itemsObj = itemsArray.getJSONObject(i)
                     val volumeObj = itemsObj.getJSONObject("volumeInfo")
+                    val industryIdentifiers = volumeObj.getJSONArray("industryIdentifiers")
+                    val id = industryIdentifiers.getJSONObject(0).getString("identifier")
                     val title = volumeObj.optString("title")
                     val subtitle = volumeObj.optString("subtitle")
                     val authorsArray = volumeObj.getJSONArray("authors")

@@ -61,7 +61,8 @@ class VoteFragment : Fragment() {
                     for (childSnapshot in snapshot.children) {
                         val title = childSnapshot.child("title").getValue(String::class.java)
                         val publisher = childSnapshot.child("authors").getValue(String::class.java)
-                        title?.let { data.add(VotingViewModel(it, publisher,0,0,"")) }
+                        val id=childSnapshot.child("id").getValue(String::class.java)
+                        title?.let { data.add(VotingViewModel(it, publisher,0,0, id.toString())) }
                     }
                     adapter.updateList(data)
                 }
