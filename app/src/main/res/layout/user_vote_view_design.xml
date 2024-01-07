@@ -18,7 +18,7 @@
             android:layout_height="48dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_back_btt_foreground" />
+            android:src="@drawable/ic_delete_btt_foreground" />
 
         <ImageView
             android:id="@+id/imageViewPositive"
@@ -26,7 +26,7 @@
             android:layout_height="48dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_comment_foreground" />
+            android:src="@drawable/ic_add_post_btt_foreground" />
 
         <LinearLayout
             android:id="@+id/Book"
@@ -37,11 +37,14 @@
             <ImageView
                 android:id="@+id/idIVBook"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
                 android:padding="5dp"
                 android:scaleType="fitCenter" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/titleView"
                 android:layout_width="260dp"
@@ -50,6 +53,7 @@
                 android:layout_marginEnd="-6dp"
                 android:text="Tytuł książki"
                 android:textSize="18sp" />
+            </LinearLayout>
 
         </LinearLayout>
         <TextView

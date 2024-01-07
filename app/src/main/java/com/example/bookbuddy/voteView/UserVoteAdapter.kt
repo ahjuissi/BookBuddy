@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.bookbuddy.R
 import com.example.bookbuddy.searchView.SearchFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -48,6 +49,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleView: TextView = itemView.findViewById(R.id.titleView)
+        private val idIVBook: ImageView = itemView.findViewById(R.id.idIVBook)
 
         init {
                 // Ustawienie nasłuchiwania kliknięć na przycisku imageViewNegative
@@ -78,6 +80,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
                 }
 
             }
+
         }
         fun bind(item: VotingViewModel) {
             titleView.text = item.title
@@ -87,7 +90,23 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
                 selectedItem = item
                 onItemClick(item)
             }
+            val thumbnailRef = FirebaseDatabase.getInstance().getReference("Voting/${item.id}/thumbnail")
+            thumbnailRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val thumbnail = snapshot.getValue(String::class.java)
+                    thumbnail?.let {
+                        Glide.with(itemView.context)
+                            .load(it)
+                            .into(idIVBook)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, "Error fetching thumbnail: ${error.message}")
+                }
+            })
         }
+
     }
     private fun handleVoteButtonClick(position: Int, voteValue: Int) {
         if (position != RecyclerView.NO_POSITION) {
