@@ -36,12 +36,19 @@ class NavActivity : AppCompatActivity(){
         setContentView(bindingMain.root)
         firebaseAuth=FirebaseAuth.getInstance()
         fetchUserInfo()
+
+
         val homeFragment= HomeFragment()
         val userVoteFragment= UserVoteFragment()
         val searchFragment= SearchFragment()
         val adminFragment= AdminFragment()
         val userFragment= UserProfileFragment()
 //        val profileFragment=ProfileFragment()
+
+
+
+
+
         setCurrentFragment(homeFragment)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { item->
@@ -62,6 +69,8 @@ class NavActivity : AppCompatActivity(){
             true
         }
     }
+
+
 
     private fun setCurrentFragment(fragment: Fragment)=
         supportFragmentManager.beginTransaction().apply {

@@ -6,14 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.FragmentUserVotingBinding
-import com.example.bookbuddy.databinding.FragmentVoteBinding
-import com.example.bookbuddy.databinding.FragmentVotingBinding
 import com.example.bookbuddy.databinding.UserVoteViewDesignBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -22,29 +21,80 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class UserVoteFragment : Fragment() {
-    private lateinit var bindingVote: FragmentUserVotingBinding
+    private lateinit var bindingUserVoting: FragmentUserVotingBinding
     private lateinit var bindingVoteDesigne: UserVoteViewDesignBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: UserVoteAdapter
     private var firebaseAuth = FirebaseAuth.getInstance()
     private  val bookIds = mutableListOf<String>()
+    private var winner: TextView? = null
+
+    private lateinit var loadingDialog: AlertDialog
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        bindingVote = FragmentUserVotingBinding.inflate(inflater, container, false)
-        bindingVoteDesigne = UserVoteViewDesignBinding.inflate(inflater, container, false)
-        fetchAllBookIdsFromVoting()
-        return bindingVote.root
+    ): View {
+        println("onCreateView")
+        // Initialize loading indicator
+        loadingDialog = createLoadingDialog()
+        bindingUserVoting = FragmentUserVotingBinding.inflate(inflater, container, false)
+
+        return bindingUserVoting.root
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val bookView = view.findViewById<LinearLayout>(R.id.Book)
-        checkWinnerBranchExists()
+        println("onViewCreated")
+        showLoadingDialog() // Show loading indicator before making the database query
+
+        val winnerReference = FirebaseDatabase.getInstance().getReference("Winner")
+        winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                dismissLoadingDialog() // Hide loading indicator once the data is retrieved
+                if (snapshot.exists()) {
+                    println("winnnnnnn")
+                    bindingUserVoting.userVotingWinner.visibility = View.VISIBLE
+                    fetchWinner()
+                } else {
+                    println("glosowanie")
+                    setupRecyclerView()
+                    fetchAllBookIdsFromVoting()
+                    fetchVoteList()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseError", "Error checking Winner branch: ${error.message}")
+            }
+        })
+
+        dismissLoadingDialog() // Hide loading indicator once the logic is completed
     }
+
+    // Helper method to create loading indicator dialog
+    private fun createLoadingDialog(): AlertDialog {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(R.layout.loading_indicator)
+        builder.setCancelable(false)
+        return builder.create()
+    }
+
+    // Helper method to show loading indicator
+    private fun showLoadingDialog() {
+        loadingDialog.show()
+    }
+
+    // Helper method to dismiss loading indicator
+    private fun dismissLoadingDialog() {
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
+    }
+
 
     private fun checkWinnerBranchExists() {
         val winnerReference = FirebaseDatabase.getInstance().getReference("Winner")
@@ -52,9 +102,11 @@ class UserVoteFragment : Fragment() {
         winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
+
                     fetchWinner()
                 } else {
                     // Gałąź "Winner" nie istnieje, pobierz dane z głosowania
+
                     setupRecyclerView()
                     fetchVoteList()
                 }
@@ -68,6 +120,7 @@ class UserVoteFragment : Fragment() {
 
     private fun fetchWinner() {
         val winnerReference = FirebaseDatabase.getInstance().getReference("Winner")
+        winner = bindingUserVoting.voteFragmentWinner
 
         winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -77,6 +130,7 @@ class UserVoteFragment : Fragment() {
                     val bookTitle = childSnapshot.child("bookTitle").getValue(String::class.java)
                     val numberOfVotes = childSnapshot.child("numberOfVotes").getValue(Int::class.java)
                     println(bookTitle)
+                    winner?.text = bookTitle
                     bookTitle?.let { title ->
                         numberOfVotes?.let { votes ->
                             val winner = WinnerInfo(title, votes.toString())
@@ -111,7 +165,7 @@ class UserVoteFragment : Fragment() {
         })
     }
     private fun setupRecyclerView() {
-        recyclerView = bindingVote.recyclerView
+        recyclerView = bindingUserVoting.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val templist: List<VotingViewModel> = emptyList()
         val data: MutableList<VotingViewModel> = templist.toMutableList()
@@ -122,7 +176,6 @@ class UserVoteFragment : Fragment() {
         )
         recyclerView.adapter = adapter
     }
-
     private fun fetchAllBookIdsFromVoting() {
         val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
 
