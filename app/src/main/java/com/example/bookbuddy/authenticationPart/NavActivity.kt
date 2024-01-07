@@ -37,7 +37,7 @@ class NavActivity : AppCompatActivity(){
         firebaseAuth=FirebaseAuth.getInstance()
         fetchUserInfo()
         val homeFragment= HomeFragment()
-        val voteFragment= UserVoteFragment()
+        val userVoteFragment= UserVoteFragment()
         val searchFragment= SearchFragment()
         val adminFragment= AdminFragment()
         val userFragment= UserProfileFragment()
@@ -47,7 +47,7 @@ class NavActivity : AppCompatActivity(){
         bottomNavigationView.setOnItemSelectedListener { item->
             when(item.itemId) {
                 R.id.home -> setCurrentFragment(homeFragment)
-                R.id.vote -> setCurrentFragment(voteFragment)
+                R.id.vote -> setCurrentFragment(userVoteFragment)
                 R.id.search -> setCurrentFragment(searchFragment)
                 R.id.profile -> {
                     if (role == "Admin") {

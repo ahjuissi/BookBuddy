@@ -4,5 +4,8 @@ data class WinnerInfo(
     val userId: String = "",
     val city: String = "",
     val bookId: String="",
-    val totalVotes: Any
-)
+    val totalVotes: Int=0,
+    val bookTitle: String=""
+){
+    constructor() : this("", "", "", 0)
+}

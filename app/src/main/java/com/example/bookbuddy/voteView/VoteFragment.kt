@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookbuddy.databinding.FragmentVotingBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,9 +21,10 @@ class VoteFragment : Fragment() {
     private lateinit var bindingVoteList: FragmentVotingBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: VotingAdapter
-    lateinit var delete: FloatingActionButton
+    lateinit var delete: Button
     private var firebaseAuth = FirebaseAuth.getInstance()
     private lateinit var userCity:String
+    private lateinit var bookTitle:String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +64,7 @@ class VoteFragment : Fragment() {
     }
     private fun checkWinnerTableExistence() {
         val databaseReference = FirebaseDatabase.getInstance().getReference("Winner")
-
+        val databaseVoting = FirebaseDatabase.getInstance().getReference("Voting")
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!snapshot.exists()) {
@@ -79,6 +80,8 @@ class VoteFragment : Fragment() {
 
                             for (votingChildSnapshot in votingSnapshot.children) {
                                 val bookId = votingChildSnapshot.child("id").getValue(String::class.java)
+                                    bookTitle = votingChildSnapshot.child("title").getValue(String::class.java)
+                                        .toString()
                                 var totalLikes = 0
                                 var totalDislikes = 0
 
@@ -95,9 +98,10 @@ class VoteFragment : Fragment() {
                                     winnerBookId = bookId ?: ""
                                 }
                             }
+                            databaseVoting.removeValue()
 //test
                             winnerBookId.takeIf { it.isNotEmpty() }?.let {
-                                val winner = WinnerInfo(userId, userCity, it, maxLikes)
+                                val winner = WinnerInfo(userId, userCity, it, maxLikes, bookTitle)
                                 winnerData.add(winner)
                                 saveWinnerInfoToDatabase(winnerData)
                             }

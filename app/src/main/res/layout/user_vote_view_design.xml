@@ -50,6 +50,16 @@
                 android:layout_marginEnd="-6dp"
                 android:text="Tytuł książki"
                 android:textSize="18sp" />
+
         </LinearLayout>
+        <TextView
+            android:layout_marginTop="220dp"
+            android:layout_marginLeft="130dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/Result">
+
+
+        </TextView>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
