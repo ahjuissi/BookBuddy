@@ -1,14 +1,18 @@
 package com.example.bookbuddy.profileViewUser
 
 import ImagePicDialog
+import ImagePicDialog.Companion.REQUEST_CODE_GALLERY
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +32,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
+import com.shashank.sony.fancytoastlib.FancyToast
+import java.util.Date
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,8 +44,10 @@ import com.google.firebase.firestore.firestore
 class EditProfileFragment : Fragment() {
     private lateinit var bindingEditProfile: FragmentEditProfileBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var storage: FirebaseStorage
     private var db= Firebase.firestore
     private lateinit var imageDialog: ImagePicDialog
+    private var selectedPicture : Uri? =null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +57,7 @@ class EditProfileFragment : Fragment() {
         bindingEditProfile = FragmentEditProfileBinding.inflate(inflater, container, false)
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        storage=FirebaseStorage.getInstance()
         imageDialog = ImagePicDialog(requireActivity())
 
         // Pobierz UID aktualnie zalogowanego użytkownika
@@ -70,26 +81,65 @@ class EditProfileFragment : Fragment() {
             nameChange()
         }
         bindingEditProfile.editProfilepic.setOnClickListener{
-            ImagePicDialog()
-        }
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+           val intent=Intent()
+            intent.action=Intent.ACTION_GET_CONTENT
+            intent.type="image/*"
+            startActivityForResult(intent,1)
 
-        if (requestCode == ImagePicDialog.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-            val selectedImage: Uri? = data.data
-            selectedImage?.let {
-                val imageDialog = ImagePicDialog(requireActivity())
-                imageDialog.uploadImageToFirebaseStorage(selectedImage)
+        }
+//        bindingEditProfile.continueBtn.setOnClickListener{
+//            if(selectedPicture==null)
+//            {
+//                Toast.makeText(this@EditProfileFragment,"Please select your image",Toast.LENGTH_SHORT).show()
+//            }else updateImage()
+//
+//        }
+    }
+    private fun updateImage(){
+val reference=storage.reference.child("Profile").child(Date().time.toString())
+        reference.putFile(selectedPicture!!).addOnCompleteListener{
+            if(it.isSuccessful)
+            {
+                reference.downloadUrl.addOnSuccessListener { taks->
+                    uploadInfo(taks.toString())
+                }
             }
         }
-    }
-    private fun ImagePicDialog() {
-        val imageDialog = ImagePicDialog(requireActivity())
 
-        bindingEditProfile.editProfilepic.setOnClickListener {
-            imageDialog.chooseImageFromGallery()
+    }
+    private fun uploadInfo(imgUrl:String)
+    {val userId = FirebaseAuth.getInstance().currentUser?.uid
+        userId?.let { uid ->
+            val databaseReference = FirebaseDatabase.getInstance().reference
+            val userInfoRef = databaseReference.child("userInfo").child(uid)
+
+            // Save imgUrl under the current user's ID in the userInfo node
+            userInfoRef.child("imgUrl").setValue(imgUrl)
+                .addOnSuccessListener {
+                    // Handle success if necessary
+                    // For example, Log a success message
+                    println("Image URL saved successfully")
+                }
+                .addOnFailureListener { e ->
+                    // Handle any errors that may occur during the operation
+                    // For example, Log an error message
+                    Log.e(TAG, "Error saving image URL: ${e.message}")
+                }
         }
+
+    }
+
+    fun startActivityForResult(intent: Intent, requestCode: Int,data: Intent?) {
+        super.startActivityForResult(intent, requestCode)
+        if(data!=null)
+        {
+            if(data.data!=null)
+            {
+                selectedPicture=data.data!!
+
+            }
+        }
+
     }
     private fun nameChange() {
         val builder = AlertDialog.Builder(requireContext())

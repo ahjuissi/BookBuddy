@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookbuddy.R
+import com.example.bookbuddy.searchView.BookDetailsActivity
 import com.example.bookbuddy.searchView.SearchFragment
 import com.squareup.picasso.Picasso
 import java.util.*
