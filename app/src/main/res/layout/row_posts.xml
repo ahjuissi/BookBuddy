@@ -115,30 +115,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_weight="2">
 
             <ImageView
                 android:id="@+id/like_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/heart_selector" />
-
-
-            <Space
-                android:layout_width="100dp"
-                android:layout_height="1dp"
-                android:orientation="horizontal" />
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:src="@drawable/heart_selector"
+                android:background="?android:selectableItemBackground" />
 
             <Button
                 android:id="@+id/comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autoLink="all"
-                android:drawableStart="@drawable/ic_comment_foreground"
-                android:padding="5dp"
+                android:drawableLeft="@drawable/baseline_comment_24"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:padding="10dp"
                 android:text="COMMENT" />
         </LinearLayout>
+
 
     </LinearLayout>
 

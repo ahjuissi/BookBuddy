@@ -26,7 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/loadcomment"
-            android:text="Anni"
+            android:text="Name"
+            android:padding="5dp"
+
+            android:layout_margin="3dp"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -38,7 +41,9 @@
             android:layout_below="@id/commentname"
             android:layout_toEndOf="@id/loadcomment"
             android:layout_toRightOf="@id/loadcomment"
-            android:text="Actual Comment"
+            android:padding="5dp"
+            android:layout_margin="3dp"
+            android:text="Comment"
             android:textColor="@color/black" />
 
         <TextView
@@ -46,9 +51,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/commenttext"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
             android:layout_toEndOf="@id/loadcomment"
             android:layout_toRightOf="@id/loadcomment"
-            android:text="12/06/19" />
+            android:padding="5dp"
+            android:text="dd/MM/yyyy hh:mm aa" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

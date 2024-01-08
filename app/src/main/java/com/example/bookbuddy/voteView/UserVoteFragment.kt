@@ -148,14 +148,13 @@ class UserVoteFragment : Fragment() {
                 if (data.isNotEmpty()) {
                     val titleView = bindingVoteDesigne.titleView
                     val idIVBook = bindingVoteDesigne.idIVBook
-                    val resultTextView = bindingVoteDesigne.Result
                     titleView.text = data[0].bookTitle
-                    titleView.append("\nTotal Votes: ${data[0].totalVotes}")
+//                    titleView.append("\nTotal Votes: ${data[0].totalVotes}")
                     println(titleView)
 
 
                     // Wyświetlenie liczby głosów w TextView o ID "Result"
-                    resultTextView.text = "Ilosc głosow: ${data[0].totalVotes}"
+//                    resultTextView.text = "Ilosc głosow: \n${data[0].totalVotes}"
                 }
             }
 

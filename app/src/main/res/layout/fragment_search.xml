@@ -17,7 +17,7 @@
         android:background="#aabbccff"
         android:orientation="horizontal"
         android:padding="4dp"
-        android:weightSum="5">
+        android:weightSum="7">
 
         <!--edit text for getting the search
             query for book from user-->
@@ -25,19 +25,24 @@
         <!--image button for our search button -->
         <EditText
             android:id="@+id/idEdtSearchBooks"
-            android:layout_width="260dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="Search"
+            android:textStyle="italic"
+            android:textSize="22sp"
             android:layout_height="wrap_content"
             android:background="@color/white" />
 
-        <Button
+        <ImageButton
             android:id="@+id/idBtnSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="Search" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:background="aabbccff"
+            android:src="@drawable/baseline_search_24" />
     </LinearLayout>
 
 
