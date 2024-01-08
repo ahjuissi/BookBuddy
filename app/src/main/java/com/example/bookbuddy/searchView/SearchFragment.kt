@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 //import com.example.bookbuddy.databinding.FragmentSearchBinding
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -36,7 +37,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     lateinit var booksList: ArrayList<BookRVModal>
     lateinit var loadingPB: ProgressBar
     lateinit var searchEdt: EditText
-    lateinit var searchBtn: Button
+    lateinit var searchBtn: ImageView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

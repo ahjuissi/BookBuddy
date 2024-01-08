@@ -1,9 +1,8 @@
 package com.example.bookbuddy.profileViewUser
 
-import ImagePicDialog
-import ImagePicDialog.Companion.REQUEST_CODE_GALLERY
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
@@ -46,8 +45,8 @@ class EditProfileFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var storage: FirebaseStorage
     private var db= Firebase.firestore
-    private lateinit var imageDialog: ImagePicDialog
-    private var selectedPicture : Uri? =null
+    private lateinit var imageDialog: Dialog
+    private lateinit var selectedPicture : Uri
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,8 +56,7 @@ class EditProfileFragment : Fragment() {
         bindingEditProfile = FragmentEditProfileBinding.inflate(inflater, container, false)
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        storage=FirebaseStorage.getInstance()
-        imageDialog = ImagePicDialog(requireActivity())
+        imageDialog = Dialog(requireActivity())
 
         // Pobierz UID aktualnie zalogowanego użytkownika
         val userId = firebaseAuth.currentUser?.uid
@@ -81,34 +79,55 @@ class EditProfileFragment : Fragment() {
             nameChange()
         }
         bindingEditProfile.editProfilepic.setOnClickListener{
-           val intent=Intent()
-            intent.action=Intent.ACTION_GET_CONTENT
-            intent.type="image/*"
-            startActivityForResult(intent,1)
+                chooseImageFromGallery()
+                imageDialog.dismiss() // Zamknij dialog po wybraniu zdjęcia z galerii
+            }
 
-        }
-//        bindingEditProfile.continueBtn.setOnClickListener{
-//            if(selectedPicture==null)
-//            {
-//                Toast.makeText(this@EditProfileFragment,"Please select your image",Toast.LENGTH_SHORT).show()
-//            }else updateImage()
-//
-//        }
+
     }
-    private fun updateImage(){
-val reference=storage.reference.child("Profile").child(Date().time.toString())
-        reference.putFile(selectedPicture!!).addOnCompleteListener{
-            if(it.isSuccessful)
-            {
-                reference.downloadUrl.addOnSuccessListener { taks->
-                    uploadInfo(taks.toString())
-                }
+    fun chooseImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, REQUEST_CODE_GALLERY)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+            val selectedImage: Uri? = data.data
+            selectedImage?.let {
+                uploadImageToFirebaseStorage(selectedImage)
             }
         }
-
     }
-    private fun uploadInfo(imgUrl:String)
-    {val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+    fun uploadImageToFirebaseStorage(imageUri: Uri) {
+        val userId = firebaseAuth.currentUser?.uid
+        // Get a reference to Firebase Storage
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+
+        // Create a reference to the location where the image will be saved
+        val imagesRef = storageRef.child("images/$userId.jpg")
+
+        imagesRef.putFile(imageUri).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Pobierz URL przesłanego obrazu
+                imagesRef.downloadUrl.addOnSuccessListener { uri ->
+                    // Tutaj uzyskujesz URL i możesz go wykorzystać, np. przekazać do funkcji uploadInfo
+                    uploadInfo(uri.toString())
+                }.addOnFailureListener { exception ->
+                    // Obsługa błędu w przypadku niepowodzenia pobrania URL
+                    Log.e(TAG, "Error getting download URL: ${exception.message}")
+                }
+            } else {
+                // Obsługa błędu w przypadku niepowodzenia przesłania pliku
+                Log.e(TAG, "Error uploading file: ${task.exception?.message}")
+            }
+        }
+    }
+    private fun uploadInfo(imgUrl: String) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
         userId?.let { uid ->
             val databaseReference = FirebaseDatabase.getInstance().reference
             val userInfoRef = databaseReference.child("userInfo").child(uid)
@@ -126,20 +145,6 @@ val reference=storage.reference.child("Profile").child(Date().time.toString())
                     Log.e(TAG, "Error saving image URL: ${e.message}")
                 }
         }
-
-    }
-
-    fun startActivityForResult(intent: Intent, requestCode: Int,data: Intent?) {
-        super.startActivityForResult(intent, requestCode)
-        if(data!=null)
-        {
-            if(data.data!=null)
-            {
-                selectedPicture=data.data!!
-
-            }
-        }
-
     }
     private fun nameChange() {
         val builder = AlertDialog.Builder(requireContext())
@@ -291,8 +296,12 @@ val reference=storage.reference.child("Profile").child(Date().time.toString())
     }
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment,fragment)
+            replace(R.id.flFragment, fragment)
             //    addToBackStack(null)
             commit()
         }
+            companion object {
+            const val REQUEST_CODE_GALLERY = 123
+        }
 }
+

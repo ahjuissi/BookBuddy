@@ -41,7 +41,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:layout_margin="10dp"
-            android:background="aabbccff"
+            android:background="#aabbccff"
             android:src="@drawable/baseline_search_24" />
     </LinearLayout>
 

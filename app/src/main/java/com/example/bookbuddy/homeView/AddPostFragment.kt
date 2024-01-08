@@ -76,6 +76,7 @@ class AddPostFragment : Fragment() {
                     email = dataSnapshot1.child("mail").getValue(String::class.java).toString()
                     city = dataSnapshot1.child("city").getValue(String::class.java).toString()
 
+
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {

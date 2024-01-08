@@ -22,6 +22,8 @@ import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.RowPostsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 //TODO: imie + nazwisko , to samo w postDetailsFr
 
@@ -44,6 +46,7 @@ class AdapterPosts(private val context: Context,
         getLikesCount(post.ptime!!, holder.like_count)
         getCommentsCount(post.ptime!!, holder.comments_count)
         checkIfLiked(post.ptime!!, holder.likebtn)
+        getImage(post.uid!!,holder.picture)
 
         with(holder) {
             name.text = post.uname
@@ -99,6 +102,33 @@ class AdapterPosts(private val context: Context,
             }
         })
     }
+    private fun getImage(uid: String, imageView: CircleImageView) {
+        val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
+        userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val imgUri = dataSnapshot.child("imgUrl").value.toString()
+                    // Jeśli istnieje skrót do zdjęcia w Storage
+                    if (imgUri.isNotEmpty()) {
+                        // Pobierz adres URI obrazu z Firebase Storage
+                        Glide.with(context)
+                            .load(imgUri)
+                            .into(imageView)
+                        println(imgUri)
+                    }
+                } else {
+                    // Ustaw domyślny obraz, jeśli brak skrótu do zdjęcia
+                    // imageView.setImageResource(R.drawable.default_image)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+
+    }) }
+
     private fun getCommentsCount(pid: String, commentsCountTextView: TextView) {
         val commentsRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Comments")
         commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -192,7 +222,7 @@ class AdapterPosts(private val context: Context,
         return modelPosts?.size ?: 0
     }
     inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val picture: ImageView = itemView.findViewById(R.id.picturetv)
+        val picture: CircleImageView = itemView.findViewById(R.id.picturetv)
         val name: TextView = itemView.findViewById(R.id.unametv)
         val time: TextView = itemView.findViewById(R.id.utimetv)
         val more: ImageButton = itemView.findViewById(R.id.morebtn)
