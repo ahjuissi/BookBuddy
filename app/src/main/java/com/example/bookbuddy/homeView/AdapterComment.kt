@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.bookbuddy.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 import java.util.Calendar
@@ -38,6 +38,7 @@ class AdapterComment(
 
         holder.name.text = commentData.uname
         holder.comment.text = commentData.comment
+        getImage(commentData.uid!!,holder.imagea)
 
 
         commentData.ptime?.let {
@@ -55,6 +56,28 @@ class AdapterComment(
             e.printStackTrace()
         }
     }
+
+    private fun getImage(uid: String, imageView: ImageView) {
+        val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
+        userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val imgUri = dataSnapshot.child("imgUrl").value.toString()
+                    if (imgUri.isNotEmpty()) {
+                        Glide.with(context)
+                            .load(imgUri)
+                            .into(imageView)
+                        println(imgUri)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+
+        }) }
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateComments(newComments: List<ModelComment>) {

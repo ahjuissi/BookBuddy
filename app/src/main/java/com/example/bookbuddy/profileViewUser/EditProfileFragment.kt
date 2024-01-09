@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.FragmentEditProfileBinding
 import com.google.android.material.textfield.TextInputEditText
@@ -46,7 +47,6 @@ class EditProfileFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private var db= Firebase.firestore
     private lateinit var imageDialog: Dialog
-    private lateinit var selectedPicture : Uri
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +61,6 @@ class EditProfileFragment : Fragment() {
         // Pobierz UID aktualnie zalogowanego użytkownika
         val userId = firebaseAuth.currentUser?.uid
         userId?.let {}  //TODO
-
         return bindingEditProfile.root
     }
 

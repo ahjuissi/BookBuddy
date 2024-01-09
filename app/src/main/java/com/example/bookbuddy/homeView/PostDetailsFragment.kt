@@ -1,5 +1,6 @@
 package com.example.bookbuddy.homeView
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
@@ -19,11 +20,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.bookbuddy.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.firestore
+import de.hdodenhof.circleimageview.CircleImageView
 import java.util.Calendar
 import java.util.Locale
 
@@ -104,6 +107,7 @@ class PostDetailsFragment : Fragment() {
         getCommentsCount()
         getLikesCount()
         checkIfLiked()
+        getImage(uId, myuid,pPicture as CircleImageView, comPic as CircleImageView)
 
         more?.visibility = View.GONE
         if (uId == myuid) {
@@ -138,6 +142,48 @@ class PostDetailsFragment : Fragment() {
             showMoreOptions()
         }
 
+    }
+    @SuppressLint("SuspiciousIndentation")
+    private fun getImage(uid: String, myuid:String, imageView: CircleImageView, commentImageView: CircleImageView) {
+        val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
+        userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val imgUri = dataSnapshot.child("imgUrl").value.toString()
+                    // Jeśli istnieje skrót do zdjęcia w Storage
+                    if (imgUri.isNotEmpty()) {
+                        // Pobierz adres URI obrazu z Firebase Storage
+                        context?.let {
+                            Glide.with(it)
+                                .load(imgUri)
+                                .into(imageView)
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+        val commInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(myuid)
+            commInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val imgUri = dataSnapshot.child("imgUrl").value.toString()
+                    if (imgUri.isNotEmpty()) {
+                        context?.let {
+                            Glide.with(it)
+                                .load(imgUri)
+                                .into(commentImageView)
+                        }
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
     private fun showMoreOptions() {
         val popupMenu = PopupMenu(context, more!!, Gravity.END)

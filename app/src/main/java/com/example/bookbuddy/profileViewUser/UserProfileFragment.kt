@@ -10,6 +10,7 @@ import com.example.bookbuddy.databinding.FragmentProfileBinding
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.widget.Button
+import com.bumptech.glide.Glide
 import com.example.bookbuddy.R
 import com.example.bookbuddy.authenticationPart.LoginActivity
 import com.example.bookbuddy.profileViewAdmin.AdminFragment
@@ -89,14 +90,21 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
             @SuppressLint("SetTextI18n")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    println("test")
                     val name = dataSnapshot.child("name").getValue(String::class.java)
                     val surname = dataSnapshot.child("surname").getValue(String::class.java)
                     val email = dataSnapshot.child("mail").getValue(String::class.java)
-
+                    val picture = dataSnapshot.child("imgUrl").getValue(String::class.java)
+                    if (picture != null)
+                    {
+                        try {
+                            context?.let { Glide.with(it).load(picture).into(bindingProfile.avatarIv) }
+                        } catch (_: Exception) {
+                        }
+                    }
                     bindingProfile.textViewName.text = "Name: $name"
                     bindingProfile.textViewSurname.text = "Surname: $surname"
                     bindingProfile.textViewEmail.text = "Email: $email"
+
                     val logoutButton: Button = bindingProfile.logoutButton
                     logoutButton.setOnClickListener {
                         FirebaseAuth.getInstance().signOut()
