@@ -43,7 +43,7 @@ class VotingAdapter(private var mList: MutableList<VotingViewModel>,
         private val bookLayout: LinearLayout = itemView.findViewById(R.id.Book)
         init {
             // Ustawienie nasłuchiwania kliknięć na przycisku delButton
-            itemView.findViewById<Button>(R.id.delButton).setOnClickListener {
+            itemView.findViewById<ImageView>(R.id.delButton).setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val item = mList[position]
