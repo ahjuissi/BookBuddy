@@ -49,11 +49,11 @@
         <!--on below line we are creating
             a text view for page number-->
         <TextView
-            android:id="@+id/idTVBookPages"
+            android:id="@+id/idTVBookAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:text="Book Pages"
+            android:text="Author"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="10sp" />

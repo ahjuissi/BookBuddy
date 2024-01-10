@@ -29,7 +29,7 @@
             android:layout_weight="7"
             android:layout_margin="10dp"
             android:padding="10dp"
-            android:text="Search"
+            android:hint="Search"
             android:textStyle="italic"
             android:textSize="22sp"
             android:layout_height="wrap_content"
@@ -57,6 +57,7 @@
         android:layout_marginTop="15dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         android:layout_below="@id/idLLsearch" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/sendVotingfab"
         android:layout_width="wrap_content"

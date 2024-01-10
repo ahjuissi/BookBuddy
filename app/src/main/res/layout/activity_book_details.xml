@@ -35,6 +35,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
+                    android:text="Publisher"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/idTVauthors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text="Author"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
@@ -76,17 +84,6 @@
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-        <!--text view for displaying book subtitle-->
-        <TextView
-            android:id="@+id/idTVSubTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:padding="4dp"
-            android:text="subtitle"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
-
         <!--text view for displaying book description-->
         <TextView
             android:id="@+id/idTVDescription"
@@ -122,14 +119,6 @@
                 android:text="Add"
                 android:textAllCaps="false" />
 
-            <!--button for opening buying page of the book-->
-            <Button
-                android:id="@+id/idBtnBuy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="Buy"
-                android:textAllCaps="false" />
 
         </LinearLayout>
 

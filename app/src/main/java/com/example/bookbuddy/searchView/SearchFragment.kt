@@ -1,22 +1,17 @@
 package com.example.bookbuddy.searchView
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-//import com.example.bookbuddy.databinding.FragmentSearchBinding
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.FragmentSearchBinding
 import com.example.bookbuddy.voteView.VoteFragment
@@ -26,15 +21,22 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.IOException
+import kotlin.math.min
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     //    private lateinit var bindingSearch: FragmentSearchBinding
     lateinit var sendButton: FloatingActionButton
     private lateinit var bindingSearch: FragmentSearchBinding
-    private lateinit var firebaseAuth: FirebaseAuth
     lateinit var mRequestQueue: RequestQueue
-    lateinit var booksList: ArrayList<BookRVModal>
+    lateinit var booksList: ArrayList<BookDetailsRVModel>
     lateinit var loadingPB: ProgressBar
     lateinit var searchEdt: EditText
     lateinit var searchBtn: ImageView
@@ -44,16 +46,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     ): View {
         bindingSearch = FragmentSearchBinding.inflate(inflater, container, false)
         sendButton = bindingSearch.sendVotingfab
-        sendButton.visibility = View.GONE // Ukryj przycisk domyślnie
-        val title = arguments?.getString("title")
-
-        // Tutaj możesz użyć title w celu wywołania getBooksData(title)
-        if (!title.isNullOrEmpty()) {
-            getBooksData(title)
-        }
+        sendButton.visibility = View.GONE
         val firebaseAuth = FirebaseAuth.getInstance()
         val userId = firebaseAuth.currentUser?.uid
-
         userId?.let { uid ->
             val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
 
@@ -66,136 +61,156 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         sendButton.visibility = View.VISIBLE
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
         }
         sendButton.setOnClickListener {
-            val ListVotingFragment = VoteFragment()
-            setCurrentFragment(ListVotingFragment)
+            val ListVoteFragment = VoteFragment()
+            setCurrentFragment(ListVoteFragment)
         }
 
-        // on below line we are initializing
-        // our variable with their ids.
-
-//        loadingPB = rootView.findViewById(R.id.idLoadingPB)
-//        searchEdt = rootView.findViewById(R.id.idEdtSearchBooks)
-//        searchBtn = rootView.findViewById(R.id.idBtnSearch)
         loadingPB = bindingSearch.idLoadingPB
         searchEdt = bindingSearch.idEdtSearchBooks
         searchBtn = bindingSearch.idBtnSearch
 
-        // adding click listener for search button
-        searchBtn.setOnClickListener {
-            loadingPB.visibility = View.VISIBLE
-
-            // checking if our edittext field is empty or not.
-            if (searchEdt.text.toString().isEmpty()) {
-                searchEdt.setError("Please enter search query")
-            }
-
-            // if the search query is not empty then we are
-            // calling get book info method to load all
-            // the books from the API.
-            getBooksData(searchEdt.text.toString())
-        }
+//        val title = arguments?.getString("title")
+//        if (!title.isNullOrEmpty()) {
+//            getBooksData(title)
+//        }
         return bindingSearch.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    fun getBooksData(searchQuery: String) {
+        // adding click listener for search button
+        searchBtn.setOnClickListener {
+            loadingPB.visibility = View.VISIBLE
+            val searchTerm = searchEdt.text.toString()
+            // checking if our edittext field is empty or not.
+            if (searchTerm.isEmpty()) {
+                searchEdt.error = "Please enter a search query" // Ustawienie błędu dla pola wyszukiwania
+                loadingPB.visibility = View.GONE // Ukrycie wskaźnika ładowania, ponieważ nie ma żadnego zapytania
+            } else {
+                println("edit nie pusty leciiiii")
+                getBooksData(searchTerm) // Wywołanie funkcji, jeśli pole wyszukiwania nie jest puste
+                loadingPB.visibility = View.GONE
+            }
+        }
+    }
+    private fun getBooksData(searchTerm: String) {
+        val client = OkHttpClient()
+        val url = "https://openlibrary.org/search.json?q=$searchTerm"
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle errors
+                Log.w("TAG", "onFailure")
+            }
 
-        // creating a new array list.
-        booksList = ArrayList()
-        // below line is use to initialize
-        // the variable for our request queue.
-        mRequestQueue = Volley.newRequestQueue(requireContext())
-        // below line is use to clear cache this
-        // will be use when our data is being updated.
-        mRequestQueue.cache.clear()
+            override fun onResponse(call: Call, response: Response) {
+                val responseData = response.body?.string()
+                Log.w("TAG", "Processing JSON response data")
+                val booksList = parseResults(responseData)
+                updateListWithData(booksList)
+            }
+        })
+    }
+    private fun parseResults(responseData: String?): List<BookDetailsRVModel> {
+        val booksList = mutableListOf<BookDetailsRVModel>()
 
-        // below is the url for getting data from API in json format.
-        val url = "https://www.googleapis.com/books/v1/volumes?q=$searchQuery"
-        // below line we are  creating a new request queue.
-        val queue = Volley.newRequestQueue(requireContext())
-
-        // on below line we are creating a variable for request
-        // and initializing it with json object request
-        val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
-            loadingPB.visibility = View.GONE
-            // inside on response method we are extracting all our json data.
+        responseData?.let {
             try {
-                val itemsArray = response.getJSONArray("items")
-                for (i in 0 until itemsArray.length()) {
-                    val itemsObj = itemsArray.getJSONObject(i)
-                    val volumeObj = itemsObj.getJSONObject("volumeInfo")
-                    val industryIdentifiers = volumeObj.getJSONArray("industryIdentifiers")
-                    val id = industryIdentifiers.getJSONObject(0).getString("identifier")
-                    val title = volumeObj.optString("title")
-                    val subtitle = volumeObj.optString("subtitle")
-                    val authorsArray = volumeObj.getJSONArray("authors")
-                    val publisher = volumeObj.optString("publisher")
-                    val publishedDate = volumeObj.optString("publishedDate")
-                    val description = volumeObj.optString("description")
-                    val pageCount = volumeObj.optInt("pageCount")
-                    val imageLinks = volumeObj.optJSONObject("imageLinks")
-                    val thumbnail = imageLinks!!.optString("thumbnail")
-                    val previewLink = volumeObj.optString("previewLink")
-                    val infoLink = volumeObj.optString("infoLink")
-                    val saleInfoObj = itemsObj.optJSONObject("saleInfo")
-                    val buyLink = saleInfoObj!!.optString("buyLink")
+                val jsonObject = JSONObject(responseData)
+                val docsArray = jsonObject.getJSONArray("docs")
+
+                val maxBooksToShow = 4
+                val booksCount = minOf(docsArray.length(), maxBooksToShow)
+
+                for (i in 0 until booksCount) {
+                    val bookObject = docsArray.getJSONObject(i)
+                    val title = bookObject.optString("title")
+                    val id = bookObject.optString("cover_i")
+                    val olid = bookObject.optString("key") ?: bookObject.optString("olid")
+                    val cleanedOlid = olid?.substringAfterLast("/") ?: ""
+                    val authorsArray = bookObject.optJSONArray("author_name")
+
+                    val publisher = bookObject.optString("publisher")
+                    val publishedDate = bookObject.optString("publishedDate")
+                    val previewLink = bookObject.optString("previewLink")
+
                     val authorsArrayList: ArrayList<String> = ArrayList()
-                    if (authorsArray.length() != 0) {
-                        for (j in 0 until authorsArray.length()) {
-                            authorsArrayList.add(authorsArray.optString(i))
+                    if (authorsArray!!.length() != 0) {
+                        val maxAuthors = minOf(authorsArray.length(), 4) // Ograniczenie do maksymalnie 4 autorów
+                        for (j in 0 until maxAuthors) {
+                            authorsArrayList.add(authorsArray.optString(j))
                         }
                     }
 
-                    // after extracting all the data we are
-                    // saving this data in our modal class.
-                    val bookInfo = BookRVModal(
+                    val bookInfo = BookDetailsRVModel(
                         title,
-                        subtitle,
-                        authorsArrayList,
                         id,
+                        olid,
+                        authorsArrayList,
+                        "", // Empty description for now
                         publisher,
                         publishedDate,
-                        description,
-                        pageCount,
-                        thumbnail,
-                        previewLink,
-                        infoLink,
-                        buyLink
+                        previewLink
                     )
-                    // below line is use to pass our modal
-                    // class in our array list.
+//                    fetchBookDescriptionAndUpdateList(bookInfo, cleanedOlid)
                     booksList.add(bookInfo)
-
-                    // below line is use to pass our
-                    // array list in adapter class.
-                    val adapter = BookRVAdapter(booksList, requireContext())
-                    // below line is use to add linear layout
-                    // manager for our recycler view.
-                    val layoutManager = GridLayoutManager(requireContext(), 3)
-                    val mRecyclerView = requireView().findViewById<RecyclerView>(R.id.idRVBooks)
-
-                    // in below line we are setting layout manager and
-                    // adapter to our recycler view.
-                    mRecyclerView.layoutManager = layoutManager
-                    mRecyclerView.adapter = adapter
                 }
             } catch (e: Exception) {
+                Log.w("TAG", "Exception")
                 e.printStackTrace()
             }
-        }, { error ->
-            Toast.makeText(requireContext(), "No books found..", Toast.LENGTH_SHORT).show()
-        })
-
-        queue.add(request)
+        }
+        return booksList
+    }
+    private fun updateListWithData(booksList: List<BookDetailsRVModel>) {
+        val adapter = BookRVAdapter(booksList, requireContext())
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        // Aktualizacja widoku RecyclerView na wątku głównym
+        requireActivity().runOnUiThread {
+            val mRecyclerView = requireView().findViewById<RecyclerView>(R.id.idRVBooks)
+            mRecyclerView.layoutManager = layoutManager
+            mRecyclerView.adapter = adapter
+        }
     }
 
 
+        private fun fetchBookDescriptionAndUpdateList(bookInfo: BookDetailsRVModel, olid: String) {
+        val client = OkHttpClient()
+        val descriptionUrl = "https://openlibrary.org$olid.json"
+        val descriptionRequest = Request.Builder()
+            .url(descriptionUrl)
+            .build()
+
+        client.newCall(descriptionRequest).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle description request failure
+                Log.e("TAG", "Description request failed: ${e.message}")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val descriptionResponseData = response.body?.string()
+                val descriptionJsonObject = JSONObject(descriptionResponseData!!)
+                val description = descriptionJsonObject.optString("description")
+                val updatedDescription = if (description.startsWith("{")) {
+                    description.substringAfter("\"value\":").trim()
+                } else {
+                    description
+                }
+                requireActivity().runOnUiThread {
+                    bookInfo.description = updatedDescription
+                    updateListWithData(booksList)
+                }
+            }
+        })
+    }
     private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
