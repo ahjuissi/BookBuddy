@@ -53,7 +53,6 @@ class BookRVAdapter(
             i.putExtra("olid",currentBook.olid)
             i.putExtra("authors", currentBook.authors.joinToString())
             i.putExtra("description", currentBook.description)
-            i.putExtra("previewLink", currentBook.previewLink)
             i.putExtra("subjects", currentBook.subjects)
             i.putExtra("subjectPeople", currentBook.subjectPeople)
             i.putExtra("subjectTimes", currentBook.subjectTimes)

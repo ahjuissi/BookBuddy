@@ -1,6 +1,5 @@
 package com.example.bookbuddy.searchView
 
-import java.util.Date
 
 data class BookDetailsRVModel(
     var title: String,

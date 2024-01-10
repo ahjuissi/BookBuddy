@@ -61,7 +61,6 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
 
-        <!--text view for displaying book description-->
         <TextView
             android:id="@+id/idTVDescription"
             android:layout_width="match_parent"

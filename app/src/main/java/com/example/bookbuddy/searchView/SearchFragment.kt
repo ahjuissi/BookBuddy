@@ -153,7 +153,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     )
                     fetchBookDetailsAndUpdateList(bookInfo, olid, booksList) //test
                     fetchBookDescriptionAndUpdateList(bookInfo, olid, booksList)
-
                     booksList.add(bookInfo)
                 }
             } catch (e: Exception) {

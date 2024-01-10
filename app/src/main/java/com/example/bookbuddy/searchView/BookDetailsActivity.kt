@@ -69,11 +69,11 @@ class BookDetailsActivity : AppCompatActivity() {
         val cleanedOlid = olid?.substringAfterLast("/") ?: ""
         val authors = intent.getStringExtra("authors")?.split(", ")?.toMutableList() //ZMIANA
         val description = intent.getStringExtra("description")
-        var previewLink = "https://openlibrary.org$olid"
-        var subjects = intent.getStringExtra("subjects")?.split(", ")?.toMutableList()
-        var subject_people=  intent.getStringExtra("subjectPeople")?.split(", ")?.toMutableList()
-        var subject_times = intent.getStringExtra("subjectTimes")?.split(", ")?.toMutableList()
-        var publishedDate = intent.getStringExtra("publishedDate")
+        val previewLink = "https://openlibrary.org$olid"
+        val subjects = intent.getStringExtra("subjects")?.split(", ")?.toMutableList()
+        val subject_people=  intent.getStringExtra("subjectPeople")?.split(", ")?.toMutableList()
+        val subject_times = intent.getStringExtra("subjectTimes")?.split(", ")?.toMutableList()
+        val publishedDate = intent.getStringExtra("publishedDate")
 
 
         titleTV.text = title
