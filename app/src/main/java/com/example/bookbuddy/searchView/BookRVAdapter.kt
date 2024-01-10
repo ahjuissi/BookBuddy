@@ -21,7 +21,6 @@ import com.example.bookbuddy.R
 import com.bumptech.glide.request.target.Target
 
 
-
 class BookRVAdapter(
 
     private var bookList: List<BookDetailsRVModel>,

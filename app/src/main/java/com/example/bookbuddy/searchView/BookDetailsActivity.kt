@@ -56,7 +56,6 @@ class BookDetailsActivity : AppCompatActivity() {
         descTV = findViewById(R.id.idTVDescription)
         publisherDateTV = findViewById(R.id.idTVPublishDate)
         previewBtn = findViewById(R.id.idBtnPreview)
-        buyBtn = findViewById(R.id.idBtnBuy)
         bookIV = findViewById(R.id.idIVbook)
         authorsTV = findViewById(R.id.idTVauthors)
 
@@ -165,7 +164,6 @@ class BookDetailsActivity : AppCompatActivity() {
                         isFirstResource: Boolean
                     ): Boolean {
                         var nextUrl = url
-
                         if (retryCount > 0) {
                             val newRetryCount = retryCount - 1
 

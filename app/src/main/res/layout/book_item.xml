@@ -46,8 +46,6 @@
             android:textStyle="bold"
             tools:ignore="RtlCompat" />
 
-        <!--on below line we are creating
-            a text view for page number-->
         <TextView
             android:id="@+id/idTVBookAuthor"
             android:layout_width="match_parent"

@@ -28,7 +28,6 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
-import kotlin.math.min
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {

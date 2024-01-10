@@ -19,10 +19,6 @@
         android:padding="4dp"
         android:weightSum="7">
 
-        <!--edit text for getting the search
-            query for book from user-->
-
-        <!--image button for our search button -->
         <EditText
             android:id="@+id/idEdtSearchBooks"
             android:layout_width="0dp"
