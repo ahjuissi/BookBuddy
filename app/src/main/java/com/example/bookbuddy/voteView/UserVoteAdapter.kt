@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookbuddy.R
+import com.example.bookbuddy.searchView.BookDetailsActivity
 import com.example.bookbuddy.searchView.SearchFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -63,14 +64,14 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
                 }
             itemView.findViewById<LinearLayout>(R.id.Book).setOnClickListener {
                 val item = mList[position]
-                val title = item.title
+                val id = item.id
                 val searchFragment = SearchFragment()
 
                 if (itemView.context is AppCompatActivity) {
                     val appCompatActivity = itemView.context as AppCompatActivity
 
                     val bundle = Bundle()
-                    bundle.putString("title", title)
+                    bundle.putString("id", id)
                     searchFragment.arguments = bundle
 
                     appCompatActivity.supportFragmentManager.beginTransaction()

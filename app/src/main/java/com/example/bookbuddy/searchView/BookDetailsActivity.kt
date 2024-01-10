@@ -123,13 +123,11 @@ class BookDetailsActivity : AppCompatActivity() {
         addBtn.setOnClickListener {
             val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
             val bookData = HashMap<String, Any>()
-            //TODO: do głosowania
             bookData["title"] = title.toString()
-//            bookData["publisher"] = publisher.toString()
             bookData["authors"] = authors.toString()
-//            bookData["thumbnail"]=thumbnail.toString()
-            bookData["id"]=id
-            databaseReference.child(id.toString()).setValue(bookData)
+            bookData["id"]=cleanedOlid
+            bookData["thumbnail"]=thumbnailUrl
+            databaseReference.child(cleanedOlid).setValue(bookData)
         }
         // adding on click listener for our preview button.
         previewBtn.setOnClickListener {

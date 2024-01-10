@@ -26,6 +26,7 @@ import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
@@ -60,6 +61,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         sendButton.visibility = View.VISIBLE
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
@@ -73,10 +75,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         searchEdt = bindingSearch.idEdtSearchBooks
         searchBtn = bindingSearch.idBtnSearch
 
-//        val title = arguments?.getString("title")
-//        if (!title.isNullOrEmpty()) {
-//            getBooksData(title)
-//        }
+        val voteId = arguments?.getString("id")
+        if (!voteId.isNullOrEmpty()) {
+            getBooksData(voteId)
+        }
         return bindingSearch.root
     }
 
@@ -123,7 +125,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 val jsonObject = JSONObject(responseData)
                 val docsArray = jsonObject.getJSONArray("docs")
 
-                val maxBooksToShow = 4
+                val maxBooksToShow = 70
                 val booksCount = minOf(docsArray.length(), maxBooksToShow)
 
                 for (i in 0 until booksCount) {
@@ -249,8 +251,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 Log.e("TAG", "Description request failed: ${e.message}")
             }
 
-            override fun onResponse(call: Call, response: Response) {
-                val descriptionResponseData = response.body?.string()
+
+                override fun onResponse(call: Call, response: Response) {
+            if (!response.isSuccessful) {
+                Log.e("TAG", "Non-successful response: ${response.code}")
+                // Handle non-successful response (e.g., display an error message)
+                return
+            }
+
+            val descriptionResponseData = response.body?.string()
+            try {
                 val descriptionJsonObject = JSONObject(descriptionResponseData!!)
                 val description = descriptionJsonObject.optString("description")
                 val updatedDescription = if (description.startsWith("{")) {
@@ -258,11 +268,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 } else {
                     description
                 }
-                    bookInfo.description = updatedDescription
-                    updateListWithData(booksList)
-
+                bookInfo.description = updatedDescription
+                updateListWithData(booksList)
+            } catch (e: JSONException) {
+                Log.e("TAG", "JSON Parsing Error: ${e.message}")
+                e.printStackTrace()
+                // Handle JSON parsing error
             }
-        })
+        }
+    })
     }
     private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
