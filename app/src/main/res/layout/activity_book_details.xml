@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--Image view for displaying our book image-->
             <ImageView
                 android:id="@+id/idIVbook"
                 android:layout_width="130dp"
@@ -29,15 +28,6 @@
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
-                <!--Text view for displaying book publisher-->
-                <TextView
-                    android:id="@+id/idTVpublisher"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="Publisher"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
                 <TextView
                     android:id="@+id/idTVauthors"
                     android:layout_width="match_parent"
@@ -45,20 +35,7 @@
                     android:padding="4dp"
                     android:text="Author"
                     android:textColor="@color/black"
-                    android:textSize="15sp" />
-
-                <!--text view for displaying number of pages of book-->
-                <TextView
-                    android:id="@+id/idTVNoOfPages"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:padding="4dp"
-                    android:text="Number of Pages"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-
-                <!--text view for displaying book publish date-->
+                    android:textSize="16sp" />
                 <TextView
                     android:id="@+id/idTVPublishDate"
                     android:layout_width="match_parent"
@@ -67,7 +44,7 @@
                     android:padding="4dp"
                     android:text="Publish Date"
                     android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -82,7 +59,7 @@
             android:padding="4dp"
             android:text="title"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <!--text view for displaying book description-->
         <TextView
@@ -93,7 +70,34 @@
             android:padding="4dp"
             android:text="description"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/idTVSubjectTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            android:text="Subjects"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/idTVSubjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            android:text="Subject ppl"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/idTVSubjectPpl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            android:text="Subjects time"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

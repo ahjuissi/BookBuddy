@@ -32,17 +32,16 @@ class BookDetailsActivity : AppCompatActivity() {
 
     // creating variables for strings,text view,
     // image views and button.
-    lateinit var titleTV: TextView
-    lateinit var authorsTV: TextView
-    lateinit var subtitleTV: TextView
-    lateinit var publisherTV: TextView
-    lateinit var descTV: TextView
-    lateinit var pageTV: TextView
-    lateinit var publisherDateTV: TextView
-    lateinit var previewBtn: Button
-    lateinit var buyBtn: Button
-    lateinit var bookIV: ImageView
-    lateinit var addBtn: Button
+    private lateinit var bookIV: ImageView
+    private lateinit var authorsTV: TextView
+    private lateinit var publisherDateTV: TextView
+    private lateinit var titleTV: TextView
+    private lateinit var descTV: TextView
+    private lateinit var subTV: TextView
+    private lateinit var subPplTV: TextView
+    private lateinit var subTimeTV: TextView
+    private lateinit var previewBtn: Button
+    private lateinit var addBtn: Button
 
 
     @SuppressLint("SetTextI18n")
@@ -51,26 +50,31 @@ class BookDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_book_details)
 
         // initializing our variables.
-        titleTV = findViewById(R.id.idTVTitle)
-        publisherTV = findViewById(R.id.idTVpublisher)
-        descTV = findViewById(R.id.idTVDescription)
-        publisherDateTV = findViewById(R.id.idTVPublishDate)
-        previewBtn = findViewById(R.id.idBtnPreview)
         bookIV = findViewById(R.id.idIVbook)
         authorsTV = findViewById(R.id.idTVauthors)
-
+        publisherDateTV = findViewById(R.id.idTVPublishDate)
+        titleTV = findViewById(R.id.idTVTitle)
+        descTV = findViewById(R.id.idTVDescription)
+        subTV = findViewById(R.id.idTVSubjects)
+        subPplTV = findViewById(R.id.idTVSubjectPpl)
+        subTimeTV = findViewById(R.id.idTVSubjectTime)
+        previewBtn = findViewById(R.id.idBtnPreview)
         //Add button
         addBtn = findViewById(R.id.idBtnAdd)
 
         // getting the data which we have passed from our adapter class.
         val title = intent.getStringExtra("title")
-        val publisher = intent.getStringExtra("publisher")
-        val authors = intent.getStringExtra("authors")?.split(", ")?.toMutableList() //ZMIANA
-        val publishedDate = intent.getStringExtra("publishedDate")
-        val description = intent.getStringExtra("description")
         val id = intent.getStringExtra("id").toString()
         val olid = intent.getStringExtra("olid").toString()
-        val previewLink = intent.getStringExtra("previewLink")
+        val cleanedOlid = olid?.substringAfterLast("/") ?: ""
+        val authors = intent.getStringExtra("authors")?.split(", ")?.toMutableList() //ZMIANA
+        val description = intent.getStringExtra("description")
+        var previewLink = "https://openlibrary.org$olid"
+        var subjects = intent.getStringExtra("subjects")?.split(", ")?.toMutableList()
+        var subject_people=  intent.getStringExtra("subjectPeople")?.split(", ")?.toMutableList()
+        var subject_times = intent.getStringExtra("subjectTimes")?.split(", ")?.toMutableList()
+        var publishedDate = intent.getStringExtra("publishedDate")
+
 
         titleTV.text = title
         val authorsArrayList: ArrayList<String> = ArrayList()
@@ -82,17 +86,20 @@ class BookDetailsActivity : AppCompatActivity() {
         }
         val authorsText = authorsArrayList.joinToString(", ") // Łączenie autorów przecinkami
         authorsTV.text = authorsText
+
         val thumbnailUrl = "https://covers.openlibrary.org/b/id/${id}-L.jpg"
-        loadThumbnailWithRetry(id, olid,thumbnailUrl,bookIV)
+        loadThumbnailWithRetry(id, cleanedOlid,thumbnailUrl,bookIV)
 
 
-        //TODO: to tu na dole
-//        publisherTV.text = publisher //WSZYSTKICH wyisuje, idk czy nie olać
-        publisherDateTV.text = "Published On : $publishedDate"
-        descTV.text = description //nie pobiera desc, ale api oddaje desc więc kwestia przekazania argumentu chyba
-//        pageTV.text = "No Of Pages : $pageCount" //zapytanie do api nie pobiera str
+        val subText = subjects!!.joinToString(", ")
+        subTV.text = subText
+        val subPplText = subject_people!!.joinToString(", ")
+        subPplTV.text = subPplText
+        val subTimeText = subject_times!!.joinToString(", ")
+        subTimeTV.text = subTimeText
 
-
+        publisherDateTV.text = "$publishedDate"
+        descTV.text = description
 
         addBtn = findViewById(R.id.idBtnAdd)
         addBtn.visibility = View.GONE // Ukryj przycisk domyślnie
@@ -116,11 +123,12 @@ class BookDetailsActivity : AppCompatActivity() {
         addBtn.setOnClickListener {
             val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
             val bookData = HashMap<String, Any>()
+            //TODO: do głosowania
             bookData["title"] = title.toString()
-            bookData["publisher"] = publisher.toString()
+//            bookData["publisher"] = publisher.toString()
             bookData["authors"] = authors.toString()
 //            bookData["thumbnail"]=thumbnail.toString()
-            bookData["id"]=id.toString()
+            bookData["id"]=id
             databaseReference.child(id.toString()).setValue(bookData)
         }
         // adding on click listener for our preview button.
@@ -145,7 +153,7 @@ class BookDetailsActivity : AppCompatActivity() {
     }
     private fun loadThumbnailWithRetry(
         id: String,
-        olid: String,
+        cleanedOlid: String,
         url: String,
         bookIV: ImageView,
         retryCount: Int = 3
@@ -169,7 +177,7 @@ class BookDetailsActivity : AppCompatActivity() {
 
                             nextUrl = when {
                                 url.contains("/id/") -> {
-                                    "https://covers.openlibrary.org/b/olid/${olid}-L.jpg"
+                                    "https://covers.openlibrary.org/b/olid/${cleanedOlid}-L.jpg"
                                 }
                                 url.contains("/olid/") -> {
                                     url
@@ -179,7 +187,7 @@ class BookDetailsActivity : AppCompatActivity() {
                                 }
                             }
 
-                            loadThumbnailWithRetry(id, olid, nextUrl, bookIV, newRetryCount)
+                            loadThumbnailWithRetry(id, cleanedOlid, nextUrl, bookIV, newRetryCount)
                         }
 
                         return false

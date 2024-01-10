@@ -53,9 +53,11 @@ class BookRVAdapter(
             i.putExtra("olid",currentBook.olid)
             i.putExtra("authors", currentBook.authors.joinToString())
             i.putExtra("description", currentBook.description)
-            i.putExtra("publisher", currentBook.publisher)
-            i.putExtra("publishedDate", currentBook.publishedDate)
             i.putExtra("previewLink", currentBook.previewLink)
+            i.putExtra("subjects", currentBook.subjects)
+            i.putExtra("subjectPeople", currentBook.subjectPeople)
+            i.putExtra("subjectTimes", currentBook.subjectTimes)
+            i.putExtra("publishedDate", currentBook.publishedDate)
 
             // after passing that data we are
             // starting our new intent.

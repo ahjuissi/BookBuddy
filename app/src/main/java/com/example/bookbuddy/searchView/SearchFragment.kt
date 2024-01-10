@@ -101,15 +101,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun getBooksData(searchTerm: String) {
         val client = OkHttpClient()
         val url = "https://openlibrary.org/search.json?q=$searchTerm"
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(url).build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Handle errors
                 Log.w("TAG", "onFailure")
             }
-
             override fun onResponse(call: Call, response: Response) {
                 val responseData = response.body?.string()
                 Log.w("TAG", "Processing JSON response data")
@@ -134,13 +131,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     val title = bookObject.optString("title")
                     val id = bookObject.optString("cover_i")
                     val olid = bookObject.optString("key") ?: bookObject.optString("olid")
-                    val cleanedOlid = olid?.substringAfterLast("/") ?: ""
                     val authorsArray = bookObject.optJSONArray("author_name")
-
-                    val publisher = bookObject.optString("publisher")
-                    val publishedDate = bookObject.optString("publishedDate")
-                    val previewLink = bookObject.optString("previewLink")
-
                     val authorsArrayList: ArrayList<String> = ArrayList()
                     if (authorsArray!!.length() != 0) {
                         val maxAuthors = minOf(authorsArray.length(), 4) // Ograniczenie do maksymalnie 4 autorów
@@ -154,12 +145,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         id,
                         olid,
                         authorsArrayList,
-                        "", // Empty description for now
-                        publisher,
-                        publishedDate,
-                        previewLink
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
                     )
-//                    fetchBookDescriptionAndUpdateList(bookInfo, cleanedOlid)
+                    fetchBookDetailsAndUpdateList(bookInfo, olid, booksList) //test
+                    fetchBookDescriptionAndUpdateList(bookInfo, olid, booksList)
+
                     booksList.add(bookInfo)
                 }
             } catch (e: Exception) {
@@ -179,9 +173,71 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             mRecyclerView.adapter = adapter
         }
     }
+    private fun fetchBookDetailsAndUpdateList(bookInfo: BookDetailsRVModel, olid: String, booksList: MutableList<BookDetailsRVModel>) {
+        val client = OkHttpClient()
+        val bookDetailsUrl = "https://openlibrary.org$olid.json"
+        println(bookDetailsUrl)
+        val descriptionRequest = Request.Builder().url(bookDetailsUrl).build()
 
+        client.newCall(descriptionRequest).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle description request failure
+                Log.e("TAG", "Details request failed: ${e.message}")
+            }
 
-        private fun fetchBookDescriptionAndUpdateList(bookInfo: BookDetailsRVModel, olid: String) {
+            override fun onResponse(call: Call, response: Response) {
+                val detailsResponseData = response.body?.string()
+                val detailsJsonObject = JSONObject(detailsResponseData!!)
+                val subjectsArray = detailsJsonObject.optJSONArray("subjects")
+                val subjectPeopleArray = detailsJsonObject.optJSONArray("subject_people")
+                val subjectTimesArray = detailsJsonObject.optJSONArray("subject_times")
+                val publishedDate = detailsJsonObject.optString("first_publish_date")
+
+                val subjectsStringBuilder = StringBuilder()
+                subjectsArray?.let {
+                    val maxSubjects = if (it.length() > 30) 30 else it.length()
+                    for (j in 0 until maxSubjects) {
+                        subjectsStringBuilder.append(it.optString(j))
+                        if (j < maxSubjects - 1) {
+                            subjectsStringBuilder.append(", ")
+                        }
+                    }
+                }
+                val subjects = subjectsStringBuilder.toString()
+
+                val subjectPeopleStringBuilder = StringBuilder()
+                subjectPeopleArray?.let {
+                    val maxSubjectPeople = if (it.length() > 30) 30 else it.length()
+                    for (j in 0 until maxSubjectPeople) {
+                        subjectPeopleStringBuilder.append(it.optString(j))
+                        if (j < maxSubjectPeople - 1) {
+                            subjectPeopleStringBuilder.append(", ")
+                        }
+                    }
+                }
+                val subjectPeople = subjectPeopleStringBuilder.toString()
+
+                val subjectsTimesStringBuilder = StringBuilder()
+                subjectTimesArray?.let {
+                    for (j in 0 until it.length()) {
+                        subjectsTimesStringBuilder.append(it.optString(j))
+                        if (j < it.length() - 1) {
+                            subjectsTimesStringBuilder.append(", ")
+                        }
+                    }
+                }
+                val subjectTimes = subjectsTimesStringBuilder.toString()
+
+                bookInfo.subjects = subjects
+                bookInfo.subjectPeople = subjectPeople
+                bookInfo.subjectTimes = subjectTimes
+                bookInfo.publishedDate = publishedDate
+                updateListWithData(booksList)
+
+            }
+        })
+    }
+    private fun fetchBookDescriptionAndUpdateList(bookInfo: BookDetailsRVModel, olid: String, booksList: MutableList<BookDetailsRVModel>) {
         val client = OkHttpClient()
         val descriptionUrl = "https://openlibrary.org$olid.json"
         val descriptionRequest = Request.Builder()
@@ -203,10 +259,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 } else {
                     description
                 }
-                requireActivity().runOnUiThread {
                     bookInfo.description = updatedDescription
                     updateListWithData(booksList)
-                }
+
             }
         })
     }
