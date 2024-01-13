@@ -129,10 +129,10 @@ class UserVoteFragment : Fragment() {
                 for (childSnapshot in snapshot.children) {
                     val bookTitle = childSnapshot.child("bookTitle").getValue(String::class.java)
                     val numberOfVotes = childSnapshot.child("numberOfVotes").getValue(Int::class.java)
-                    println(bookTitle)
                     winner?.text = bookTitle
                     bookTitle?.let { title ->
                         numberOfVotes?.let { votes ->
+                            println(votes)
                             val winner = WinnerInfo(title, votes.toString())
                             data.add(winner)
                         }
@@ -147,14 +147,9 @@ class UserVoteFragment : Fragment() {
                 // Aktualizacja interfejsu użytkownika (przykładowo):
                 if (data.isNotEmpty()) {
                     val titleView = bindingVoteDesigne.titleView
-                    val idIVBook = bindingVoteDesigne.idIVBook
                     titleView.text = data[0].bookTitle
-//                    titleView.append("\nTotal Votes: ${data[0].totalVotes}")
-                    println(titleView)
+                   titleView.append("\nTotal Votes: ${data[0].totalVotes.toString()}")
 
-
-                    // Wyświetlenie liczby głosów w TextView o ID "Result"
-//                    resultTextView.text = "Ilosc głosow: \n${data[0].totalVotes}"
                 }
             }
 

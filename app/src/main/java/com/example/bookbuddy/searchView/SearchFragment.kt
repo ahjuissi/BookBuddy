@@ -96,7 +96,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             } else {
                 println("edit nie pusty leciiiii")
                 getBooksData(searchTerm) // Wywołanie funkcji, jeśli pole wyszukiwania nie jest puste
-                loadingPB.visibility = View.GONE
+
             }
         }
     }
@@ -125,7 +125,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 val jsonObject = JSONObject(responseData)
                 val docsArray = jsonObject.getJSONArray("docs")
 
-                val maxBooksToShow = 70
+                val maxBooksToShow = 1
                 val booksCount = minOf(docsArray.length(), maxBooksToShow)
 
                 for (i in 0 until booksCount) {
@@ -263,12 +263,21 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             try {
                 val descriptionJsonObject = JSONObject(descriptionResponseData!!)
                 val description = descriptionJsonObject.optString("description")
-                val updatedDescription = if (description.startsWith("{")) {
-                    description.substringAfter("\"value\":").trim()
+                // Clean up the description text
+                val cleanDescription = description
+                    .replace("\\r\\n", "\n") // Replace "\r\n" with newline
+                    .replace(Regex("\\{.*?\\}"), "") // Remove text inside curly braces
+                    .trim() // Remove leading and trailing whitespaces
+
+                val updatedDescription = if (cleanDescription.startsWith("{")) {
+                    cleanDescription.substringAfter("\"value\":").trim()
                 } else {
-                    description
+                    cleanDescription
                 }
                 bookInfo.description = updatedDescription
+                requireActivity().runOnUiThread {
+                    loadingPB.visibility = View.GONE
+                }
                 updateListWithData(booksList)
             } catch (e: JSONException) {
                 Log.e("TAG", "JSON Parsing Error: ${e.message}")
