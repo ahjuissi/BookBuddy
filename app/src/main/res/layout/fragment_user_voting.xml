@@ -54,33 +54,60 @@
         android:background="@color/white"
         tools:context=".authenticationPart.MainActivity">
 
-        <TextView
-            android:id="@+id/voteFragmentWinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="vote"
-            android:textColor="#aabbff"
-            android:textSize="40sp"
-            android:textStyle="italic|bold"
-            android:textAlignment="center"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/likeCard"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_margin="20dp"
+            android:padding="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="#FFF5EE"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/votesNumber"
-            android:textColor="#aabbff"
-            android:textSize="35sp"
-            android:textStyle="italic|bold"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
+
+            <LinearLayout
+                android:id="@+id/Book"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:orientation="vertical"
+                android:layout_margin="20dp">
+
+                <ImageView
+                    android:id="@+id/idWinnerIVBook"
+                    android:layout_width="240dp"
+                    android:layout_height="340dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:padding="5dp"
+                    android:scaleType="fitCenter"/>
+
+                <TextView
+                    android:id="@+id/voteFragmentWinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Tytuł książki"
+                    android:textStyle="italic"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
+                <TextView
+                    android:id="@+id/votesNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Liczba głosów"
+                    android:textStyle="italic"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,20 @@
 package com.example.bookbuddy.voteView
 
 import android.content.ContentValues
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.FragmentUserVotingBinding
 import com.example.bookbuddy.databinding.UserVoteViewDesignBinding
@@ -27,7 +31,9 @@ class UserVoteFragment : Fragment() {
     private lateinit var adapter: UserVoteAdapter
     private var firebaseAuth = FirebaseAuth.getInstance()
     private  val bookIds = mutableListOf<String>()
-    private var winner: TextView? = null
+    private var winnerTitle: TextView? = null
+    private var winnerVotes: TextView? = null
+    private var winnerCover: ImageView? = null
 
     private lateinit var loadingDialog: AlertDialog
 
@@ -56,11 +62,9 @@ class UserVoteFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 dismissLoadingDialog() // Hide loading indicator once the data is retrieved
                 if (snapshot.exists()) {
-                    println("winnnnnnn")
                     bindingUserVoting.userVotingWinner.visibility = View.VISIBLE
                     fetchWinner()
                 } else {
-                    println("glosowanie")
                     setupRecyclerView()
                     fetchAllBookIdsFromVoting()
                     fetchVoteList()
@@ -120,7 +124,9 @@ class UserVoteFragment : Fragment() {
 
     private fun fetchWinner() {
         val winnerReference = FirebaseDatabase.getInstance().getReference("Winner")
-        winner = bindingUserVoting.voteFragmentWinner
+        winnerTitle = bindingUserVoting.voteFragmentWinner
+        winnerVotes = bindingUserVoting.votesNumber
+        winnerCover = bindingUserVoting.idWinnerIVBook
 
         winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -129,16 +135,20 @@ class UserVoteFragment : Fragment() {
                 for (childSnapshot in snapshot.children) {
                     val bookTitle = childSnapshot.child("bookTitle").getValue(String::class.java)
                     val numberOfVotes = childSnapshot.child("numberOfVotes").getValue(Int::class.java)
-                    winner?.text = bookTitle
+                    winnerTitle?.text = bookTitle
                     bookTitle?.let { title ->
                         numberOfVotes?.let { votes ->
                             println(votes)
+                            winnerVotes?.text = votes.toString()
+//                            TODO: ładowanie okładki winnera
+//                            val thumbnailUrl = "https://covers.openlibrary.org/b/id/${id}-L.jpg"
+//                            Glide.with(this@UserVoteFragment).load(thumbnailUrl)
+
                             val winner = WinnerInfo(title, votes.toString())
                             data.add(winner)
                         }
                     }
                 }
-
                 // Wyświetlenie danych w logach
                 data.forEach { winnerInfo ->
                     Log.d("WinnerInfo", "Book Title: ${winnerInfo.bookTitle}, Number of Votes: ${winnerInfo.totalVotes}")

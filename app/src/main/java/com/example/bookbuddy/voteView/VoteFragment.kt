@@ -156,7 +156,6 @@ class VoteFragment : Fragment() {
         }
     }
 
-
     private fun setupRecyclerView() {
         recyclerView = bindingVoteList.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

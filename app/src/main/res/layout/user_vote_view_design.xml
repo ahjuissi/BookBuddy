@@ -9,8 +9,9 @@
         android:id="@+id/likeCard"
         android:layout_width="match_parent"
         android:layout_height="500dp"
+        android:layout_margin="20dp"
         android:padding="16dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="20dp"
         app:cardBackgroundColor="#FFF5EE"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,17 +20,17 @@
 
         <ImageView
             android:id="@+id/imageViewNegative"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="20dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="25dp"
             android:layout_gravity="start|start|bottom"
             android:src="@drawable/baseline_cancel_24" />
 
         <ImageView
             android:id="@+id/imageViewPositive"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="20dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="25dp"
             android:layout_gravity="end|end|bottom"
             android:src="@drawable/baseline_add_circle_24" />
 

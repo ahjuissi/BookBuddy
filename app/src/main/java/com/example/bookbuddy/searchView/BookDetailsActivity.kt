@@ -75,7 +75,6 @@ class BookDetailsActivity : AppCompatActivity() {
         val subject_times = intent.getStringExtra("subjectTimes")?.split(", ")?.toMutableList()
         val publishedDate = intent.getStringExtra("publishedDate")
 
-
         titleTV.text = title
         val authorsArrayList: ArrayList<String> = ArrayList()
         authors?.let {
@@ -159,7 +158,7 @@ class BookDetailsActivity : AppCompatActivity() {
         val handler = Handler(Looper.getMainLooper())
 
         handler.post {
-            Glide.with(this@BookDetailsActivity) // Zmieniłem `requireContext()` na `this@BookDetailsActivity` ponieważ jesteśmy w Activity, a nie w fragmencie
+            Glide.with(this@BookDetailsActivity)
                 .load(url)
                 .apply(RequestOptions().error(R.drawable.baseline_broken_image_24))
                 .listener(object : RequestListener<Drawable> {
