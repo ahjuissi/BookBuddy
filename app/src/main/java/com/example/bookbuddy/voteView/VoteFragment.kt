@@ -80,6 +80,7 @@ class VoteFragment : Fragment() {
                     votingReference.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(votingSnapshot: DataSnapshot) {
                             var maxLikes = 0
+                            var thumbnail=""
                             var winnerBookId = ""
                             val userId = firebaseAuth.currentUser?.uid ?: ""
                             val winnerData = mutableListOf<WinnerInfo>()
@@ -88,6 +89,7 @@ class VoteFragment : Fragment() {
                                 val bookId = votingChildSnapshot.child("id").getValue(String::class.java)
                                     bookTitle = votingChildSnapshot.child("title").getValue(String::class.java)
                                         .toString()
+                                 thumbnail = votingChildSnapshot.child("thumbnail").getValue(String::class.java).toString()
                                 var totalLikes = 0
                                 var totalDislikes = 0
 
@@ -107,7 +109,7 @@ class VoteFragment : Fragment() {
                             databaseVoting.removeValue()
 //test
                             winnerBookId.takeIf { it.isNotEmpty() }?.let {
-                                val winner = WinnerInfo(userId, userCity, it, maxLikes, bookTitle)
+                                val winner = WinnerInfo(userId, userCity, it, maxLikes, bookTitle, thumbnail)
                                 winnerData.add(winner)
                                 saveWinnerInfoToDatabase(winnerData)
                             }

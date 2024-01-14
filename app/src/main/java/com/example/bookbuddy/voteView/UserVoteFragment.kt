@@ -46,7 +46,7 @@ class UserVoteFragment : Fragment() {
         // Initialize loading indicator
         loadingDialog = createLoadingDialog()
         bindingUserVoting = FragmentUserVotingBinding.inflate(inflater, container, false)
-
+        bindingVoteDesigne = UserVoteViewDesignBinding.inflate(inflater, container, false)
         return bindingUserVoting.root
     }
 
@@ -127,6 +127,7 @@ class UserVoteFragment : Fragment() {
         winnerTitle = bindingUserVoting.voteFragmentWinner
         winnerVotes = bindingUserVoting.votesNumber
         winnerCover = bindingUserVoting.idWinnerIVBook
+        val titleView = bindingVoteDesigne.titleView
 
         winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -134,32 +135,28 @@ class UserVoteFragment : Fragment() {
 
                 for (childSnapshot in snapshot.children) {
                     val bookTitle = childSnapshot.child("bookTitle").getValue(String::class.java)
-                    val numberOfVotes = childSnapshot.child("numberOfVotes").getValue(Int::class.java)
+                    val numberOfVotes = childSnapshot.child("totalVotes").getValue(Int::class.java)
+                    var thumbnail = childSnapshot.child("thumbnail").getValue(String::class.java).toString()
                     winnerTitle?.text = bookTitle
                     bookTitle?.let { title ->
                         numberOfVotes?.let { votes ->
-                            println(votes)
-                            winnerVotes?.text = votes.toString()
-//                            TODO: ładowanie okładki winnera
-//                            val thumbnailUrl = "https://covers.openlibrary.org/b/id/${id}-L.jpg"
-//                            Glide.with(this@UserVoteFragment).load(thumbnailUrl)
+                            thumbnail?.let { thumbnail ->
+                                println(votes)
+                                winnerVotes?.text = votes.toString()
+                                Glide.with(this@UserVoteFragment).load(thumbnail).into(winnerCover!!)
 
-                            val winner = WinnerInfo(title, votes.toString())
-                            data.add(winner)
+                                val winner = WinnerInfo(title, votes.toString())
+                                data.add(winner)
+                            }
                         }
                     }
-                }
-                // Wyświetlenie danych w logach
-                data.forEach { winnerInfo ->
-                    Log.d("WinnerInfo", "Book Title: ${winnerInfo.bookTitle}, Number of Votes: ${winnerInfo.totalVotes}")
                 }
 
                 // Aktualizacja interfejsu użytkownika (przykładowo):
                 if (data.isNotEmpty()) {
-                    val titleView = bindingVoteDesigne.titleView
+                    // Use bindingUserVoting instead of bindingVoteDesigne
                     titleView.text = data[0].bookTitle
-                   titleView.append("\nTotal Votes: ${data[0].totalVotes.toString()}")
-
+                    titleView.append("\nTotal Votes: ${data[0].totalVotes.toString()}")
                 }
             }
 
