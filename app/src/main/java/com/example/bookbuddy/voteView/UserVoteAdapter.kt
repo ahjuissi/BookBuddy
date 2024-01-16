@@ -65,6 +65,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
             itemView.findViewById<LinearLayout>(R.id.Book).setOnClickListener {
                 val item = mList[position]
                 val id = item.id
+                val title=item.title
                 val searchFragment = SearchFragment()
 
                 if (itemView.context is AppCompatActivity) {
@@ -72,6 +73,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
 
                     val bundle = Bundle()
                     bundle.putString("id", id)
+                    bundle.putString("title", title)
                     searchFragment.arguments = bundle
 
                     appCompatActivity.supportFragmentManager.beginTransaction()

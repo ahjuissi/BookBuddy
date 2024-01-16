@@ -76,8 +76,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         searchBtn = bindingSearch.idBtnSearch
 
         val voteId = arguments?.getString("id")
-        if (!voteId.isNullOrEmpty()) {
-            getBooksData(voteId)
+        val voteTitle = arguments?.getString("title")
+        val combined= "$voteId $voteTitle"
+        if (!voteId.isNullOrEmpty()||!voteTitle.isNullOrEmpty()) {
+            getBooksData(combined)
         }
         return bindingSearch.root
     }
@@ -125,7 +127,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 val jsonObject = JSONObject(responseData)
                 val docsArray = jsonObject.getJSONArray("docs")
 
-                val maxBooksToShow = 1
+                val maxBooksToShow = 100
                 val booksCount = minOf(docsArray.length(), maxBooksToShow)
 
                 for (i in 0 until booksCount) {
