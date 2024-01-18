@@ -104,18 +104,53 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
     private fun getBooksData(searchTerm: String) {
         val client = OkHttpClient()
-        val url = "https://openlibrary.org/search.json?q=$searchTerm"
+        val url = "https://openlibrary.org/search.json?q=$searchTerm&limit=50"
         val request = Request.Builder().url(url).build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Handle errors
                 Log.w("TAG", "onFailure")
+                requireActivity().runOnUiThread {
+                    loadingPB.visibility = View.GONE
+
+                }
             }
             override fun onResponse(call: Call, response: Response) {
+                if (!response.isSuccessful) {
+                    Log.e("TAG", "Non-successful response: ${response.code}")
+                    // Handle non-successful response (e.g., display an error message)
+                    requireActivity().runOnUiThread {
+                        loadingPB.visibility = View.GONE
+                        // You might want to update your UI to indicate the error here
+                    }
+                    return
+                }
+
+
                 val responseData = response.body?.string()
                 Log.w("TAG", "Processing JSON response data")
-                val booksList = parseResults(responseData)
-                updateListWithData(booksList)
+                if (responseData.isNullOrEmpty()) {
+                    Log.e("TAG", "Empty response data")
+                    requireActivity().runOnUiThread {
+                        loadingPB.visibility = View.GONE
+                        // Handle the case when the response data is empty
+                        // You might want to update your UI to indicate that the response data is empty here
+                    }
+                    return
+                }
+
+                try {
+                    val booksList = parseResults(responseData)
+                    updateListWithData(booksList)
+                } catch (e: JSONException) {
+                    Log.e("TAG", "JSON Parsing Error: ${e.message}")
+                    e.printStackTrace()
+                    // Handle JSON parsing error
+                    requireActivity().runOnUiThread {
+                        loadingPB.visibility = View.GONE
+                        // You might want to update your UI to indicate the parsing error here
+                    }
+                }
             }
         })
     }
@@ -126,8 +161,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             try {
                 val jsonObject = JSONObject(responseData)
                 val docsArray = jsonObject.getJSONArray("docs")
-
-                val maxBooksToShow = 100
+                val maxBooksToShow = 50
                 val booksCount = minOf(docsArray.length(), maxBooksToShow)
 
                 for (i in 0 until booksCount) {

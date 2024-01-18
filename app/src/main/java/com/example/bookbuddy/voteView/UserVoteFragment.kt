@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -170,7 +171,7 @@ class UserVoteFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val templist: List<VotingViewModel> = emptyList()
         val data: MutableList<VotingViewModel> = templist.toMutableList()
-        adapter = UserVoteAdapter(data,
+        adapter = UserVoteAdapter(data,requireContext(),
             onItemClick = { selectedItem -> /* Obsługa kliknięcia elementu */ },
             onNegativeVoteClick = { selectedItem -> /* Obsługa kliknięcia negatywnego głosu */ },
             onPositiveVoteClick = { selectedItem -> /* Obsługa kliknięcia pozytywnego głosu */ }

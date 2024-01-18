@@ -42,7 +42,30 @@ class BookDetailsActivity : AppCompatActivity() {
     private lateinit var subTimeTV: TextView
     private lateinit var previewBtn: Button
     private lateinit var addBtn: Button
+    override fun onStart() {
+        super.onStart()
+        addBtn = findViewById(R.id.idBtnAdd)
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val userId = firebaseAuth.currentUser?.uid
+        userId?.let { uid ->
+            val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
+            userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userRole = snapshot.child("role").getValue(String::class.java)
 
+                    if (userRole == "Admin") {
+                        println("admin")
+                        // Jeśli użytkownik ma rolę "Admin", pokaż przycisk
+                        addBtn.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Obsługa błędów, jeśli to konieczne
+                }
+            })
+        }
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,23 +125,6 @@ class BookDetailsActivity : AppCompatActivity() {
 
         addBtn = findViewById(R.id.idBtnAdd)
         addBtn.visibility = View.GONE // Ukryj przycisk domyślnie
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val userId = firebaseAuth.currentUser?.uid
-        userId?.let { uid ->
-            val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
-            userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val userRole = snapshot.child("role").getValue(String::class.java)
-
-                    if (userRole == "Admin") {
-                        // Jeśli użytkownik ma rolę "Admin", pokaż przycisk
-                        addBtn.visibility = View.VISIBLE
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
-        }
         addBtn.setOnClickListener {
             val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
             val bookData = HashMap<String, Any>()
