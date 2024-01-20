@@ -81,6 +81,10 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
             startActivity(intent)
             requireActivity().finish()
         }
+        bindingProfile.favBooks.setOnClickListener{
+            val favBookFragment = FavBookFragment()
+            setCurrentFragment(favBookFragment)
+        }
     }
 
     private fun fetchUserInfo(userId: String) {

@@ -113,6 +113,13 @@
                 android:layout_margin="4dp"
                 android:text="Preview"
                 android:textAllCaps="false" />
+            <Button
+                android:id="@+id/idBtnFav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="Favourite"
+                android:textAllCaps="false" />
             <!--button for dodawanie admin-->
             <Button
                 android:id="@+id/idBtnAdd"

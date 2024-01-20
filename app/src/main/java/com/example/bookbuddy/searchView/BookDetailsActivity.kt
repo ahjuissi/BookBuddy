@@ -42,11 +42,12 @@ class BookDetailsActivity : AppCompatActivity() {
     private lateinit var subTimeTV: TextView
     private lateinit var previewBtn: Button
     private lateinit var addBtn: Button
+    private lateinit var favBtn: Button
     override fun onStart() {
         super.onStart()
         addBtn = findViewById(R.id.idBtnAdd)
         val firebaseAuth = FirebaseAuth.getInstance()
-        val userId = firebaseAuth.currentUser?.uid
+         val userId = firebaseAuth.currentUser?.uid
         userId?.let { uid ->
             val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
             userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -82,8 +83,8 @@ class BookDetailsActivity : AppCompatActivity() {
         subPplTV = findViewById(R.id.idTVSubjectPpl)
         subTimeTV = findViewById(R.id.idTVSubjectTime)
         previewBtn = findViewById(R.id.idBtnPreview)
-        //Add button
-        addBtn = findViewById(R.id.idBtnAdd)
+
+
 
         // getting the data which we have passed from our adapter class.
         val title = intent.getStringExtra("title")
@@ -133,6 +134,30 @@ class BookDetailsActivity : AppCompatActivity() {
             bookData["id"]=cleanedOlid
             bookData["thumbnail"]=thumbnailUrl
             databaseReference.child(cleanedOlid).setValue(bookData)
+        }
+
+        favBtn = findViewById(R.id.idBtnFav)
+        favBtn.setOnClickListener{
+            println("test")
+            val firebaseAuth = FirebaseAuth.getInstance()
+            val userId = firebaseAuth.currentUser?.uid
+            userId?.let { uid ->
+                val favBook = FirebaseDatabase.getInstance().getReference("userInfo").child(uid).child("favourite")
+                favBook.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val bookData = HashMap<String, Any>()
+                        bookData["title"] = title.toString()
+                        bookData["authors"] = authors.toString()
+                        bookData["id"]=cleanedOlid
+                        bookData["thumbnail"]=thumbnailUrl
+                        favBook.child(cleanedOlid).setValue(bookData)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Obsługa błędów, jeśli to konieczne
+                    }
+                })
+        }
         }
         // adding on click listener for our preview button.
         previewBtn.setOnClickListener {
