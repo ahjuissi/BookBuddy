@@ -132,8 +132,6 @@ class AddPostFragment : Fragment() {
         hashMap["title"] = titl
         hashMap["description"] = description
         hashMap["ptime"] = timestamp
-        hashMap["plike"] = 0
-        hashMap["pcomments"] = 0
 
         val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         databaseReference.child(timestamp).setValue(hashMap)
