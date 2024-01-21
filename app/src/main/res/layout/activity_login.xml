@@ -5,9 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="#aabbff"
     android:padding="16dp"
     tools:context=".authenticationPart.LoginActivity">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:layout_gravity="center_vertical"
+        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="@color/cardViewBackground">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            tools:ignore="SpeakableTextPresentCheck">
 
     <LinearLayout
         android:id="@+id/ll_main_layout"
@@ -16,21 +30,17 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
-        android:background="#444444"
         android:orientation="vertical"
         android:gravity="center"
         android:padding="20dp">
-
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="50dp"
+            android:padding="30dp"
             android:text="Login"
-            android:textColor="#6bfff7"
-            android:textSize="25sp" />
-
+            android:textSize="30sp" />
 
         <EditText
             android:id="@+id/et_user_name"
@@ -38,10 +48,7 @@
             android:layout_height="wrap_content"
             android:hint="Mail"
             android:padding="12dp"
-            android:textAlignment="viewStart"
-            android:background="#aabbff"
-            android:textColor="#000000"
-            android:textColorHint="#000000" />
+            android:textAlignment="viewStart"/>
         <View
             android:layout_width="0dp"
             android:layout_height="10dp" />
@@ -55,16 +62,12 @@
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="12dp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:padding="12dp"
-            android:textAlignment="viewStart"
-            android:background="#aabbff"
-            android:textColor="#000000"
-            android:textColorHint="#000000" />
+            android:textAlignment="viewStart" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <View
+        <Space
             android:layout_width="0dp"
             android:layout_height="30dp" />
 
@@ -76,8 +79,7 @@
             android:text="Submit"
             android:textAllCaps="false"
             android:padding="10dp"
-            android:layout_gravity="center"
-            android:backgroundTint="#566395"/>
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/signupRedirectText"
@@ -87,10 +89,9 @@
             android:layout_marginTop="8dp"
             android:padding="8dp"
             android:text="Not yet registered? Sign Up!"
-            android:textColor="#6bfff7"
             android:textSize="18sp" />
 
     </LinearLayout>
-
-
+        </androidx.core.widget.NestedScrollView>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

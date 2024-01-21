@@ -286,7 +286,7 @@ class EditProfileFragment : Fragment() {
             positiveButton.setBackgroundColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    R.color.purple_500
+                    R.color.purple
                 )
             )
         }

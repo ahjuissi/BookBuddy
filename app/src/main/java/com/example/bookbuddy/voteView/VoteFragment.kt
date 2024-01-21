@@ -11,7 +11,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookbuddy.R
-import com.example.bookbuddy.databinding.FragmentVotingBinding
+import com.example.bookbuddy.databinding.FragmentVotingListBinding
 import com.example.bookbuddy.profileViewAdmin.AdminFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class VoteFragment : Fragment() {
-    private lateinit var bindingVoteList: FragmentVotingBinding
+    private lateinit var bindingVoteList: FragmentVotingListBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: VotingAdapter
     lateinit var delete: Button
@@ -32,7 +32,7 @@ class VoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        bindingVoteList = FragmentVotingBinding.inflate(inflater, container, false)
+        bindingVoteList = FragmentVotingListBinding.inflate(inflater, container, false)
         delete = bindingVoteList.winner
         return bindingVoteList.root
     }

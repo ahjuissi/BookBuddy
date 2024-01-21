@@ -9,12 +9,16 @@
     android:orientation="vertical"
     tools:context=".authenticationPart.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/idLLsearch"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/idCVsearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="#aabbccff"
+        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="@color/cardViewBackground">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         android:padding="4dp"
         android:weightSum="7">
@@ -26,10 +30,8 @@
             android:layout_margin="10dp"
             android:padding="10dp"
             android:hint="Search"
-            android:textStyle="italic"
             android:textSize="22sp"
-            android:layout_height="wrap_content"
-            android:background="@color/white" />
+            android:layout_height="wrap_content" />
 
         <ImageButton
             android:id="@+id/idBtnSearch"
@@ -37,22 +39,18 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:layout_margin="10dp"
-            android:background="#aabbccff"
+            android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/baseline_search_24" />
     </LinearLayout>
 
-
-
-
-
-<!--recycler view for displaying our list of books-->
+    </androidx.cardview.widget.CardView>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/idRVBooks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        android:layout_below="@id/idLLsearch" />
+        android:layout_below="@id/idCVsearch" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/sendVotingfab"
@@ -64,9 +62,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="15dp"
+        android:visibility="gone"
         android:src="@drawable/ic_edit_profile_foreground" />
-
-    <!--progressbar for displaying our loading indicator-->
     <ProgressBar
         android:id="@+id/idLoadingPB"
         android:layout_width="wrap_content"

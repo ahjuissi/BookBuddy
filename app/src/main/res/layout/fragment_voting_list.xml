@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:backgroundTint="#aabbff"
             android:theme="?attr/actionBarTheme"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" >
@@ -38,8 +37,8 @@
                 android:layout_margin="10dp"
                 android:padding="16dp"
                 android:stateListAnimator="@null"
-                android:text="End of Voting"
-                android:textColor="@android:color/white" />
+                android:backgroundTint="@color/colorAccent"
+                android:text="End of Voting" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

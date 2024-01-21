@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bookbuddy.R
 import com.example.bookbuddy.databinding.FragmentUserVotingBinding
-import com.example.bookbuddy.databinding.UserVoteViewDesignBinding
+import com.example.bookbuddy.databinding.UserVotingViewDesignBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener
 
 class UserVoteFragment : Fragment() {
     private lateinit var bindingUserVoting: FragmentUserVotingBinding
-    private lateinit var bindingVoteDesigne: UserVoteViewDesignBinding
+    private lateinit var bindingVoteDesigne: UserVotingViewDesignBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: UserVoteAdapter
     private var firebaseAuth = FirebaseAuth.getInstance()
@@ -47,7 +47,7 @@ class UserVoteFragment : Fragment() {
         // Initialize loading indicator
         loadingDialog = createLoadingDialog()
         bindingUserVoting = FragmentUserVotingBinding.inflate(inflater, container, false)
-        bindingVoteDesigne = UserVoteViewDesignBinding.inflate(inflater, container, false)
+        bindingVoteDesigne = UserVotingViewDesignBinding.inflate(inflater, container, false)
         return bindingUserVoting.root
     }
 

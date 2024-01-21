@@ -6,15 +6,16 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     app:cardElevation="6dp"
-    >
+    app:cardCornerRadius="20dp"
+    app:cardBackgroundColor="@color/cardViewBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingLeft="3dp"
-        android:background="#aabbff">
+        android:paddingLeft="3dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,36 +25,29 @@
                 android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/usernameView"
-                android:textStyle="italic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="Item"
+                android:padding="6dp"
+                android:text="Name"
                 android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/usersurnameView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-
-                android:text="Item"
-                android:textSize="20sp"
-                android:textStyle="italic" />
+                android:padding="6dp"
+                android:text="Surname"
+                android:textSize="20sp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/usermailView"
                 android:layout_width="wrap_content"
-                android:textStyle="italic"
                 android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
-                android:text="Item"
+                android:text="example@mail.com"
                 android:textSize="16sp"/>
         </LinearLayout>
-
-
     </RelativeLayout>
-
 </androidx.cardview.widget.CardView>

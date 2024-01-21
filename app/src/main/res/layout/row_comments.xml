@@ -4,35 +4,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="1dp"
+    android:layout_margin="2dp"
     android:orientation="vertical"
-    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="5dp"
+    app:cardBackgroundColor="@color/cardViewBackground"
     app:contentPadding="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/loadcomment"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            app:civ_border_width="2dp"
-            app:civ_border_color="#FF000000"
-            android:src="@drawable/profile_image" />
+            android:src="@drawable/ic_profile_pic_foreground" />
 
         <TextView
             android:id="@+id/commentname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_toRightOf="@id/loadcomment"
+            android:padding="4dp"
             android:text="Name"
-            android:padding="5dp"
-
-            android:layout_margin="3dp"
-            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -41,26 +37,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/commentname"
+            android:layout_margin="2dp"
             android:layout_toEndOf="@id/loadcomment"
             android:layout_toRightOf="@id/loadcomment"
-            android:padding="5dp"
-            android:layout_margin="3dp"
-            android:text="Comment"
-            android:textColor="@color/black" />
+            android:padding="4dp"
+            android:text="Comment" />
 
         <TextView
             android:id="@+id/commenttime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/commenttext"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginBottom="3dp"
+            android:layout_margin="2dp"
             android:layout_toEndOf="@id/loadcomment"
             android:layout_toRightOf="@id/loadcomment"
-            android:padding="5dp"
+            android:padding="4dp"
             android:text="dd/MM/yyyy hh:mm aa" />
     </RelativeLayout>
-
 </androidx.cardview.widget.CardView>

@@ -6,8 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="5dp"
-    app:cardCornerRadius="5dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="25dp"
+    app:cardBackgroundColor="@color/cardViewBackground"
     app:cardElevation="4dp">
 
     <!--on below line we are creating a
@@ -27,7 +28,7 @@
             android:layout_margin="8dp"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/baseline_book_24" />
 
         <!--on below line we are creating
             a simple text view-->
@@ -50,7 +51,7 @@
             android:id="@+id/idTVBookAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
+            android:layout_margin="10dp"
             android:text="Author"
             android:textAlignment="center"
             android:textColor="@color/black"

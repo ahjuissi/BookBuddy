@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:backgroundTint="#aabbff"
             android:theme="?attr/actionBarTheme"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" >
@@ -31,9 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:textSize="20sp"
-                android:textStyle="italic|bold"
-                android:textColor="#000000"
                 android:text="Home"
+                android:textStyle="bold"
                 android:layout_gravity="center"
                 android:gravity="center"/>
             <Button
@@ -52,7 +50,7 @@
         android:padding="10dp"
         android:orientation="horizontal"
         android:layout_marginTop="70dp"
-        android:background="#bbaaff"
+        android:background="@color/editTextBackground"
         android:gravity="center"
         android:weightSum="5">
         <TextView
@@ -61,9 +59,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textSize="20sp"
-            android:textStyle="italic"
             android:text="dd/MM/yyyy hh:mm aa"
-            android:textColor="@color/black"
             android:layout_weight="2"/>
         <ImageView
             android:layout_width="wrap_content"
@@ -76,9 +72,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textSize="20sp"
-            android:textStyle="italic"
             android:text="City"
-            android:textColor="@color/black"
             android:layout_weight="4"/>
     </LinearLayout>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

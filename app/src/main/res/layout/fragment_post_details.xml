@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/commentsa">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,18 +20,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="3dp"
+                app:cardCornerRadius="5dp"
                 app:cardElevation="3dp"
                 app:cardUseCompatPadding="true"
+                app:cardBackgroundColor="@color/cardViewBackground"
                 app:contentPadding="5dp">
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
                     <LinearLayout
                         android:id="@+id/profilelayout_co"
                         android:layout_width="match_parent"
@@ -40,27 +36,25 @@
                         android:gravity="center_vertical"
                         android:padding="5dp"
                         android:orientation="horizontal">
-
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/details_picture_co"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/profile_image"
+                            android:layout_margin="5dp"
+                            android:src="@drawable/ic_profile_pic_foreground"
                             tools:ignore="MissingClass" />
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_margin="5dp"
                             android:orientation="vertical">
-
                             <TextView
                                 android:id="@+id/details_uname_co"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Name"
-                                android:textColor="@color/black"
                                 android:textSize="16sp"/>
 
                             <TextView
@@ -68,17 +62,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="33 min" />
-
                         </LinearLayout>
-
                         <ImageButton
                             android:id="@+id/details_morebtn_co"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:background="@drawable/ic_more_foreground"/>
-
                     </LinearLayout>
-
                     <TextView
                         android:id="@+id/details_ptitle_co"
                         android:layout_width="match_parent"
@@ -94,8 +84,7 @@
                         android:layout_height="wrap_content"
                         android:text="Description"
                         android:padding="5dp"
-                        android:textSize="18sp"
-                        android:textColor="@color/black" />
+                        android:textSize="17sp"/>
 
 
                     <LinearLayout
@@ -124,8 +113,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#F5F0F0" />
+                        android:layout_height="1dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -139,8 +127,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:src="@drawable/heart_selector" />
-
-
                         <Space
                             android:layout_width="200dp"
                             android:layout_height="1dp"
@@ -170,6 +156,13 @@
     </androidx.core.widget.NestedScrollView>
 
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/idCVsearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="@color/cardViewBackground">
 
     <RelativeLayout
         android:id="@+id/commentsa"
@@ -179,9 +172,9 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/comment_pic"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/profile_image" />
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:src="@drawable/ic_profile_pic_foreground" />
 
         <EditText
             android:id="@+id/type_commet"
@@ -189,20 +182,21 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/sendcomment"
             android:layout_toEndOf="@id/comment_pic"
-            android:background="@color/white"
             android:hint="Enter Comment..."
             android:inputType="textCapSentences|textMultiLine"
             android:padding="15dp" />
 
         <ImageButton
             android:id="@+id/sendcomment"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_alignParentEnd="true"
-            android:background="@color/white"
+            android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/baseline_send_24" />
 
     </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
     <ProgressBar
         android:id="@+id/details_PB"
         android:layout_width="wrap_content"

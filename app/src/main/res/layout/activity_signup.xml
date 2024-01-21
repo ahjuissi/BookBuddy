@@ -4,18 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
-    android:background="#441f"
+    android:padding="10dp"
     android:animateLayoutChanges="true"
     tools:context=".authenticationPart.MainActivity">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="@color/cardViewBackground">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            tools:ignore="SpeakableTextPresentCheck">
     <LinearLayout
         android:id="@+id/ll_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="7dp"
-        android:background="#444444"
+        android:layout_margin="10dp"
         android:orientation="vertical"
         android:gravity="center"
         android:padding="10dp">
@@ -23,16 +31,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="top|center"
             android:padding="20dp"
             android:text="Sign up"
-            android:textColor="#6dffbf"
-            android:textSize="25sp"/>
+            android:textSize="30sp"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="25dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#444444"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -43,12 +52,9 @@
             android:layout_weight="1"
             android:hint="Name"
             android:padding="12dp"
-            android:textAlignment="center"
-            android:background="#aabbff"
-            android:textColor="#000000"
-            android:textColorHint="#000000" />
+            android:textAlignment="center" />
         <View
-            android:layout_width="8dp"
+            android:layout_width="9dp"
             android:layout_height="0dp" />
 
         <EditText
@@ -58,16 +64,12 @@
             android:layout_weight="1"
             android:hint="Surname"
             android:padding="12dp"
-            android:textAlignment="center"
-            android:background="#aabbff"
-            android:textColor="#000000"
-            android:textColorHint="#000000" />
+            android:textAlignment="center"/>
 
     </LinearLayout>
-
         <View
             android:layout_width="0dp"
-            android:layout_height="8dp" />
+            android:layout_height="9dp" />
 
 
         <EditText
@@ -76,13 +78,7 @@
             android:layout_height="wrap_content"
             android:hint="Mail"
             android:padding="12dp"
-            android:textAlignment="center"
-            android:background="#aabbff"
-            android:textColor="#000000"
-            android:textColorHint="#000000" />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="8dp" />
+            android:textAlignment="center"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_password_first_input"
@@ -97,15 +93,8 @@
             android:hint="Password"
             android:padding="12dp"
             android:textAlignment="center"
-            android:background="#aabbff"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
             android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="8dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_password_second_input"
@@ -120,21 +109,16 @@
             android:hint="Repeat password"
             android:padding="12dp"
             android:textAlignment="center"
-            android:background="#aabbff"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
             android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <View
             android:layout_width="0dp"
-            android:layout_height="8dp" />
+            android:layout_height="9dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#444444"
             android:orientation="horizontal"
             android:gravity="center">
 
@@ -145,11 +129,8 @@
                 android:layout_weight="1"
                 android:padding="13dp"
                 android:textAlignment="center"
-                android:background="#aabbff"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:popupBackground="#aabbff"
-                android:entries="@array/city_options"/>
+                android:entries="@array/city_options"
+                android:background="@color/editTextBackground"/>
 
             <View
                 android:layout_width="8dp"
@@ -162,11 +143,8 @@
             android:layout_weight="1"
             android:padding="13dp"
             android:textAlignment="center"
-            android:background="#aabbff"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
-            android:popupBackground="#aabbff"
-            android:entries="@array/role_options"/>
+            android:entries="@array/role_options"
+                android:background="@color/editTextBackground"/>
          </LinearLayout>
 
         <View
@@ -181,6 +159,7 @@
             android:enabled="true"
             android:textAllCaps="false"
             android:padding="10dp"
+
             android:layout_gravity="center"/>
 
         <TextView
@@ -191,10 +170,10 @@
             android:padding="10dp"
             android:text="Already a user? Sign in."
             android:layout_marginTop="8dp"
-            android:textSize="18sp"
-            android:textColor="#6bfff7"/>
-
+            android:textSize="18sp"/>
     </LinearLayout>
 
+        </androidx.core.widget.NestedScrollView>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

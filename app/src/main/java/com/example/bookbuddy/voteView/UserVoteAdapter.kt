@@ -9,13 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -24,16 +22,13 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.example.bookbuddy.R
-import com.example.bookbuddy.searchView.BookDetailsActivity
 import com.example.bookbuddy.searchView.SearchFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.withContext
-import java.util.*
+
 class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
                       private val context: Context,
                     private val onItemClick: (VotingViewModel) -> Unit,
@@ -47,7 +42,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.user_vote_view_design, parent, false)
+            .inflate(R.layout.user_voting_view_design, parent, false)
         return ViewHolder(view)
     }
 

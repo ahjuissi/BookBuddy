@@ -6,23 +6,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".authenticationPart.MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+        <TextView
+            android:id="@+id/userProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Admin menu"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
     <LinearLayout
         android:id="@+id/ll_admin_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_marginTop="65dp"
+        android:gravity="center_horizontal"
+        android:padding="15dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="25dp"
+            app:cardBackgroundColor="@color/cardViewBackground">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:gravity="center_horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:padding="20dp"
-        tools:ignore="UselessParent">
-
-
+        android:padding="20dp">
         <FrameLayout
             android:id="@+id/idFrame_add_user"
             android:layout_width="wrap_content"
@@ -44,9 +83,7 @@
                 android:layout_marginTop="45dp"
                 android:clickable="false"
                 android:text="Users List"
-                android:textColor="@color/black"
                 android:textStyle="bold"/>
-
         </FrameLayout>
         <FrameLayout
             android:id="@+id/idFrame_add_vote"
@@ -69,19 +106,17 @@
                 android:layout_marginTop="45dp"
                 android:clickable="false"
                 android:text="Add Vote"
-                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:paddingTop="5dp"/>
         </FrameLayout>
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            android:padding="20dp"
-            tools:ignore="UselessParent">
-
+            android:padding="20dp">
             <FrameLayout
                 android:id="@+id/idFrame_profile"
                 android:layout_width="wrap_content"
@@ -107,7 +142,6 @@
                     android:layout_marginTop="45dp"
                     android:clickable="false"
                     android:text="Your Profile"
-                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:paddingTop="5dp"/>
 
@@ -133,13 +167,11 @@
                     android:layout_marginTop="45dp"
                     android:clickable="false"
                     android:text="Add Date"
-                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:paddingTop="5dp"/>
             </FrameLayout>
-        </LinearLayout>
     </LinearLayout>
-
-
-
+            </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

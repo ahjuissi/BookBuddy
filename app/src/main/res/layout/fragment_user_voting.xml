@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:backgroundTint="#aabbff"
             android:theme="?attr/actionBarTheme"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" >
@@ -30,8 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:textSize="20sp"
-                android:textStyle="italic|bold"
-                android:textColor="#000000"
+                android:textStyle="bold"
                 android:text="Vote for books of the next month "
                 android:layout_gravity="center"
                 android:gravity="center"/>
@@ -45,13 +43,14 @@
         android:layout_height="match_parent"
         android:padding="10dp"
         android:layout_marginTop="60dp"
-        tools:listitem="@layout/user_vote_view_design" />
+        tools:listitem="@layout/user_voting_view_design" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/user_voting_winner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:background="@color/white"
+        android:background="@color/activityBackground"
         tools:context=".authenticationPart.MainActivity">
 
         <androidx.cardview.widget.CardView
@@ -61,7 +60,7 @@
             android:layout_margin="20dp"
             android:padding="16dp"
             app:cardCornerRadius="20dp"
-            app:cardBackgroundColor="#FFF5EE"
+            app:cardBackgroundColor="@color/cardViewBackground"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:layout_editor_absoluteX="0dp"
@@ -81,6 +80,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
                     android:padding="5dp"
+                    android:src="@drawable/baseline_book_24"
                     android:scaleType="fitCenter"/>
 
                 <TextView
@@ -91,8 +91,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Tytuł książki"
-                    android:textStyle="italic"
-                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:textSize="22sp" />
                 <TextView
                     android:id="@+id/votesNumber"
@@ -102,11 +101,9 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Liczba głosów"
-                    android:textStyle="italic"
-                    android:textColor="@color/black"
                     android:textSize="20sp" />
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
