@@ -39,7 +39,7 @@
                 android:layout_gravity="end"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:background="@drawable/ic_add_post_btt_foreground"/>
+                android:background="@drawable/baseline_post_add_24"/>
 
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

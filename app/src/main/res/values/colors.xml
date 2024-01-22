@@ -3,7 +3,7 @@
 
     <color name="activityBackground">#FFF5F9</color>
     <color name="colorPrimary">#5E71DA</color>
-    <color name="colorPrimaryDark">#353F81</color>
+    <color name="colorPrimaryDark">#323283</color>
     <color name="colorAccent">#FF7CBD</color>
     <color name="textColorPrimary">#2E2D2D</color>
     <color name="textColor">#191919</color>
