@@ -156,6 +156,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Submit"
+            android:textColor="@color/activityBackground"
             android:enabled="true"
             android:textAllCaps="false"
             android:padding="10dp"
@@ -167,10 +168,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:gravity="center"
             android:padding="10dp"
-            android:text="Already a user? Sign in."
-            android:layout_marginTop="8dp"
-            android:textSize="18sp"/>
+            android:text="Already a user?\nSign in."
+            android:layout_marginTop="10dp"
+            android:textSize="22sp"/>
     </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

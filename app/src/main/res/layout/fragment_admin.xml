@@ -23,12 +23,12 @@
         <TextView
             android:id="@+id/userProfile"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="Admin menu"
             android:textStyle="bold"
-            android:textSize="20sp" />
+            android:textSize="22sp" />
     </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -67,6 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:tooltipText="Frame add user"
             android:paddingRight="15dp">
             <ImageButton
                 android:id="@+id/idImgBtnAddUser"
@@ -89,6 +90,7 @@
             android:id="@+id/idFrame_add_vote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:tooltipText="Frame add vote"
             android:layout_gravity="center"
             android:paddingLeft="15dp">
             <ImageButton
@@ -128,6 +130,7 @@
                     android:id="@+id/idImgBtnProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:tooltipText="Your profile"
                     android:background="#aabbff"
                     android:padding="10dp"
                     android:src="@drawable/ic_profile_foreground"
@@ -156,6 +159,7 @@
                     android:id="@+id/idImgBtnAddDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:tooltipText="Frame add meeting"
                     android:background="#aabbff"
                     android:padding="10dp"
                     android:src="@drawable/ic_calendar_foreground"
@@ -166,7 +170,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="45dp"
                     android:clickable="false"
-                    android:text="Add Date"
+                    android:text="Add Meeting"
                     android:textStyle="bold"
                     android:paddingTop="5dp"/>
             </FrameLayout>

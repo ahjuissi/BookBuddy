@@ -57,7 +57,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Name"
-                                android:textSize="16sp"/>
+                                android:textSize="18sp"/>
 
                             <TextView
                                 android:id="@+id/details_utime_co"
@@ -76,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Title"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:padding="5dp"
                         android:textStyle="bold" />
 
@@ -86,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:text="Description"
                         android:padding="5dp"
-                        android:textSize="17sp"/>
+                        android:textSize="18sp"/>
 
 
                     <LinearLayout
@@ -127,6 +127,7 @@
                             android:id="@+id/details_like_iv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:tooltipText="Like comment"
                             android:layout_gravity="center"
                             android:src="@drawable/heart_selector" />
                         <Space
@@ -192,6 +193,7 @@
             android:id="@+id/sendcomment"
             android:layout_width="55dp"
             android:layout_height="55dp"
+            android:tooltipText="Upload comment"
             android:layout_alignParentEnd="true"
             android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/baseline_send_24" />

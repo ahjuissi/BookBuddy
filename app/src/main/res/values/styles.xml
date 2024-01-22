@@ -2,16 +2,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/activityBackground</item>
-        <item name="colorPrimary">#6478DC</item>
-        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorButtonNormal">@color/colorPrimary</item>
-        <item name="android:buttonCornerRadius" tools:targetApi="p">100dp</item>
         <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorHint">@color/textColorHint</item>
-        <item name="android:fontFamily">@font/lato_family</item>
         <item name="android:editTextBackground">@color/editTextBackground</item>
+        <item name="android:colorButtonNormal">@color/colorPrimaryButton</item>
+        <item name="android:buttonCornerRadius" tools:targetApi="p">100dp</item>
+        <item name="android:fontFamily">@font/lato_family</item>
     </style>
 
     <!-- extend the base theme to add styles available only with API level 21+ -->
@@ -19,6 +19,15 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>
         <item name="android:windowExitTransition">@android:transition/slide_left</item>
+    </style>
+
+    <style name="BottomNavigationTextActive">
+        <item name="android:textSize">12sp</item> <!-- Dostosuj wielkość tekstu dla aktywnego elementu -->
+        <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="BottomNavigationTextInactive">
+        <item name="android:textSize">12sp</item> <!-- Dostosuj wielkość tekstu dla nieaktywnych elementów -->
     </style>
 
 

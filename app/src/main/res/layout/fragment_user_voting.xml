@@ -27,8 +27,8 @@
             <TextView
                 android:id="@+id/userList"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:textSize="20sp"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:text="Vote for books of the next month "
                 android:layout_gravity="center"

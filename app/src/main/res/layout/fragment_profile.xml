@@ -25,22 +25,25 @@
                 android:id="@+id/user_profile_back_btn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/ic_back_btt_foreground" />
+                android:background="@drawable/ic_back_btt_foreground"
+                android:tooltipText="Back btn admin menu" />
 
             <TextView
                 android:id="@+id/userProfile"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="User Profile"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/favBooks"
-                android:layout_gravity="end"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:tooltipText="Favorite books"
                 android:background="@drawable/fav_books" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -125,6 +128,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="15dp"
+        android:textAllCaps="false"
+        android:textColor="@color/activityBackground"
         android:text="Logout" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -133,11 +138,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:tooltipText="Edit profile button"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="15dp"
-        android:src="@drawable/ic_edit_profile_foreground" />
+        android:src="@drawable/baseline_edit_24" />
 
 
 

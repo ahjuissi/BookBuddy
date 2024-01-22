@@ -11,6 +11,6 @@
              -58.862 47.717,-106.58 106.58,-106.58l0,0c36.032,
              -0.281 69.718,17.842 89.339,48.065C215.674,53.517
               249.273,35.441 285.257,35.528z"
-        android:fillColor="@color/colorAccent"/>
+        android:fillColor="?attr/colorAccent"/>
 
 </vector>
