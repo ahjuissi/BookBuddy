@@ -37,6 +37,7 @@ class UserVoteFragment : Fragment() {
     private var winnerCover: ImageView? = null
 
     private lateinit var loadingDialog: AlertDialog
+    private lateinit var loadingPB: ProgressBar
 
 
     override fun onCreateView(
@@ -48,6 +49,9 @@ class UserVoteFragment : Fragment() {
         loadingDialog = createLoadingDialog()
         bindingUserVoting = FragmentUserVotingBinding.inflate(inflater, container, false)
         bindingVoteDesigne = UserVotingViewDesignBinding.inflate(inflater, container, false)
+
+        loadingPB = bindingUserVoting.idLoadingPB
+
         return bindingUserVoting.root
     }
 
@@ -147,22 +151,25 @@ class UserVoteFragment : Fragment() {
                                 Glide.with(this@UserVoteFragment).load(thumbnail).into(winnerCover!!)
 
                                 val winner = WinnerInfo(title, votes.toString())
+                                loadingPB.visibility = View.GONE
                                 data.add(winner)
                             }
                         }
                     }
                 }
 
-                // Aktualizacja interfejsu użytkownika (przykładowo):
+                // Aktualizacja interfejsu użytkownika:
                 if (data.isNotEmpty()) {
                     // Use bindingUserVoting instead of bindingVoteDesigne
                     titleView.text = data[0].bookTitle
                     titleView.append("\nTotal Votes: ${data[0].totalVotes.toString()}")
+                    loadingPB.visibility = View.GONE
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FirebaseError", "Error fetching Winner data: ${error.message}")
+                loadingPB.visibility = View.GONE
             }
         })
     }
