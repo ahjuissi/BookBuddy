@@ -8,6 +8,7 @@
     tools:context=".profileViewUser.EditProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -15,7 +16,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
@@ -44,11 +44,16 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:cardCornerRadius="25dp"
@@ -61,15 +66,6 @@
         android:padding="20dp"
         android:gravity="center_horizontal">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/setting_profile_image"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/ic_profile_pic_foreground" />
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="10dp"/>
     <TextView
         android:id="@+id/edit_profilepic"
         android:layout_width="match_parent"
@@ -97,15 +93,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Change Password "
+        android:text="Change Password"
         android:textAlignment="center"
         android:padding="20dp"
         android:background="@color/editTextBackground"
         android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/edit_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Change City"
+            android:textAlignment="center"
+            android:padding="20dp"
+            android:background="@color/editTextBackground"
+            android:textSize="20sp" />
         <Space
             android:layout_width="0dp"
             android:layout_height="40dp"/>
 
     </LinearLayout>
     </androidx.cardview.widget.CardView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

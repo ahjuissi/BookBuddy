@@ -74,9 +74,8 @@
                     android:layout_height="200dp"
                     android:layout_gravity="top|center_horizontal"
                     android:layout_marginBottom="20dp"
-                    android:background="@drawable/ic_profile_pic_foreground"
                     android:padding="5dp"
-                    android:src="@drawable/ic_images" />
+                    android:src="@drawable/ic_profile_pic_foreground" />
 
                 <TextView
                     android:id="@+id/textViewName"
@@ -101,7 +100,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center_horizontal"
+                    android:layout_marginBottom="8dp"
                     android:text="Email: "
+                    android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/textViewCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:text="City: "
                     android:textSize="18sp" />
 
             </LinearLayout>

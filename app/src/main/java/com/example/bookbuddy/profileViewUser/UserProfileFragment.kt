@@ -27,7 +27,7 @@ import com.google.firebase.firestore.firestore
 class UserProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var bindingProfile: FragmentProfileBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private var db= Firebase.firestore
+    private var db = Firebase.firestore
 
 
     override fun onCreateView(
@@ -97,6 +97,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
                     val name = dataSnapshot.child("name").getValue(String::class.java)
                     val surname = dataSnapshot.child("surname").getValue(String::class.java)
                     val email = dataSnapshot.child("mail").getValue(String::class.java)
+                    val city = dataSnapshot.child("city").getValue(String::class.java)
                     val picture = dataSnapshot.child("imgUrl").getValue(String::class.java)
                     if (picture != null)
                     {
@@ -108,6 +109,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
                     bindingProfile.textViewName.text = "Name: $name"
                     bindingProfile.textViewSurname.text = "Surname: $surname"
                     bindingProfile.textViewEmail.text = "Email: $email"
+                    bindingProfile.textViewCity.text = "City: $city"
 
                     val logoutButton: Button = bindingProfile.logoutButton
                     logoutButton.setOnClickListener {

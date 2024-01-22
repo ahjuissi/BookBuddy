@@ -15,8 +15,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -71,20 +73,21 @@ class EditProfileFragment : Fragment() {
             val userProfileFragment = UserProfileFragment()
             setCurrentFragment(userProfileFragment)
         }
-        bindingEditProfile.editPassword.setOnClickListener{
-            passwordChangeDialog()
+        bindingEditProfile.editProfilepic.setOnClickListener{
+            chooseImageFromGallery()
+            imageDialog.dismiss() // Zamknij dialog po wybraniu zdjęcia z galerii
         }
         bindingEditProfile.editName.setOnClickListener{
             nameChange()
         }
-        bindingEditProfile.editProfilepic.setOnClickListener{
-                chooseImageFromGallery()
-                imageDialog.dismiss() // Zamknij dialog po wybraniu zdjęcia z galerii
-            }
-
-
+        bindingEditProfile.editPassword.setOnClickListener{
+            passwordChangeDialog()
+        }
+        bindingEditProfile.editCity.setOnClickListener{
+            cityChange()
+        }
     }
-    fun chooseImageFromGallery() {
+    private fun chooseImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_CODE_GALLERY)
     }
@@ -100,7 +103,7 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    fun uploadImageToFirebaseStorage(imageUri: Uri) {
+    private fun uploadImageToFirebaseStorage(imageUri: Uri) {
         val userId = firebaseAuth.currentUser?.uid
         // Get a reference to Firebase Storage
         val storage = Firebase.storage
@@ -293,6 +296,64 @@ class EditProfileFragment : Fragment() {
 
         dialog.show()
     }
+    private fun cityChange() {
+        val builder = AlertDialog.Builder(requireContext())
+        val keyCity = "city"
+
+        builder.setTitle("Change City")
+
+        // Tworzenie układu do wyboru miasta
+        val layout = LinearLayout(requireContext())
+        layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(10, 10, 10, 10)
+
+        // Spinner do wyboru miasta
+        val spinner = Spinner(requireContext())
+        val cities = arrayOf("Poznań", "Łódź", "Warszawa")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cities)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        layout.addView(spinner)
+
+        builder.setView(layout)
+
+        builder.setPositiveButton("Upload") { _, _ ->
+            val selectedCity = spinner.selectedItem.toString()
+
+            if (selectedCity.isNotEmpty()) {
+                val databaseReference = FirebaseDatabase.getInstance().reference
+                val firebaseUser = FirebaseAuth.getInstance().currentUser
+
+                firebaseUser?.let { user ->
+                    val userId = user.uid
+                    val userInfoRef = databaseReference.child("userInfo").child(userId)
+                    val updates = hashMapOf<String, Any>(
+                        keyCity to selectedCity
+                    )
+                    userInfoRef.updateChildren(updates)
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                requireContext(),
+                                "City updated",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(
+                                requireContext(),
+                                "Unable to update city",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                }
+            } else {
+                Toast.makeText(requireContext(), "Please select a city", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        builder.create().show()
+    }
+
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)

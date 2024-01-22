@@ -4,7 +4,7 @@
     <string-array name="city_options">
         <item>Poznań</item>
         <item>Łódź</item>
-        <item>Koło</item>
+        <item>Warszawa</item>
     </string-array>
     <string-array name="role_options">
         <item>User</item>

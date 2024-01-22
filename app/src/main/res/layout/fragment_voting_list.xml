@@ -29,6 +29,16 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/ic_back_btt_foreground"/>
+            <TextView
+                android:id="@+id/userProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Voting list"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+
             <Button
                 android:id="@+id/winner"
                 android:layout_width="wrap_content"
@@ -38,7 +48,7 @@
                 android:padding="16dp"
                 android:stateListAnimator="@null"
                 android:backgroundTint="@color/colorAccent"
-                android:text="End of Voting" />
+                android:text="End of\nVoting" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
