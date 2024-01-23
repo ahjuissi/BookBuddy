@@ -148,7 +148,6 @@ class EditProfileFragment : Fragment() {
                 }
         }
     }
-    @SuppressLint("ResourceAsColor")
     private fun nameChange() {
         val builder = AlertDialog.Builder(requireContext())
         val keyName = "name"
@@ -215,17 +214,18 @@ class EditProfileFragment : Fragment() {
         val dialog = builder.create()
         dialog.setOnShowListener {
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            positiveButton.setTextColor(R.color.activityBackground)
+            positiveButton.setTextColor(Color.WHITE)
             positiveButton.setBackgroundColor(
                 ContextCompat.getColor(
-                    requireContext(),R.color.colorPrimary
+                    requireContext(),
+                    R.color.blue
                 )
             )
         }
 
-        builder.create().show()
+
+        dialog.show()
     }
-    @SuppressLint("ResourceAsColor")
     private fun passwordChangeDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Change password.")
@@ -297,18 +297,17 @@ class EditProfileFragment : Fragment() {
         val dialog = builder.create()
         dialog.setOnShowListener {
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            positiveButton.setTextColor(R.color.activityBackground)
+            positiveButton.setTextColor(Color.WHITE)
             positiveButton.setBackgroundColor(
                 ContextCompat.getColor(
-                    requireContext(),R.color.colorPrimary
+                    requireContext(),
+                    R.color.blue
                 )
             )
         }
 
-
         dialog.show()
     }
-    @SuppressLint("ResourceAsColor")
     private fun cityChange() {
         val builder = AlertDialog.Builder(requireContext())
         val keyCity = "city"
@@ -363,19 +362,19 @@ class EditProfileFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please select a city", Toast.LENGTH_LONG).show()
             }
         }
-
         val dialog = builder.create()
         dialog.setOnShowListener {
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            positiveButton.setTextColor(R.color.activityBackground)
+            positiveButton.setTextColor(Color.WHITE)
             positiveButton.setBackgroundColor(
                 ContextCompat.getColor(
-                    requireContext(),R.color.colorPrimary
+                    requireContext(),
+                    R.color.blue
                 )
             )
         }
 
-        builder.create().show()
+        dialog.show()
     }
 
     private fun setCurrentFragment(fragment: Fragment)=

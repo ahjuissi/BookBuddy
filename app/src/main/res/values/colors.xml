@@ -15,6 +15,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="purple">#673AB7</color>
+    <color name="blue">#4C61D6</color>
     <color name="positiveColor">#4CAF50</color>
     <color name="negativeColor">#F44336</color>
     <color name="ic_launcher_background">#AABBFF</color>
