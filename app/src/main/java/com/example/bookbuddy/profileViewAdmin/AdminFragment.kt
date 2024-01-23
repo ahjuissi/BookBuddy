@@ -97,7 +97,8 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         layout.addView(timePicker) // Dodaj TimePicker do layout
 
         val saveButton = Button(requireContext())
-        saveButton.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+        saveButton.text = "Save Date & Time"
+        saveButton.setTextColor(ContextCompat.getColor(requireContext(), com.example.bookbuddy.R.color.activityBackground))
         layout.addView(saveButton) // Dodaj przycisk do layout
 
         scrollView.addView(layout)

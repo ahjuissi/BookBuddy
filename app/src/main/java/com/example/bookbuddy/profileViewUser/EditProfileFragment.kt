@@ -148,6 +148,7 @@ class EditProfileFragment : Fragment() {
                 }
         }
     }
+    @SuppressLint("ResourceAsColor")
     private fun nameChange() {
         val builder = AlertDialog.Builder(requireContext())
         val keyName = "name"
@@ -211,9 +212,20 @@ class EditProfileFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please enter both name and surname", Toast.LENGTH_LONG).show()
             }
         }
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setTextColor(R.color.activityBackground)
+            positiveButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),R.color.colorPrimary
+                )
+            )
+        }
 
         builder.create().show()
     }
+    @SuppressLint("ResourceAsColor")
     private fun passwordChangeDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Change password.")
@@ -285,17 +297,18 @@ class EditProfileFragment : Fragment() {
         val dialog = builder.create()
         dialog.setOnShowListener {
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            positiveButton.setTextColor(Color.WHITE)
+            positiveButton.setTextColor(R.color.activityBackground)
             positiveButton.setBackgroundColor(
                 ContextCompat.getColor(
-                    requireContext(),
-                    R.color.purple
+                    requireContext(),R.color.colorPrimary
                 )
             )
         }
 
+
         dialog.show()
     }
+    @SuppressLint("ResourceAsColor")
     private fun cityChange() {
         val builder = AlertDialog.Builder(requireContext())
         val keyCity = "city"
@@ -349,6 +362,17 @@ class EditProfileFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "Please select a city", Toast.LENGTH_LONG).show()
             }
+        }
+
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setTextColor(R.color.activityBackground)
+            positiveButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),R.color.colorPrimary
+                )
+            )
         }
 
         builder.create().show()
