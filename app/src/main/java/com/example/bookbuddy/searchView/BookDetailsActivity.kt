@@ -43,6 +43,7 @@ class BookDetailsActivity : AppCompatActivity() {
     private lateinit var previewBtn: Button
     private lateinit var addBtn: Button
     private lateinit var favBtn: Button
+    private lateinit var adminCity:String
     override fun onStart() {
         super.onStart()
         addBtn = findViewById(R.id.idBtnAdd)
@@ -53,6 +54,7 @@ class BookDetailsActivity : AppCompatActivity() {
             userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userRole = snapshot.child("role").getValue(String::class.java)
+                     adminCity= snapshot.child("city").getValue(String::class.java).toString()
 
                     if (userRole == "Admin") {
                         println("admin")
@@ -127,13 +129,16 @@ class BookDetailsActivity : AppCompatActivity() {
         addBtn = findViewById(R.id.idBtnAdd)
         addBtn.visibility = View.GONE // Ukryj przycisk domyślnie
         addBtn.setOnClickListener {
-            val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
-            val bookData = HashMap<String, Any>()
-            bookData["title"] = title.toString()
-            bookData["authors"] = authors.toString()
-            bookData["id"]=cleanedOlid
-            bookData["thumbnail"]=thumbnailUrl
-            databaseReference.child(cleanedOlid).setValue(bookData)
+            if (::adminCity.isInitialized) {
+                val databaseReference =
+                    FirebaseDatabase.getInstance().getReference("Voting").child(adminCity)
+                val bookData = HashMap<String, Any>()
+                bookData["title"] = title.toString()
+                bookData["authors"] = authors.toString()
+                bookData["id"] = cleanedOlid
+                bookData["thumbnail"] = thumbnailUrl
+                databaseReference.child(cleanedOlid).setValue(bookData)
+            }
         }
 
         favBtn = findViewById(R.id.idBtnFav)

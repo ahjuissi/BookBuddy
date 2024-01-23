@@ -29,6 +29,7 @@ class NavActivity : AppCompatActivity(){
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var role:String
+    private lateinit var city:String
     private var db= Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,8 +89,11 @@ class NavActivity : AppCompatActivity(){
                         val fetchedRole = dataSnapshot.child("role").getValue(String::class.java)
                         fetchedRole?.let {
                             role = it // Przypisanie pobranej roli do zmiennej globalnej
+
                             // Tutaj możesz wykorzystać zmienną role według potrzeb
-                        } }else {
+                        }
+
+                    }else {
                         Log.d(TAG, "No such document")
                     }
                 }

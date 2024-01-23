@@ -1,5 +1,6 @@
 package com.example.bookbuddy.voteView
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.media.Image
 import android.os.Bundle
@@ -35,6 +36,7 @@ class UserVoteFragment : Fragment() {
     private var winnerTitle: TextView? = null
     private var winnerVotes: TextView? = null
     private var winnerCover: ImageView? = null
+    private lateinit var userCity:String
 
     private lateinit var loadingDialog: AlertDialog
     private lateinit var loadingPB: ProgressBar
@@ -44,7 +46,6 @@ class UserVoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        println("onCreateView")
         // Initialize loading indicator
         loadingDialog = createLoadingDialog()
         bindingUserVoting = FragmentUserVotingBinding.inflate(inflater, container, false)
@@ -59,30 +60,52 @@ class UserVoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("onViewCreated")
         showLoadingDialog() // Show loading indicator before making the database query
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val userId = firebaseAuth.currentUser?.uid
 
-        val winnerReference = FirebaseDatabase.getInstance().getReference("Winner")
-        winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                dismissLoadingDialog() // Hide loading indicator once the data is retrieved
-                if (snapshot.exists()) {
-                    bindingUserVoting.userVotingWinner.visibility = View.VISIBLE
-                    fetchWinner()
-                } else {
-                    setupRecyclerView()
-                    fetchAllBookIdsFromVoting()
-                    fetchVoteList()
+        userId?.let { uid ->
+            val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
+
+            userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        userCity = snapshot.child("city").getValue(String::class.java).toString()
+                        // Move the following logic inside this block
+                        val winnerReference =
+                            FirebaseDatabase.getInstance().getReference("Winner").child(userCity)
+                        winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                dismissLoadingDialog() // Hide loading indicator once the data is retrieved
+                                if (snapshot.exists()) {
+                                    bindingUserVoting.userVotingWinner.visibility = View.VISIBLE
+                                    fetchWinner()
+                                } else {
+                                    println("test")
+                                    setupRecyclerView()
+                                    fetchAllBookIdsFromVoting()
+                                    fetchVoteList()
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.e("FirebaseError", "Error checking Winner branch: ${error.message}")
+                            }
+                        })
+                    } else {
+                        println("User info not found")
+                        dismissLoadingDialog() // Dismiss loading dialog if user info is not found
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("FirebaseError", "Error checking Winner branch: ${error.message}")
-            }
-        })
-
-        dismissLoadingDialog() // Hide loading indicator once the logic is completed
+                override fun onCancelled(error: DatabaseError) {
+                    println("Error fetching user info: ${error.message}")
+                    dismissLoadingDialog() // Dismiss loading dialog in case of error
+                }
+            })
+        }
     }
+
 
     // Helper method to create loading indicator dialog
     private fun createLoadingDialog(): AlertDialog {
@@ -104,31 +127,8 @@ class UserVoteFragment : Fragment() {
         }
     }
 
-
-    private fun checkWinnerBranchExists() {
-        val winnerReference = FirebaseDatabase.getInstance().getReference("Winner")
-
-        winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-
-                    fetchWinner()
-                } else {
-                    // Gałąź "Winner" nie istnieje, pobierz dane z głosowania
-
-                    setupRecyclerView()
-                    fetchVoteList()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("FirebaseError", "Error checking Winner branch: ${error.message}")
-            }
-        })
-    }
-
     private fun fetchWinner() {
-        val winnerReference = FirebaseDatabase.getInstance().getReference("Winner")
+        val winnerReference = FirebaseDatabase.getInstance().getReference("Winner").child(userCity)
         winnerTitle = bindingUserVoting.voteFragmentWinner
         winnerVotes = bindingUserVoting.votesNumber
         winnerCover = bindingUserVoting.idWinnerIVBook
@@ -146,8 +146,7 @@ class UserVoteFragment : Fragment() {
                     bookTitle?.let { title ->
                         numberOfVotes?.let { votes ->
                             thumbnail?.let { thumbnail ->
-                                println(votes)
-                                winnerVotes?.text = votes.toString()
+                                winnerVotes?.text = "Number of likes: $votes"
                                 Glide.with(this@UserVoteFragment).load(thumbnail).into(winnerCover!!)
 
                                 val winner = WinnerInfo(title, votes.toString())
@@ -186,7 +185,7 @@ class UserVoteFragment : Fragment() {
         recyclerView.adapter = adapter
     }
     private fun fetchAllBookIdsFromVoting() {
-        val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
 
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -205,8 +204,8 @@ class UserVoteFragment : Fragment() {
     private fun fetchVoteList() {
         val userId = firebaseAuth.currentUser?.uid
         userId?.let { uid ->
-            val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
-            val userVotesReference = FirebaseDatabase.getInstance().getReference("Voting")
+            val databaseReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
+            val userVotesReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
 
             userVotesReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(userVotesSnapshot: DataSnapshot) {
@@ -228,7 +227,7 @@ class UserVoteFragment : Fragment() {
                                     val thumbnail=childSnapshot.child("thumbnail").getValue(String::class.java).toString()
                                     title?.let { safeTitle ->
                                         authors?.let { safeAuthors ->
-                                            data.add(VotingViewModel(safeTitle, safeAuthors, 0, 0, bookId,thumbnail))
+                                            data.add(VotingViewModel(safeTitle, safeAuthors, 0, 0, bookId,thumbnail,userCity))
                                         }
                                     }
                                 }

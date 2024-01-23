@@ -99,7 +99,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
         fun bind(item: VotingViewModel) {
             titleView.text = item.title
             loadingPB.visibility = View.VISIBLE
-
+            val city=item.city
             itemView.setOnClickListener {
                 // Zaznacz wybrany element
                 selectedItem = item
@@ -107,7 +107,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
             }
             context.let {
                 val thumbnailRef =
-                    FirebaseDatabase.getInstance().getReference("Voting/${item.id}/thumbnail")
+                    FirebaseDatabase.getInstance().getReference("Voting/$city/${item.id}/thumbnail")
                 thumbnailRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val thumbnail = snapshot.getValue(String::class.java)
@@ -183,10 +183,12 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
 
         private fun updateVotesInDatabase(item: VotingViewModel, voteValue: Int) {
             val bookId = item.id
+            val city=item.city
+            println(city)
             val userId = FirebaseAuth.getInstance().currentUser?.uid
             userId?.let { uid ->
                 val votesReference =
-                    FirebaseDatabase.getInstance().getReference("Voting").child(bookId)
+                    FirebaseDatabase.getInstance().getReference("Voting").child(city.toString()).child(bookId)
 
                 // Aktualizacja wartości w bazie danych dla pola bookLikes lub bookDislikes
                 votesReference.addListenerForSingleValueEvent(object : ValueEventListener {

@@ -5,4 +5,6 @@ data class VotingViewModel(
     val bookLikes: Int,
     val bookDislikes: Int,
     val id:String,
-    val thumbnail:String)
+    val thumbnail:String,
+    var city:String?
+)

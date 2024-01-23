@@ -25,7 +25,7 @@ class VoteFragment : Fragment() {
     private lateinit var adapter: VotingAdapter
     lateinit var delete: Button
     private var firebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var userCity:String
+    lateinit var userCity:String
     private lateinit var bookTitle:String
 
     override fun onCreateView(
@@ -39,27 +39,22 @@ class VoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        delete.setOnClickListener {
-            fetchUserCityFromDatabase()
-            checkWinnerTableExistence()
-        }
-        val adminFragment= AdminFragment()
-        bindingVoteList.backBtn.setOnClickListener {
-            setCurrentFragment(adminFragment)
-        }
-        setupRecyclerView()
-        fetchVoteList()
-    }
-    private fun fetchUserCityFromDatabase() {
         val userId = firebaseAuth.currentUser?.uid
         userId?.let {
             val userInfoReference = FirebaseDatabase.getInstance().getReference("userInfo").child(userId)
             userInfoReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     userCity = snapshot.child("city").getValue(String::class.java).toString()
-                    // Tutaj możesz użyć wartości "userCity" w innych częściach kodu
-                    // Na przykład, przekazać wartość "userCity" do funkcji "saveWinnerInfoToDatabase"
-                    // lub gdziekolwiek indziej jest potrzebna wartość "city"
+                    delete.setOnClickListener {
+                        checkWinnerTableExistence()
+                        setCurrentFragment(AdminFragment())
+                    }
+                    val adminFragment= AdminFragment()
+                    bindingVoteList.backBtn.setOnClickListener {
+                        setCurrentFragment(adminFragment)
+                    }
+                    setupRecyclerView()
+                    fetchVoteList()
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -67,15 +62,17 @@ class VoteFragment : Fragment() {
                 }
             })
         }
+
     }
+
     private fun checkWinnerTableExistence() {
-        val databaseReference = FirebaseDatabase.getInstance().getReference("Winner")
-        val databaseVoting = FirebaseDatabase.getInstance().getReference("Voting")
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Winner").child(userCity)
+        val databaseVoting = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!snapshot.exists()) {
                     Log.d("VoteFragment", "Winner table does not exist.")
-                    val votingReference = FirebaseDatabase.getInstance().getReference("Voting")
+                    val votingReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
 
                     votingReference.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(votingSnapshot: DataSnapshot) {
@@ -146,7 +143,7 @@ class VoteFragment : Fragment() {
             val totalLikes = winner.totalVotes
             val city = winner.city
 
-            val winnerReference = FirebaseDatabase.getInstance().getReference("Winner").child(bookId.toString())
+            val winnerReference = FirebaseDatabase.getInstance().getReference("Winner").child(city).child(bookId.toString())
 
             winnerReference.setValue(winner)
                 .addOnSuccessListener {
@@ -173,7 +170,7 @@ class VoteFragment : Fragment() {
     private fun fetchVoteList() {
         val userId = firebaseAuth.currentUser?.uid
         userId?.let {
-            val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
+            val databaseReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
             databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val data = mutableListOf<VotingViewModel>()
@@ -182,7 +179,7 @@ class VoteFragment : Fragment() {
                         val publisher = childSnapshot.child("authors").getValue(String::class.java)
                         val thumbnail=childSnapshot.child("thumbnail").getValue(String::class.java).toString()
                         val id=childSnapshot.child("id").getValue(String::class.java)
-                        title?.let { data.add(VotingViewModel(it, publisher,0,0, id.toString(),thumbnail)) }
+                        title?.let { data.add(VotingViewModel(it, publisher,0,0, id.toString(),thumbnail,userCity)) }
                     }
                     adapter.updateList(data)
                 }
@@ -195,7 +192,7 @@ class VoteFragment : Fragment() {
     }
 
     private fun deleteItemFromDatabase(title: VotingViewModel) {
-        val databaseReference = FirebaseDatabase.getInstance().getReference("Voting")
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
         val titleToDelete = title.title // Pobranie tytułu do usunięcia
         databaseReference.orderByChild("title").equalTo(titleToDelete)
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -216,5 +213,7 @@ class VoteFragment : Fragment() {
             //  addToBackStack(null)
             commit()
         }
+
+
 }
 
