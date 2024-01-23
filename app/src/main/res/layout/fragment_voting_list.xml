@@ -59,6 +59,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="voting list view"
         android:padding="10dp"
         android:layout_marginTop="76dp"
         tools:listitem="@layout/voting_list_view_design" />

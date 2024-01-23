@@ -29,7 +29,7 @@
             android:layout_weight="7"
             android:layout_margin="10dp"
             android:padding="10dp"
-            android:hint="Search"
+            android:hint="Search your book"
             android:textSize="22sp"
             android:layout_height="wrap_content" />
 
@@ -49,6 +49,7 @@
         android:id="@+id/idRVBooks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="searched books view"
         android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         android:layout_below="@id/idCVsearch" />
@@ -64,7 +65,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="15dp"
         android:visibility="gone"
-        android:src="@drawable/ic_edit_profile_foreground" />
+        android:src="@drawable/baseline_edit_24"  />
     <ProgressBar
         android:id="@+id/idLoadingPB"
         android:layout_width="wrap_content"

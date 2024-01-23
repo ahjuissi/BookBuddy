@@ -64,6 +64,7 @@
             android:layout_height="wrap_content"
             android:padding="12dp"
             android:hint="Password"
+            android:contentDescription="Password"
             android:inputType="textPassword"
             android:textAlignment="viewStart" />
         </com.google.android.material.textfield.TextInputLayout>

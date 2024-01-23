@@ -14,6 +14,7 @@ import android.widget.ScrollView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.example.bookbuddy.R
 import com.example.bookbuddy.profileViewUser.UserProfileFragment
 import com.example.bookbuddy.databinding.FragmentAdminBinding
@@ -96,7 +97,7 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         layout.addView(timePicker) // Dodaj TimePicker do layout
 
         val saveButton = Button(requireContext())
-        saveButton.text = "Save Date & Time"
+        saveButton.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
         layout.addView(saveButton) // Dodaj przycisk do layout
 
         scrollView.addView(layout)

@@ -91,6 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:contentDescription="Password"
             android:padding="12dp"
             android:textAlignment="center"
             android:inputType="textPassword" />
@@ -107,6 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Repeat password"
+            android:contentDescription="Repeat password"
             android:padding="12dp"
             android:textAlignment="center"
             android:inputType="textPassword"/>
