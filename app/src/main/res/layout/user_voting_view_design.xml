@@ -25,6 +25,7 @@
             android:layout_height="60dp"
             android:layout_margin="25dp"
             android:layout_gravity="start|start|bottom"
+            android:contentDescription="negative vote"
             android:src="@drawable/baseline_cancel_24" />
 
         <ImageView
@@ -32,6 +33,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="25dp"
+            android:contentDescription="positive vote"
             android:layout_gravity="end|end|bottom"
             android:src="@drawable/baseline_add_circle_24" />
 
@@ -48,6 +50,7 @@
                 android:layout_height="300dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
+                android:contentDescription="book cover"
                 android:padding="5dp"
                 android:src="@drawable/baseline_book_24"
                 android:scaleType="fitCenter"/>

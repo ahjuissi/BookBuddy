@@ -51,7 +51,7 @@
             android:layout_gravity="end|top"
             android:padding="8dp"
             android:layout_margin="5dp"
-            android:tooltipText="Delete"
+            android:contentDescription="Delete"
             android:src="@drawable/baseline_delete_forever_24"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

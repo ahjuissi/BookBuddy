@@ -79,6 +79,7 @@
                     android:layout_height="340dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
+                    android:contentDescription="winner book cover"
                     android:padding="5dp"
                     android:src="@drawable/baseline_book_24"
                     android:scaleType="fitCenter"/>

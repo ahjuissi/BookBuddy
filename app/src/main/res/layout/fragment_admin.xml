@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:tooltipText="Frame add user"
+            android:contentDescription="Frame add user"
             android:paddingRight="15dp">
             <ImageButton
                 android:id="@+id/idImgBtnAddUser"
@@ -90,7 +90,7 @@
             android:id="@+id/idFrame_add_vote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tooltipText="Frame add vote"
+            android:contentDescription="Frame add vote"
             android:layout_gravity="center"
             android:paddingLeft="15dp">
             <ImageButton
@@ -123,6 +123,7 @@
                 android:id="@+id/idFrame_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="Your profile"
                 android:layout_gravity="center"
                 android:paddingRight="15dp">
 
@@ -130,7 +131,6 @@
                     android:id="@+id/idImgBtnProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tooltipText="Your profile"
                     android:background="#aabbff"
                     android:padding="10dp"
                     android:src="@drawable/ic_profile_foreground"
@@ -153,13 +153,13 @@
                 android:id="@+id/idFrame_add_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="Frame add meeting"
                 android:layout_gravity="center"
                 android:paddingLeft="15dp">
                 <ImageButton
                     android:id="@+id/idImgBtnAddDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tooltipText="Frame add meeting"
                     android:background="#aabbff"
                     android:padding="10dp"
                     android:src="@drawable/ic_calendar_foreground"

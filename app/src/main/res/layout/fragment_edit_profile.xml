@@ -28,6 +28,7 @@
                 android:id="@+id/edit_profile_back_btn"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
+                android:contentDescription="Back button user profile"
                 android:background="@drawable/ic_back_btt_foreground"
                 tools:ignore="SpeakableTextPresentCheck" />
             <TextView

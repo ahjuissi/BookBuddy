@@ -28,6 +28,7 @@
                 android:id="@+id/back_btn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:contentDescription="back button user list"
                 android:background="@drawable/ic_back_btt_foreground"/>
             <TextView
                 android:id="@+id/userList"

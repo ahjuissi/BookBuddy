@@ -69,6 +69,7 @@
                             android:id="@+id/details_morebtn_co"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
+                            android:contentDescription="more button"
                             android:background="@drawable/ic_more_foreground"/>
                     </LinearLayout>
                     <TextView
@@ -127,7 +128,7 @@
                             android:id="@+id/details_like_iv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:tooltipText="Like comment"
+                            android:contentDescription="Like comment"
                             android:layout_gravity="center"
                             android:src="@drawable/heart_selector" />
                         <Space
@@ -193,7 +194,7 @@
             android:id="@+id/sendcomment"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:tooltipText="Upload comment"
+            android:contentDescription="Upload comment"
             android:layout_alignParentEnd="true"
             android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/baseline_send_24" />

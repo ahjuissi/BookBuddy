@@ -28,6 +28,7 @@
                 android:id="@+id/back_btn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:contentDescription="back button voting list"
                 android:background="@drawable/ic_back_btt_foreground"/>
             <TextView
                 android:id="@+id/userProfile"
@@ -47,7 +48,8 @@
                 android:layout_margin="10dp"
                 android:padding="16dp"
                 android:stateListAnimator="@null"
-                android:backgroundTint="@color/colorAccent"
+                android:backgroundTint="?attr/colorAccent"
+                android:textColor="@color/activityBackground"
                 android:text="End of\nVoting" />
         </androidx.appcompat.widget.Toolbar>
 

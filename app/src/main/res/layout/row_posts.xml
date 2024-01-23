@@ -30,6 +30,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
+                android:contentDescription="post profile picture"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_profile_pic_foreground"
                 tools:ignore="MissingClass" />
@@ -60,7 +61,7 @@
                 android:id="@+id/morebtn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:tooltipText="Post more button"
+                android:contentDescription="Post more button"
                 android:background="@drawable/ic_more_foreground"/>
 
         </LinearLayout>
@@ -125,7 +126,7 @@
                 android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:src="@drawable/heart_selector"
-                android:tooltipText="Like"
+                android:contentDescription="Like"
                 android:background="?android:selectableItemBackground" />
 
             <Button
