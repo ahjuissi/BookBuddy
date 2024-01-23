@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.bumptech.glide.request.target.Target
+import com.shashank.sony.fancytoastlib.FancyToast
 
 
 class BookDetailsActivity : AppCompatActivity() {
@@ -42,13 +43,14 @@ class BookDetailsActivity : AppCompatActivity() {
     private lateinit var subTimeTV: TextView
     private lateinit var previewBtn: Button
     private lateinit var addBtn: Button
-    private lateinit var favBtn: Button
+    private lateinit var favBtn: ImageView
     private lateinit var adminCity:String
+    private lateinit var userId:String
     override fun onStart() {
         super.onStart()
         addBtn = findViewById(R.id.idBtnAdd)
         val firebaseAuth = FirebaseAuth.getInstance()
-         val userId = firebaseAuth.currentUser?.uid
+          userId = firebaseAuth.currentUser?.uid.toString()
         userId?.let { uid ->
             val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
             userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -74,6 +76,8 @@ class BookDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_details)
+        val firebaseAuth = FirebaseAuth.getInstance()
+        userId = firebaseAuth.currentUser?.uid.toString()
 
         // initializing our variables.
         bookIV = findViewById(R.id.idIVbook)
@@ -100,7 +104,7 @@ class BookDetailsActivity : AppCompatActivity() {
         val subject_people=  intent.getStringExtra("subjectPeople")?.split(", ")?.toMutableList()
         val subject_times = intent.getStringExtra("subjectTimes")?.split(", ")?.toMutableList()
         val publishedDate = intent.getStringExtra("publishedDate")
-
+        favBtn=findViewById(R.id.idBtnFav)
         titleTV.text = title
         val authorsArrayList: ArrayList<String> = ArrayList()
         authors?.let {
@@ -140,22 +144,67 @@ class BookDetailsActivity : AppCompatActivity() {
                 databaseReference.child(cleanedOlid).setValue(bookData)
             }
         }
-
-        favBtn = findViewById(R.id.idBtnFav)
+        checkIfLiked(favBtn, userId)
         favBtn.setOnClickListener{
-            println("test")
+
             val firebaseAuth = FirebaseAuth.getInstance()
             val userId = firebaseAuth.currentUser?.uid
             userId?.let { uid ->
                 val favBook = FirebaseDatabase.getInstance().getReference("userInfo").child(uid).child("favourite")
                 favBook.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        val bookData = HashMap<String, Any>()
-                        bookData["title"] = title.toString()
-                        bookData["authors"] = authors.toString()
-                        bookData["id"]=cleanedOlid
-                        bookData["thumbnail"]=thumbnailUrl
-                        favBook.child(cleanedOlid).setValue(bookData)
+
+                        if (snapshot.exists()) {
+                            favBook.removeValue()
+                                .addOnSuccessListener {
+
+                                    FancyToast.makeText(
+                                        this@BookDetailsActivity,
+                                        "Removed",
+                                        FancyToast.LENGTH_SHORT,
+                                        FancyToast.SUCCESS,
+                                        false
+                                    ).show()
+                                    checkIfLiked(favBtn,uid)
+                                }
+                                .addOnFailureListener { e ->
+                                    FancyToast.makeText(
+                                        this@BookDetailsActivity,
+                                        "Failed to remove: $e",
+                                        FancyToast.LENGTH_SHORT,
+                                        FancyToast.ERROR,
+                                        false
+                                    ).show()
+
+                                }
+                        } else {
+                            val bookData = HashMap<String, Any>()
+                            bookData["title"] = title.toString()
+                            bookData["authors"] = authors.toString()
+                            bookData["id"]=cleanedOlid
+                            bookData["thumbnail"]=thumbnailUrl
+                            favBook.child(cleanedOlid).setValue(bookData)
+                                .addOnSuccessListener {
+
+                                    FancyToast.makeText(
+                                        this@BookDetailsActivity,
+                                        "Added",
+                                        FancyToast.LENGTH_SHORT,
+                                        FancyToast.SUCCESS,
+                                        false
+                                    ).show()
+                                    checkIfLiked(favBtn,uid)
+                                }
+                                .addOnFailureListener { e ->
+                                    FancyToast.makeText(
+                                        this@BookDetailsActivity,
+                                        "Failed to add: $e",
+                                        FancyToast.LENGTH_SHORT,
+                                        FancyToast.ERROR,
+                                        false
+                                    ).show()
+                                }
+                        }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -183,6 +232,22 @@ class BookDetailsActivity : AppCompatActivity() {
             startActivity(i)
         }
 
+    }
+    private fun checkIfLiked(favBtn: ImageView,uid:String) {
+        val favBook = FirebaseDatabase.getInstance().getReference("userInfo").child(uid).child("favourite")
+        favBook.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    favBtn.setImageResource(com.example.bookbuddy.R.drawable.heart_red)
+                } else {
+                    favBtn.setImageResource(com.example.bookbuddy.R.drawable.heart)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Obsługa błędu w bazie danych
+                Toast.makeText(this@BookDetailsActivity, "Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
     private fun loadThumbnailWithRetry(
         id: String,

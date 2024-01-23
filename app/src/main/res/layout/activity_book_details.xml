@@ -155,17 +155,21 @@
                 android:textAllCaps="false" />
 
         </LinearLayout>
-        <Button
+
+        <ImageView
             android:id="@+id/idBtnFav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:layout_gravity="center_horizontal"
-            android:text="  Favourite "
+            android:paddingTop="15dp"
+            android:paddingEnd="15dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:text="Favourite"
+            android:src="@drawable/heart_selector"
+            android:background="?android:selectableItemBackground"
             android:textColor="@color/activityBackground"
-            android:drawableLeft="@drawable/fav_books"
-            android:textAllCaps="false" />
-        <!--button for dodawanie admin-->
+            android:textAllCaps="false"/>
 
 
     </LinearLayout>

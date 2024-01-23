@@ -21,15 +21,10 @@ class LoginActivity : AppCompatActivity() {
         bindingLogin = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(bindingLogin.root)
         firebaseAuth=FirebaseAuth.getInstance()
-        //test NavBar
-        // val NavIntent = Intent(this, NavActivity::class.java)
-        //startActivity(NavIntent)
 
-        
-        //    setContentView(R.layout.activity_login)
         bindingLogin.btnLoginSubmit.setOnClickListener {
-            val email = bindingLogin.etUserName.text.toString() //mail
-            val password = bindingLogin.etPassword.text.toString() // haslo
+            val email = bindingLogin.etUserName.text.toString()
+            val password = bindingLogin.etPassword.text.toString()
             if(email.isNotEmpty() && password.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -44,7 +39,6 @@ class LoginActivity : AppCompatActivity() {
                             val intent = Intent(this, NavActivity::class.java)
                             startActivity(intent)
                         } else {
-
                             FancyToast.makeText(
                                 this@LoginActivity,
                                 "Please verify your email address",
@@ -54,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
                             ).show()
                         }
                     }else {
-
                         FancyToast.makeText(
                             this@LoginActivity,
                             "Email or password are incorrect",
