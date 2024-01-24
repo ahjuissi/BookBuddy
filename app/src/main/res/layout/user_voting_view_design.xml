@@ -13,11 +13,21 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="center">
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
     <androidx.cardview.widget.CardView
         android:id="@+id/likeCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_margin="20dp"
         app:cardCornerRadius="20dp"
         app:cardBackgroundColor="@color/cardViewBackground"
         app:layout_constraintTop_toTopOf="parent"
@@ -87,5 +97,6 @@
             android:visibility="visible"
             tools:ignore="MissingConstraints" />
     </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 </LinearLayout>
 </RelativeLayout>
