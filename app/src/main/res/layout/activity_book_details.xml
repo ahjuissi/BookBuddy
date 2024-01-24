@@ -27,18 +27,19 @@
 
             <ImageView
                 android:id="@+id/idIVbook"
-                android:layout_width="130dp"
-                android:layout_height="160dp"
-                android:layout_margin="18dp"
+                android:layout_width="135dp"
+                android:layout_height="170dp"
+                android:layout_margin="5dp"
                 android:src="@drawable/baseline_broken_image_24"/>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_margin="5dp"
                 android:orientation="vertical">
 
-                <!--text view for displaying book title-->
                 <TextView
                     android:id="@+id/idTVTitle"
                     android:layout_width="match_parent"
@@ -68,9 +69,17 @@
                     android:text="Publish Date"
                     android:textSize="16sp"
                     android:gravity="center" />
+                <ImageView
+                    android:id="@+id/idBtnFav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/baseline_star_gold"
+                    android:contentDescription="favorite book"
+                    android:background="?android:selectableItemBackground" />
 
             </LinearLayout>
-
         </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -155,21 +164,6 @@
                 android:textAllCaps="false" />
 
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/idBtnFav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingEnd="15dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:text="Favourite"
-            android:src="@drawable/heart_selector"
-            android:background="?android:selectableItemBackground"
-            android:textColor="@color/activityBackground"
-            android:textAllCaps="false"/>
 
 
     </LinearLayout>

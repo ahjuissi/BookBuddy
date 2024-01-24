@@ -46,10 +46,6 @@ class NavActivity : AppCompatActivity(){
         val userFragment= UserProfileFragment()
 //        val profileFragment=ProfileFragment()
 
-
-
-
-
         setCurrentFragment(homeFragment)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { item->

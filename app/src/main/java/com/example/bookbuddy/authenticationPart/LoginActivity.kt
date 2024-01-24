@@ -14,8 +14,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var bindingLogin: ActivityLoginBinding
     private lateinit var firebaseAuth:FirebaseAuth
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingLogin = ActivityLoginBinding.inflate(layoutInflater)

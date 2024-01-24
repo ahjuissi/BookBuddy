@@ -238,9 +238,9 @@ class BookDetailsActivity : AppCompatActivity() {
         favBook.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    favBtn.setImageResource(com.example.bookbuddy.R.drawable.heart_red)
+                    favBtn.setImageResource(com.example.bookbuddy.R.drawable.baseline_star_gold)
                 } else {
-                    favBtn.setImageResource(com.example.bookbuddy.R.drawable.heart)
+                    favBtn.setImageResource(com.example.bookbuddy.R.drawable.baseline_star_border)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -249,6 +249,7 @@ class BookDetailsActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun loadThumbnailWithRetry(
         id: String,
         cleanedOlid: String,

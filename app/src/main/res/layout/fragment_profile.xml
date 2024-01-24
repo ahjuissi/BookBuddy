@@ -40,11 +40,11 @@
 
             <Button
                 android:id="@+id/favBooks"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:layout_gravity="end"
                 android:contentDescription="Favorite books"
-                android:background="@drawable/fav_books" />
+                android:background="@drawable/baseline_star_gold" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

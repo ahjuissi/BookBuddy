@@ -53,7 +53,7 @@
                     android:id="@+id/utimetv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="33 min" />
+                    android:text="Date/Time" />
 
             </LinearLayout>
 
@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="1.2K Likes"
+                android:text="Likes"
                 android:textColor="@color/colorPrimary" />
 
             <TextView
@@ -103,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="1.2K Comment"
+                android:text="Comment"
                 android:textAlignment="textEnd"
                 android:textColor="@color/colorPrimary" />
         </LinearLayout>
@@ -126,7 +126,7 @@
                 android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:src="@drawable/heart_selector"
-                android:contentDescription="Like"
+                android:contentDescription="Like post"
                 android:background="?android:selectableItemBackground" />
 
             <Button
