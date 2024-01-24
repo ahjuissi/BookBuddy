@@ -16,7 +16,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_margin="10dp"
             app:cardCornerRadius="20dp"
             app:cardBackgroundColor="@color/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
         android:id="@+id/likeCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         app:cardCornerRadius="20dp"
         app:cardBackgroundColor="@color/cardViewBackground"
         app:layout_constraintTop_toTopOf="parent"
