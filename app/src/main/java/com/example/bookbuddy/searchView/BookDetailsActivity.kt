@@ -64,7 +64,6 @@ class BookDetailsActivity : AppCompatActivity() {
                         addBtn.visibility = View.VISIBLE
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                     // Obsługa błędów, jeśli to konieczne
                 }
@@ -78,7 +77,6 @@ class BookDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_book_details)
         val firebaseAuth = FirebaseAuth.getInstance()
         userId = firebaseAuth.currentUser?.uid.toString()
-
         // initializing our variables.
         bookIV = findViewById(R.id.idIVbook)
         authorsTV = findViewById(R.id.idTVauthors)
@@ -89,7 +87,7 @@ class BookDetailsActivity : AppCompatActivity() {
         subPplTV = findViewById(R.id.idTVSubjectPpl)
         subTimeTV = findViewById(R.id.idTVSubjectTime)
         previewBtn = findViewById(R.id.idBtnPreview)
-
+        favBtn = findViewById(R.id.idBtnFav)
 
 
         // getting the data which we have passed from our adapter class.
@@ -104,7 +102,8 @@ class BookDetailsActivity : AppCompatActivity() {
         val subject_people=  intent.getStringExtra("subjectPeople")?.split(", ")?.toMutableList()
         val subject_times = intent.getStringExtra("subjectTimes")?.split(", ")?.toMutableList()
         val publishedDate = intent.getStringExtra("publishedDate")
-        favBtn=findViewById(R.id.idBtnFav)
+
+        checkIfLiked(favBtn, userId,cleanedOlid)
         titleTV.text = title
         val authorsArrayList: ArrayList<String> = ArrayList()
         authors?.let {
@@ -144,13 +143,12 @@ class BookDetailsActivity : AppCompatActivity() {
                 databaseReference.child(cleanedOlid).setValue(bookData)
             }
         }
-        checkIfLiked(favBtn, userId)
-        favBtn.setOnClickListener{
 
+        favBtn.setOnClickListener{
             val firebaseAuth = FirebaseAuth.getInstance()
             val userId = firebaseAuth.currentUser?.uid
             userId?.let { uid ->
-                val favBook = FirebaseDatabase.getInstance().getReference("userInfo").child(uid).child("favourite")
+                val favBook = FirebaseDatabase.getInstance().getReference("userInfo").child(uid).child("favourite").child(cleanedOlid)
                 favBook.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -165,7 +163,7 @@ class BookDetailsActivity : AppCompatActivity() {
                                         FancyToast.SUCCESS,
                                         false
                                     ).show()
-                                    checkIfLiked(favBtn,uid)
+                                    checkIfLiked(favBtn,uid,cleanedOlid)
                                 }
                                 .addOnFailureListener { e ->
                                     FancyToast.makeText(
@@ -183,7 +181,7 @@ class BookDetailsActivity : AppCompatActivity() {
                             bookData["authors"] = authors.toString()
                             bookData["id"]=cleanedOlid
                             bookData["thumbnail"]=thumbnailUrl
-                            favBook.child(cleanedOlid).setValue(bookData)
+                            favBook.setValue(bookData)
                                 .addOnSuccessListener {
 
                                     FancyToast.makeText(
@@ -193,7 +191,7 @@ class BookDetailsActivity : AppCompatActivity() {
                                         FancyToast.SUCCESS,
                                         false
                                     ).show()
-                                    checkIfLiked(favBtn,uid)
+                                    checkIfLiked(favBtn,uid,cleanedOlid)
                                 }
                                 .addOnFailureListener { e ->
                                     FancyToast.makeText(
@@ -233,22 +231,27 @@ class BookDetailsActivity : AppCompatActivity() {
         }
 
     }
-    private fun checkIfLiked(favBtn: ImageView,uid:String) {
-        val favBook = FirebaseDatabase.getInstance().getReference("userInfo").child(uid).child("favourite")
+    private fun checkIfLiked(favBtn: ImageView, uid: String, cleanedOlid: String) {
+        val favBook = FirebaseDatabase.getInstance().getReference("userInfo").child(uid).child("favourite").child(cleanedOlid)
         favBook.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    favBtn.setImageResource(com.example.bookbuddy.R.drawable.baseline_star_gold)
+                    favBtn.setImageResource(R.drawable.baseline_star_gold)
                 } else {
-                    favBtn.setImageResource(com.example.bookbuddy.R.drawable.baseline_star_border)
+                    favBtn.setImageResource(R.drawable.baseline_star_border)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Obsługa błędu w bazie danych
-                Toast.makeText(this@BookDetailsActivity, "Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@BookDetailsActivity,
+                    "Error: ${databaseError.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
+
 
     private fun loadThumbnailWithRetry(
         id: String,
