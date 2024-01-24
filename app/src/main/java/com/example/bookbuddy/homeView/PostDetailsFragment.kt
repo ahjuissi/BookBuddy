@@ -33,13 +33,11 @@ import java.util.Locale
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-//TODO: {like, likeCount, ComCount}(też w homeFr), Delete post w adapter
 class PostDetailsFragment : Fragment() {
     private var myname: String = ""
     private var myemail: String = ""
     private var mysurname: String = ""
     private var mydp: String = ""
-    private var uimage: String = ""
     private var postId: String = ""
     private var uId: String = ""
 

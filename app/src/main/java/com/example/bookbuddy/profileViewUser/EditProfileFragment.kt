@@ -43,6 +43,7 @@ import java.util.Date
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
+@Suppress("DEPRECATION")
 class EditProfileFragment : Fragment() {
     private lateinit var bindingEditProfile: FragmentEditProfileBinding
     private lateinit var firebaseAuth: FirebaseAuth
@@ -91,10 +92,8 @@ class EditProfileFragment : Fragment() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_CODE_GALLERY)
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImage: Uri? = data.data
             selectedImage?.let {
@@ -108,22 +107,15 @@ class EditProfileFragment : Fragment() {
         // Get a reference to Firebase Storage
         val storage = Firebase.storage
         val storageRef = storage.reference
-
-        // Create a reference to the location where the image will be saved
         val imagesRef = storageRef.child("images/$userId.jpg")
-
         imagesRef.putFile(imageUri).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Pobierz URL przesłanego obrazu
                 imagesRef.downloadUrl.addOnSuccessListener { uri ->
-                    // Tutaj uzyskujesz URL i możesz go wykorzystać, np. przekazać do funkcji uploadInfo
                     uploadInfo(uri.toString())
                 }.addOnFailureListener { exception ->
-                    // Obsługa błędu w przypadku niepowodzenia pobrania URL
                     Log.e(TAG, "Error getting download URL: ${exception.message}")
                 }
             } else {
-                // Obsługa błędu w przypadku niepowodzenia przesłania pliku
                 Log.e(TAG, "Error uploading file: ${task.exception?.message}")
             }
         }
@@ -133,17 +125,11 @@ class EditProfileFragment : Fragment() {
         userId?.let { uid ->
             val databaseReference = FirebaseDatabase.getInstance().reference
             val userInfoRef = databaseReference.child("userInfo").child(uid)
-
-            // Save imgUrl under the current user's ID in the userInfo node
             userInfoRef.child("imgUrl").setValue(imgUrl)
                 .addOnSuccessListener {
-                    // Handle success if necessary
-                    // For example, Log a success message
                     println("Image URL saved successfully")
                 }
                 .addOnFailureListener { e ->
-                    // Handle any errors that may occur during the operation
-                    // For example, Log an error message
                     Log.e(TAG, "Error saving image URL: ${e.message}")
                 }
         }
@@ -376,7 +362,6 @@ class EditProfileFragment : Fragment() {
 
         dialog.show()
     }
-
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
