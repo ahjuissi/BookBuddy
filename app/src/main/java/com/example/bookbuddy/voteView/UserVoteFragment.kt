@@ -174,7 +174,8 @@ class UserVoteFragment : Fragment() {
     }
     private fun setupRecyclerView() {
         recyclerView = bindingUserVoting.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
         val templist: List<VotingViewModel> = emptyList()
         val data: MutableList<VotingViewModel> = templist.toMutableList()
         adapter = UserVoteAdapter(data,requireContext(),
