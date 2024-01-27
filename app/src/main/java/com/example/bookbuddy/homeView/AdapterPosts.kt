@@ -102,7 +102,30 @@ class AdapterPosts(private val context: Context,
             }
         })
     }
-    private fun getImage(uid: String, imageView: CircleImageView) {
+
+    private fun checkIfLiked(pid: String, likebtn: ImageView) {
+        val likesRef =
+            FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes")
+                .child(myuid)
+        likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart_red)
+                } else {
+                    likebtn.setImageResource(com.example.bookbuddy.R.drawable.heart)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Obsługa błędu w bazie danych
+                Toast.makeText(context, "Error: ${databaseError.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+    }
+
+
+        private fun getImage(uid: String, imageView: CircleImageView) {
         val userInfoRef = FirebaseDatabase.getInstance().getReference("userInfo").child(uid)
         userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -169,12 +192,11 @@ class AdapterPosts(private val context: Context,
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu w bazie danych
                 Toast.makeText(context, "Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
-    private fun checkIfLiked(pid: String, likebtn: ImageView) {
+    private fun Glide(pid: String, likebtn: ImageView) {
         val likesRef = FirebaseDatabase.getInstance().getReference("Posts").child(pid).child("Likes").child(myuid)
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

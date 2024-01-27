@@ -34,6 +34,9 @@ class VoteFragment : Fragment() {
     ): View? {
         bindingVoteList = FragmentVotingListBinding.inflate(inflater, container, false)
         delete = bindingVoteList.winner
+        recyclerView = bindingVoteList.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
         return bindingVoteList.root
     }
 
@@ -156,8 +159,6 @@ class VoteFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        recyclerView = bindingVoteList.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val templist: List<VotingViewModel> = emptyList()
         val data: MutableList<VotingViewModel> = templist.toMutableList()
         adapter = VotingAdapter(data,
@@ -183,7 +184,6 @@ class VoteFragment : Fragment() {
                     }
                     adapter.updateList(data)
                 }
-
                 override fun onCancelled(databaseError: DatabaseError) {
                     Log.w(ContentValues.TAG, "Error getting documents: ", databaseError.toException())
                 }

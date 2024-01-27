@@ -167,7 +167,6 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
             }
         }
 
-
         private fun handleVoteButtonClick(position: Int, voteValue: Int) {
             if (position != RecyclerView.NO_POSITION) {
                 val item = mList[position]

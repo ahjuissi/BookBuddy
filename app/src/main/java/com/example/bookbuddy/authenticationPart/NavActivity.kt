@@ -26,7 +26,6 @@ import com.google.firebase.firestore.firestore
 
 class NavActivity : AppCompatActivity(){
     private lateinit var bindingMain: ActivityMainBinding
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var role:String
     private lateinit var city:String
@@ -45,10 +44,6 @@ class NavActivity : AppCompatActivity(){
         val adminFragment= AdminFragment()
         val userFragment= UserProfileFragment()
 //        val profileFragment=ProfileFragment()
-
-
-
-
 
         setCurrentFragment(homeFragment)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)

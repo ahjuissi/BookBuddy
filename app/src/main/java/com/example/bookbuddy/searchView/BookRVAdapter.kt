@@ -40,7 +40,7 @@ class BookRVAdapter(
         holder.bookTitleTV.text = currentBook.title
         holder.bookAuthor.text = currentBook.authors.joinToString(", ")
 
-        val thumbnailUrl = "https://covers.openlibrary.org/b/id/${currentBook.id}-S.jpg"
+        val thumbnailUrl = "https://covers.openlibrary.org/b/id/${currentBook.id}-M.jpg"
         loadThumbnailWithRetry(currentBook, thumbnailUrl, holder.bookThumbnail)
 
         // below line is use to add on click listener for our item of recycler view.
@@ -90,7 +90,7 @@ class BookRVAdapter(
                             nextUrl = when {
                                 url.contains("/id/") -> {
                                     // If loading with ID fails, try OLID
-                                    "https://covers.openlibrary.org/b/olid/${book.olid}-S.jpg"
+                                    "https://covers.openlibrary.org/b/olid/${book.olid}-M.jpg"
                                 }
                                 url.contains("/olid/") -> {
                                     // If OLID fails, stop trying
@@ -98,7 +98,7 @@ class BookRVAdapter(
                                 }
                                 else -> {
                                     // Last attempt: Try OLID if previous attempts fail
-                                    "https://covers.openlibrary.org/b/id/${book.id}-S.jpg"
+                                    "https://covers.openlibrary.org/b/id/${book.id}-M.jpg"
                                 }
                             }
 

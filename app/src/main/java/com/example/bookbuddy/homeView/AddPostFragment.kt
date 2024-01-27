@@ -139,12 +139,8 @@ class AddPostFragment : Fragment() {
                 Toast.makeText(requireContext(), "Published", Toast.LENGTH_LONG).show()
                 title.setText("")
                 des.setText("")
-                //startActivity(Intent(requireContext(), NavActivity::class.java))
-                //requireActivity().finish()
-                //to psuło ^ , tera git
                 val homeFragment = HomeFragment()
                 setCurrentFragment(homeFragment)
-
             }.addOnFailureListener { e ->
                 Toast.makeText(requireContext(), "Failed", Toast.LENGTH_LONG).show()
             }

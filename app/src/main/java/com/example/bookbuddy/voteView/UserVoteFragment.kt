@@ -128,27 +128,29 @@ class UserVoteFragment : Fragment() {
     }
 
     private fun fetchWinner() {
-        val winnerReference = FirebaseDatabase.getInstance().getReference("Winner").child(userCity)
+        val winnerReference = FirebaseDatabase.getInstance()
+            .getReference("Winner").child(userCity)
         winnerTitle = bindingUserVoting.voteFragmentWinner
         winnerVotes = bindingUserVoting.votesNumber
         winnerCover = bindingUserVoting.idWinnerIVBook
         val titleView = bindingVoteDesigne.titleView
-
         winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val data = mutableListOf<WinnerInfo>()
-
                 for (childSnapshot in snapshot.children) {
-                    val bookTitle = childSnapshot.child("bookTitle").getValue(String::class.java)
-                    val numberOfVotes = childSnapshot.child("totalVotes").getValue(Int::class.java)
-                    var thumbnail = childSnapshot.child("thumbnail").getValue(String::class.java).toString()
+                    val bookTitle = childSnapshot.child("bookTitle")
+                        .getValue(String::class.java)
+                    val numberOfVotes = childSnapshot.child("totalVotes")
+                        .getValue(Int::class.java)
+                    var thumbnail = childSnapshot.child("thumbnail")
+                        .getValue(String::class.java).toString()
                     winnerTitle?.text = bookTitle
                     bookTitle?.let { title ->
                         numberOfVotes?.let { votes ->
                             thumbnail?.let { thumbnail ->
                                 winnerVotes?.text = "Number of likes: $votes"
-                                Glide.with(this@UserVoteFragment).load(thumbnail).into(winnerCover!!)
-
+                                Glide.with(this@UserVoteFragment)
+                                    .load(thumbnail).into(winnerCover!!)
                                 val winner = WinnerInfo(title, votes.toString())
                                 loadingPB.visibility = View.GONE
                                 data.add(winner)
@@ -157,9 +159,7 @@ class UserVoteFragment : Fragment() {
                     }
                 }
 
-                // Aktualizacja interfejsu użytkownika:
                 if (data.isNotEmpty()) {
-                    // Use bindingUserVoting instead of bindingVoteDesigne
                     titleView.text = data[0].bookTitle
                     titleView.append("\nTotal Votes: ${data[0].totalVotes.toString()}")
                     loadingPB.visibility = View.GONE
@@ -174,7 +174,8 @@ class UserVoteFragment : Fragment() {
     }
     private fun setupRecyclerView() {
         recyclerView = bindingUserVoting.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
         val templist: List<VotingViewModel> = emptyList()
         val data: MutableList<VotingViewModel> = templist.toMutableList()
         adapter = UserVoteAdapter(data,requireContext(),
@@ -206,18 +207,15 @@ class UserVoteFragment : Fragment() {
         userId?.let { uid ->
             val databaseReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
             val userVotesReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
-
             userVotesReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(userVotesSnapshot: DataSnapshot) {
                     val data = mutableListOf<VotingViewModel>()
 
-                    // Pobranie wszystkich książek dostępnych do głosowania
                     databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             for (childSnapshot in snapshot.children) {
                                 val bookId = childSnapshot.key ?: ""
 
-                                // Sprawdzenie czy użytkownik zagłosował na tę konkretną książkę
                                 val userVotedSnapshot = userVotesSnapshot.child(bookId)
                                 val userVoted = userVotedSnapshot.child("usersVoted").child(uid).getValue(String::class.java)
                                 println(userVoted)
