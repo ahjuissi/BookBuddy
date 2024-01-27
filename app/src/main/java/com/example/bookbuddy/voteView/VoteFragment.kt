@@ -184,7 +184,6 @@ class VoteFragment : Fragment() {
                     }
                     adapter.updateList(data)
                 }
-
                 override fun onCancelled(databaseError: DatabaseError) {
                     Log.w(ContentValues.TAG, "Error getting documents: ", databaseError.toException())
                 }

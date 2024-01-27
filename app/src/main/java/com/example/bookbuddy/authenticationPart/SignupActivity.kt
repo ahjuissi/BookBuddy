@@ -41,7 +41,9 @@ class SignupActivity : AppCompatActivity() {
             val spinner2: Spinner = bindingSignup.spinnerRole
             val role: String = spinner2.selectedItem.toString()
 
-            if (name.isEmpty() || surname.isEmpty() || mail.isEmpty() || password.isEmpty() || city.isEmpty() || role.isEmpty()) {
+            if (name.isEmpty() || surname.isEmpty() || mail.isEmpty()
+                || password.isEmpty() || city.isEmpty() || role.isEmpty())
+            {
                 FancyToast.makeText(
                     this@SignupActivity,
                     "Please insert all the data",
@@ -57,7 +59,8 @@ class SignupActivity : AppCompatActivity() {
                     FancyToast.ERROR,
                     true
                 ).show()
-            } else if (password.length < 6) {
+            }
+            else if (password.length < 6) {
                 FancyToast.makeText(
                     this,
                     "Your password must be at least 6 characters long",
@@ -65,7 +68,8 @@ class SignupActivity : AppCompatActivity() {
                     FancyToast.ERROR,
                     true
                 ).show()
-            } else if (password != password2) {
+            }
+            else if (password != password2) {
                 FancyToast.makeText(
                     this,
                     "Your passwords must match",
@@ -73,37 +77,40 @@ class SignupActivity : AppCompatActivity() {
                     FancyToast.ERROR,
                     true
                 ).show()
-            } else {
+            }
+            else {
                 firebaseAuth.createUserWithEmailAndPassword(mail, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            firebaseAuth.currentUser?.sendEmailVerification()?.addOnCompleteListener{task ->
-                                if(task.isSuccessful){
-                            val userId = firebaseAuth.currentUser?.uid
-                            val userMap = hashMapOf(
-                                "userId" to userId,
-                                "name" to name,
-                                "surname" to surname,
-                                "mail" to mail,
-                                "city" to city,
-                                "role" to role,
-                            )
+                            firebaseAuth.currentUser?.sendEmailVerification()
+                            ?.addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val userId = firebaseAuth.currentUser?.uid
+                                    val userMap = hashMapOf(
+                                        "userId" to userId,
+                                        "name" to name,
+                                        "surname" to surname,
+                                        "mail" to mail,
+                                        "city" to city,
+                                        "role" to role,
+                                    )
                                     if (userId != null) {
-                                        val databaseReference = FirebaseDatabase.getInstance().getReference("userInfo")
+                                        val databaseReference = FirebaseDatabase.getInstance()
+                                            .getReference("userInfo")
                                         databaseReference.child(userId).setValue(userMap)
                                     }
-                            val intent = Intent(this, LoginActivity::class.java)
-                            startActivity(intent)
-
+                                    val intent = Intent(this, LoginActivity::class.java)
+                                    startActivity(intent)
                                 }
+
+                                FancyToast.makeText(
+                                    this,
+                                    "Please click link on your email to verify your account",
+                                    FancyToast.LENGTH_LONG,
+                                    FancyToast.CONFUSING,
+                                    false
+                                ).show()
                             }
-                            FancyToast.makeText(
-                                this,
-                                "Please click link on your email to verify your account",
-                                FancyToast.LENGTH_LONG,
-                                FancyToast.CONFUSING,
-                                false
-                            ).show()
                         } else {
                             FancyToast.makeText(
                                 this,

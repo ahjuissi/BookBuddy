@@ -74,23 +74,21 @@ class UserListFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun userList() {
         recyclerView = bindingUserList.recyclerView
-
         val databaseReference = FirebaseDatabase.getInstance().getReference("userInfo")
         val templist: List<UserViewModel> = emptyList()
         val data: MutableList<UserViewModel> = templist.toMutableList()
         adapter = UserAdapter(data)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
-
         val firebaseAuth = FirebaseAuth.getInstance()
         val userId = firebaseAuth.currentUser?.uid
-
         if (userId != null) {
-            databaseReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            databaseReference.child(userId)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        val userCity = dataSnapshot.child("city").getValue(String::class.java)
-
+                        val userCity = dataSnapshot.child("city")
+                            .getValue(String::class.java)
                         userCity?.let {
                             FirebaseDatabase.getInstance().getReference("userInfo")
                                 .orderByChild("city")
@@ -98,10 +96,14 @@ class UserListFragment : Fragment() {
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         for (childSnapshot in snapshot.children) {
-                                            val id = childSnapshot.child("userId").getValue(String::class.java)
-                                            val name = childSnapshot.child("name").getValue(String::class.java)
-                                            val surname = childSnapshot.child("surname").getValue(String::class.java)
-                                            val mail = childSnapshot.child("mail").getValue(String::class.java)
+                                            val id = childSnapshot.child("userId")
+                                                .getValue(String::class.java)
+                                            val name = childSnapshot.child("name")
+                                                .getValue(String::class.java)
+                                            val surname = childSnapshot.child("surname")
+                                                .getValue(String::class.java)
+                                            val mail = childSnapshot.child("mail")
+                                                .getValue(String::class.java)
                                             data.add(UserViewModel(id, name, surname, mail))
                                         }
                                         adapter.notifyDataSetChanged()

@@ -19,12 +19,12 @@ class LoginActivity : AppCompatActivity() {
         bindingLogin = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(bindingLogin.root)
         firebaseAuth=FirebaseAuth.getInstance()
-
         bindingLogin.btnLoginSubmit.setOnClickListener {
             val email = bindingLogin.etUserName.text.toString()
             val password = bindingLogin.etPassword.text.toString()
             if(email.isNotEmpty() && password.isNotEmpty()) {
-                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener {
                     if (it.isSuccessful) {
                         if (firebaseAuth.currentUser?.isEmailVerified == true) {
                             FancyToast.makeText(
@@ -34,7 +34,8 @@ class LoginActivity : AppCompatActivity() {
                                 FancyToast.SUCCESS,
                                 false
                             ).show()
-                            val intent = Intent(this, NavActivity::class.java)
+                            val intent = Intent(this,
+                                NavActivity::class.java)
                             startActivity(intent)
                         } else {
                             FancyToast.makeText(

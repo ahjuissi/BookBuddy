@@ -74,7 +74,6 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
                 myuCity = dataSnapshot.child("city").getValue(String::class.java)
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu pobierania danych użytkownika
                 activity?.let {
                     Toast.makeText(it, databaseError.message, Toast.LENGTH_LONG).show()
                 }
@@ -83,23 +82,22 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Select Date and Time")
-        // Tworzenie ScrollView z układem zawierającym CalendarView, TimePicker i przyciskiem do zapisania daty i godziny
         val scrollView = ScrollView(requireContext())
         val layout = LinearLayout(requireContext())
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(10, 10, 10, 10)
 
         val calendarView = CalendarView(requireContext())
-        layout.addView(calendarView) // Dodaj CalendarView do layout
+        layout.addView(calendarView)
 
         val timePicker = TimePicker(requireContext())
         timePicker.setIs24HourView(true)
-        layout.addView(timePicker) // Dodaj TimePicker do layout
+        layout.addView(timePicker)
 
         val saveButton = Button(requireContext())
         saveButton.text = "Save Date & Time"
         saveButton.setTextColor(ContextCompat.getColor(requireContext(), com.example.bookbuddy.R.color.activityBackground))
-        layout.addView(saveButton) // Dodaj przycisk do layout
+        layout.addView(saveButton)
 
         scrollView.addView(layout)
         builder.setView(scrollView)
@@ -107,14 +105,11 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         var meetingDate: Long = 0
         var meetingTime: String = ""
 
-        // Listener do wybrania daty z CalendarView
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             val calendar = Calendar.getInstance()
             calendar.set(year, month, dayOfMonth)
             meetingDate = calendar.timeInMillis
         }
-
-        // Listener do wybrania godziny z TimePicker
         timePicker.setOnTimeChangedListener { view, hourOfDay, minute ->
             val timeFormat = if (hourOfDay >= 12) "PM" else "AM"
             meetingTime = String.format(
@@ -125,21 +120,17 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
             )
         }
 
-        // Listener do zapisania daty i godziny
         saveButton.setOnClickListener {
             if (meetingDate != 0L && meetingTime.isNotEmpty() && myuCity != null) {
                 val databaseReference = FirebaseDatabase.getInstance().reference
-
                 val meetingData = hashMapOf<String, Any>(
                     "date" to formatDate(meetingDate),
                     "time" to meetingTime,
                     "city" to myuCity!!
                 )
-
                 val updateData = HashMap<String, Any>()
                 updateData["Meeting/${myuCity!!}"] = meetingData
 
-                // Zapisujemy dane w bazie
                 databaseReference.updateChildren(updateData)
                     .addOnSuccessListener {
                         Toast.makeText(
