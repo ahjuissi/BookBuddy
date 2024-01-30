@@ -50,12 +50,10 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         bindingAdmin.idImgBtnAddUser.setOnClickListener {
             val userListFragment = UserListFragment()
             setCurrentFragment(userListFragment)
-            //  showAddView()
         }
         bindingAdmin.idImgBtnProfile.setOnClickListener {
             val userProfileFragment = UserProfileFragment()
             setCurrentFragment(userProfileFragment)
-            //  showAddView()
         }
         bindingAdmin.idImgBtnAddVote.setOnClickListener {
             val votingFragment = VoteFragment()
@@ -137,7 +135,6 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        // Dismiss the dialog using the stored reference
                         alertDialog?.dismiss()
                     }
                     .addOnFailureListener { e ->
