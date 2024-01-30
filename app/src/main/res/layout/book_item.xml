@@ -11,15 +11,11 @@
     app:cardBackgroundColor="@color/cardViewBackground"
     app:cardElevation="4dp">
 
-    <!--on below line we are creating a
-        linear layout for grid view item-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!--on below line we are creating
-            a simple image view-->
         <ImageView
             android:id="@+id/idIVBook"
             android:layout_width="match_parent"
@@ -31,8 +27,6 @@
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_book_24" />
 
-        <!--on below line we are creating
-            a simple text view-->
         <TextView
             android:id="@+id/idTVBookName"
             android:layout_width="match_parent"
