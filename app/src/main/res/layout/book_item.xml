@@ -38,13 +38,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:lines="2"
-            android:maxLines="2"
             android:padding="4dp"
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             tools:ignore="RtlCompat" />
 
