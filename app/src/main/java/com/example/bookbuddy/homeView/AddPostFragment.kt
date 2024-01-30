@@ -55,13 +55,11 @@ class AddPostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inicjalizacja elementów interfejsu użytkownika
         bindingAddPost = FragmentAddPostBinding.inflate(inflater, container, false)
         val view = bindingAddPost.root
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUser = firebaseAuth.currentUser
         uid = currentUser?.uid ?: ""
-        // Inicjalizacja Firebase Auth i pobranie danych użytkownika
         title = bindingAddPost.postTitle
         des = bindingAddPost.pdes
         upload = bindingAddPost.pupload
@@ -94,9 +92,7 @@ class AddPostFragment : Fragment() {
             val homeFragment = HomeFragment()
             setCurrentFragment(homeFragment)
         }
-        // Obsługa przycisku przesłania postu
         upload.setOnClickListener {
-            // Pobranie danych wprowadzonych przez użytkownika
             val titl = title.text.toString().trim()
             val description = des.text.toString().trim()
 
@@ -119,8 +115,6 @@ class AddPostFragment : Fragment() {
     }
 
 
-
-    // Metoda przesyłająca dane do Firebase Storage i zapisująca dane do Firebase Database
     private fun uploadData(titl: String, description: String,uid:String,name:String,email:String, city:String) {
         val timestamp = System.currentTimeMillis().toString()
 

@@ -40,9 +40,6 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import java.util.Date
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
 @Suppress("DEPRECATION")
 class EditProfileFragment : Fragment() {
     private lateinit var bindingEditProfile: FragmentEditProfileBinding
@@ -55,13 +52,11 @@ class EditProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         bindingEditProfile = FragmentEditProfileBinding.inflate(inflater, container, false)
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         imageDialog = Dialog(requireActivity())
 
-        // Pobierz UID aktualnie zalogowanego użytkownika
         val userId = firebaseAuth.currentUser?.uid
         userId?.let {}  //TODO
         return bindingEditProfile.root
@@ -76,7 +71,7 @@ class EditProfileFragment : Fragment() {
         }
         bindingEditProfile.editProfilepic.setOnClickListener{
             chooseImageFromGallery()
-            imageDialog.dismiss() // Zamknij dialog po wybraniu zdjęcia z galerii
+            imageDialog.dismiss()
         }
         bindingEditProfile.editName.setOnClickListener{
             nameChange()
@@ -104,7 +99,6 @@ class EditProfileFragment : Fragment() {
 
     private fun uploadImageToFirebaseStorage(imageUri: Uri) {
         val userId = firebaseAuth.currentUser?.uid
-        // Get a reference to Firebase Storage
         val storage = Firebase.storage
         val storageRef = storage.reference
         val imagesRef = storageRef.child("images/$userId.jpg")
@@ -252,7 +246,6 @@ class EditProfileFragment : Fragment() {
             val repeatPassword = editTextPass2.text.toString().trim()
 
             if (newPassword.isNotEmpty() && newPassword == repeatPassword) {
-                // Firebase Auth instance
                 val auth = FirebaseAuth.getInstance()
                 val user = auth.currentUser
 
@@ -300,12 +293,10 @@ class EditProfileFragment : Fragment() {
 
         builder.setTitle("Change City")
 
-        // Tworzenie układu do wyboru miasta
         val layout = LinearLayout(requireContext())
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(10, 10, 10, 10)
 
-        // Spinner do wyboru miasta
         val spinner = Spinner(requireContext())
         val cities = arrayOf("Poznań", "Łódź", "Warszawa")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cities)
@@ -365,7 +356,6 @@ class EditProfileFragment : Fragment() {
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
-            //    addToBackStack(null)
             commit()
         }
             companion object {

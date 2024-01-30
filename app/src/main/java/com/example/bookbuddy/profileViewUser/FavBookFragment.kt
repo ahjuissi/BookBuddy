@@ -38,16 +38,13 @@ import com.google.firebase.database.ValueEventListener
                 setCurrentFragment(UserProfileFragment())
             }
 
-            // Inicjalizacja adaptera
             adapter = FavBookAdapter(mutableListOf())
 
-            // Ustawienie adaptera dla recyclerView
             recyclerView = bindingFavBookFragment.recyclerView
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             recyclerView.adapter = adapter
 
             booklist()
-            // Inflate the layout for this fragment
             return bindingFavBookFragment.root
         }
 
@@ -95,7 +92,6 @@ import com.google.firebase.database.ValueEventListener
         private fun setCurrentFragment(fragment: Fragment) =
             parentFragmentManager.beginTransaction().apply {
                 replace(R.id.flFragment, fragment)
-                //  addToBackStack(null)
                 commit()
             }
     }

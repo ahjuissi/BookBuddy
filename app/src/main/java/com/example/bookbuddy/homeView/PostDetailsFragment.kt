@@ -80,7 +80,6 @@ class PostDetailsFragment : Fragment() {
         postId = arguments?.getString("pid") ?: ""
         uId = arguments?.getString("uid") ?: ""
 
-        //przypisz i aktualizuj adapter RecyclerView
         commentList = ArrayList()
         adapterComment = AdapterComment(requireContext(), commentList, myuid, postId)
         recyclerViewCom?.adapter = adapterComment
@@ -125,14 +124,14 @@ class PostDetailsFragment : Fragment() {
         loadPostInfo()
 
         likebtn?.setOnClickListener {
-            likePost() { // Po kliknięciu polubienia, przekażemy funkcję zwrotną do aktualizacji licznika polubień
+            likePost() {
                 getLikesCount()
                 checkIfLiked()
             }
         }
         sendb?.setOnClickListener {
-            postComment { // Po dodaniu komentarza, przekażemy funkcję zwrotną do aktualizacji licznika komentarzy
-                typeComment?.setText("") // Wyczyszczenie pola tekstowego po dodaniu komentarza
+            postComment {
+                typeComment?.setText("")
                 getCommentsCount()
             }
         }
@@ -148,9 +147,7 @@ class PostDetailsFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     val imgUri = dataSnapshot.child("imgUrl").value.toString()
-                    // Jeśli istnieje skrót do zdjęcia w Storage
                     if (imgUri.isNotEmpty()) {
-                        // Pobierz adres URI obrazu z Firebase Storage
                         context?.let {
                             Glide.with(it)
                                 .load(imgUri)
@@ -188,7 +185,6 @@ class PostDetailsFragment : Fragment() {
         popupMenu.menu.add(android.view.Menu.NONE, 0, 0, "DELETE")
         popupMenu.setOnMenuItemClickListener { item ->
             if (item.itemId == 0) {
-                // Delete the post from the database
                 val postsRef = FirebaseDatabase.getInstance().getReference("Posts").child(postId)
                 postsRef.removeValue()
                     .addOnSuccessListener {
@@ -207,19 +203,15 @@ class PostDetailsFragment : Fragment() {
     private fun currentUserInfo(){
         val userId = firebaseAuth.currentUser?.uid
         userId?.let { uid ->
-            // Referencja do węzła userInfo dla danego użytkownika
             val userRef = databaseReference.child("userInfo").child(uid)
 
-            // Odczytanie danych z bazy danych
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
-                        // Odczytanie danych i przypisanie do zmiennych
                          myname = snapshot.child("name").getValue(String::class.java).toString()
                          myemail = snapshot.child("mail").getValue(String::class.java).toString()
                         mysurname= snapshot.child("surname").getValue(String::class.java).toString()
                     } else {
-                        // Jeśli węzeł nie istnieje
                         Log.d("UserInfo", "User data not found")
                     }
                 }
@@ -246,7 +238,6 @@ class PostDetailsFragment : Fragment() {
                         val uemail = post["uemail"] as? String ?: ""
                         val hisname = post["uname"] as? String ?: ""
                         val ptime = post["ptime"] as? String ?: ""
-                        // Użyj wydobytych danych do aktualizacji interfejsu użytkownika
                         val calendar = Calendar.getInstance(Locale.ENGLISH)
                         calendar.timeInMillis = ptime.toLong()
                         val timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString()
@@ -268,7 +259,6 @@ class PostDetailsFragment : Fragment() {
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Użytkownik już polubił post, usuń polubienie
                     likesRef.removeValue()
                         .addOnSuccessListener {
                             Toast.makeText(context, "Unliked", Toast.LENGTH_SHORT).show()
@@ -278,7 +268,6 @@ class PostDetailsFragment : Fragment() {
                             Toast.makeText(context, "Failed to unlike: $e", Toast.LENGTH_SHORT).show()
                         }
                 } else {
-                    // Użytkownik nie polubił jeszcze postu, polub post
                     likesRef.setValue(true)
                         .addOnSuccessListener {
                             Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show()
@@ -290,7 +279,6 @@ class PostDetailsFragment : Fragment() {
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu w bazie danych
                 Toast.makeText(context, "Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -306,7 +294,6 @@ class PostDetailsFragment : Fragment() {
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu w bazie danych
                 Toast.makeText(context, "Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -320,7 +307,6 @@ class PostDetailsFragment : Fragment() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu
                 pLikeCount!!.text = "Error"
             }
         })
@@ -333,7 +319,6 @@ class PostDetailsFragment : Fragment() {
                 pCommentCount!!.text = "Comments: $commentsCount"
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu
                 pCommentCount!!.text = "Error"
             }
         })
@@ -347,12 +332,10 @@ class PostDetailsFragment : Fragment() {
                     val modelComment: ModelComment? = dataSnapshot1.getValue(ModelComment::class.java)
                     modelComment?.let { comments.add(it) }
                 }
-                // Przekazanie nowej listy komentarzy do adaptera
                 adapterComment.updateComments(comments)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędów związanych z anulowaniem operacji odczytu z bazy danych
             }
         })
     }
@@ -388,7 +371,6 @@ class PostDetailsFragment : Fragment() {
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
-            //    addToBackStack(null)
             commit()
         }
 

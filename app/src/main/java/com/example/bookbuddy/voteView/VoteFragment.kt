@@ -107,7 +107,6 @@ class VoteFragment : Fragment() {
                                 }
                             }
                             databaseVoting.removeValue()
-//test
                             winnerBookId.takeIf { it.isNotEmpty() }?.let {
                                 val winner = WinnerInfo(userId, userCity, it, maxLikes, bookTitle, thumbnail)
                                 winnerData.add(winner)
@@ -123,13 +122,11 @@ class VoteFragment : Fragment() {
                     databaseReference.removeValue()
                         .addOnSuccessListener {
                             Log.d("VoteFragment", "Winner table deleted successfully.")
-                            // Tutaj możesz dodać kod, który ma być wykonany po usunięciu tabeli "Winner"
                         }
                         .addOnFailureListener { e ->
                             Log.e("VoteFragment", "Error deleting Winner table: $e")
                         }
                 }
-                // Tutaj możesz dodać kod, który ma być wykonany bez względu na istnienie tabeli Winner
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -137,8 +134,6 @@ class VoteFragment : Fragment() {
             }
         })
     }
-
-    // Funkcja zapisująca dane do tabeli Winner dla każdej książki z osobna
     private fun saveWinnerInfoToDatabase(winnerData: List<WinnerInfo>) {
         for (winner in winnerData) {
             val userId = winner.userId
@@ -162,8 +157,8 @@ class VoteFragment : Fragment() {
         val templist: List<VotingViewModel> = emptyList()
         val data: MutableList<VotingViewModel> = templist.toMutableList()
         adapter = VotingAdapter(data,
-            onItemClick = { selectedItem -> /* Obsługa kliknięcia elementu */ },
-            onDeleteClick = { selectedItem -> deleteItemFromDatabase(selectedItem) } // Usunięcie elementu z listy
+            onItemClick = { selectedItem ->},
+            onDeleteClick = { selectedItem -> deleteItemFromDatabase(selectedItem) }
         )
         recyclerView.adapter = adapter
     }
@@ -193,7 +188,7 @@ class VoteFragment : Fragment() {
 
     private fun deleteItemFromDatabase(title: VotingViewModel) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("Voting").child(userCity)
-        val titleToDelete = title.title // Pobranie tytułu do usunięcia
+        val titleToDelete = title.title
         databaseReference.orderByChild("title").equalTo(titleToDelete)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -210,7 +205,6 @@ class VoteFragment : Fragment() {
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
-            //  addToBackStack(null)
             commit()
         }
 

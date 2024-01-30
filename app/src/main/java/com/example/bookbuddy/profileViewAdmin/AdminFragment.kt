@@ -40,7 +40,6 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         bindingAdmin = FragmentAdminBinding.inflate(inflater, container, false)
 
         return bindingAdmin.root
@@ -60,7 +59,6 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         }
         bindingAdmin.idImgBtnAddVote.setOnClickListener {
             val votingFragment = VoteFragment()
-            // Ustawiamy fragment w aktywności
             setCurrentFragment(votingFragment)
         }
         bindingAdmin.idImgBtnAddDate.setOnClickListener {
@@ -158,12 +156,9 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
             }
         }
 
-        // Create the dialog and assign it to the global variable
         alertDialog = builder.create()
         alertDialog?.show()
     }
-
-    // Funkcja do formatowania wybranej daty dla Toast
     private fun formatDate(timestamp: Long): String {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = timestamp
@@ -174,7 +169,6 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
-        //    addToBackStack(null)
             commit()
         }
 }

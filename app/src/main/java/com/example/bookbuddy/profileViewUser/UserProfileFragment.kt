@@ -34,12 +34,10 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         bindingProfile = FragmentProfileBinding.inflate(inflater, container, false)
 
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        // Pobierz UID aktualnie zalogowanego użytkownika
         val userId = firebaseAuth.currentUser?.uid
         userId?.let { uid ->
             val userInfoRef =
@@ -57,7 +55,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    // Obsługa błędu odczytu danych z bazy danych
                 }
             })
         }
@@ -68,7 +65,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        bindingProfile = FragmentProfileBinding.bind(view)
 
         bindingProfile.editProfileFab.setOnClickListener{
             val editProfileFragment = EditProfileFragment()
@@ -125,7 +121,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędów
             }
         })
     }
@@ -133,7 +128,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
-            //    addToBackStack(null)
             commit()
         }
 

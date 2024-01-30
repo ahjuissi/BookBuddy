@@ -62,12 +62,10 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
 
 
         init {
-            // Ustawienie nasłuchiwania kliknięć na przycisku imageViewNegative
             itemView.findViewById<ImageView>(R.id.imageViewNegative).setOnClickListener {
                 handleVoteButtonClick(adapterPosition, -1)
             }
 
-            // Ustawienie nasłuchiwania kliknięć na przycisku imageViewPositive
             itemView.findViewById<ImageView>(R.id.imageViewPositive).setOnClickListener {
                 handleVoteButtonClick(adapterPosition, 1)
             }
@@ -101,7 +99,6 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
             loadingPB.visibility = View.VISIBLE
             val city=item.city
             itemView.setOnClickListener {
-                // Zaznacz wybrany element
                 selectedItem = item
                 onItemClick(item)
             }
@@ -171,12 +168,12 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
             if (position != RecyclerView.NO_POSITION) {
                 val item = mList[position]
                 updateVotesInDatabase(item, voteValue)
-                mList.removeAt(position) // Usunięcie elementu z listy
-                notifyDataSetChanged() // Odświeżenie widoku RecyclerView
+                mList.removeAt(position)
+                notifyDataSetChanged()
                 if (voteValue == -1) {
-                    onNegativeVoteClick.invoke(item) // Wywołanie odpowiedniej akcji
+                    onNegativeVoteClick.invoke(item)
                 } else
-                    onPositiveVoteClick.invoke(item) // Wywołanie odpowiedniej akcji
+                    onPositiveVoteClick.invoke(item)
             }
         }
 
@@ -189,7 +186,6 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
                 val votesReference =
                     FirebaseDatabase.getInstance().getReference("Voting").child(city.toString()).child(bookId)
 
-                // Aktualizacja wartości w bazie danych dla pola bookLikes lub bookDislikes
                 votesReference.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val bookLikes = snapshot.child("bookLikes").getValue(Int::class.java) ?: 0
@@ -200,16 +196,16 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
                         val updatedDislikes =
                             if (voteValue == -1) bookDislikes + 1 else bookDislikes
 
-                        // Aktualizacja pola bookLikes lub bookDislikes
+
                         votesReference.child("bookLikes").setValue(updatedLikes)
                         votesReference.child("bookDislikes").setValue(updatedDislikes)
 
-                        // Dodanie informacji o użytkowniku oddającym głos
+
                         votesReference.child("usersVoted").child(uid).setValue("true")
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        // Obsługa błędu pobierania danych z bazy danych
+
                         Log.e(TAG, "Error updating votes in database: ", error.toException())
                     }
                 })

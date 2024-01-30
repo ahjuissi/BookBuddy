@@ -43,7 +43,6 @@ class NavActivity : AppCompatActivity(){
         val searchFragment= SearchFragment()
         val adminFragment= AdminFragment()
         val userFragment= UserProfileFragment()
-//        val profileFragment=ProfileFragment()
 
         setCurrentFragment(homeFragment)
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
@@ -60,7 +59,6 @@ class NavActivity : AppCompatActivity(){
                     }
                 }
 
-//                R.id.profile->setCurrentFragment(profileFragment)
             }
             true
         }
@@ -83,9 +81,7 @@ class NavActivity : AppCompatActivity(){
                     if (dataSnapshot.exists()) {
                         val fetchedRole = dataSnapshot.child("role").getValue(String::class.java)
                         fetchedRole?.let {
-                            role = it // Przypisanie pobranej roli do zmiennej globalnej
-
-                            // Tutaj możesz wykorzystać zmienną role według potrzeb
+                            role = it
                         }
 
                     }else {

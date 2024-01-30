@@ -43,10 +43,7 @@ class BookRVAdapter(
         val thumbnailUrl = "https://covers.openlibrary.org/b/id/${currentBook.id}-M.jpg"
         loadThumbnailWithRetry(currentBook, thumbnailUrl, holder.bookThumbnail)
 
-        // below line is use to add on click listener for our item of recycler view.
         holder.itemView.setOnClickListener {
-            // inside on click listener method we are calling a new activity
-            // and passing all the data of that item in next intent.
             val i = Intent(context, BookDetailsActivity::class.java)
             i.putExtra("title", currentBook.title)
             i.putExtra("id",currentBook.id)
@@ -58,8 +55,6 @@ class BookRVAdapter(
             i.putExtra("subjectTimes", currentBook.subjectTimes)
             i.putExtra("publishedDate", currentBook.publishedDate)
 
-            // after passing that data we are
-            // starting our new intent.
             context.startActivity(i)
         }
     }
@@ -89,15 +84,12 @@ class BookRVAdapter(
 
                             nextUrl = when {
                                 url.contains("/id/") -> {
-                                    // If loading with ID fails, try OLID
                                     "https://covers.openlibrary.org/b/olid/${book.olid}-M.jpg"
                                 }
                                 url.contains("/olid/") -> {
-                                    // If OLID fails, stop trying
                                     url
                                 }
                                 else -> {
-                                    // Last attempt: Try OLID if previous attempts fail
                                     "https://covers.openlibrary.org/b/id/${book.id}-M.jpg"
                                 }
                             }
@@ -126,8 +118,6 @@ class BookRVAdapter(
         return bookList.size
     }
     class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // on below line we are initializing our
-        // course name text view and our image view.
         val bookTitleTV: TextView = itemView.findViewById(R.id.idTVBookName)
         val bookThumbnail: ImageView = itemView.findViewById(R.id.idIVBook)
         var bookAuthor: TextView = itemView.findViewById(R.id.idTVBookAuthor)

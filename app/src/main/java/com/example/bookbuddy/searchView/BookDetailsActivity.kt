@@ -31,8 +31,6 @@ import com.shashank.sony.fancytoastlib.FancyToast
 
 class BookDetailsActivity : AppCompatActivity() {
 
-    // creating variables for strings,text view,
-    // image views and button.
     private lateinit var bookIV: ImageView
     private lateinit var authorsTV: TextView
     private lateinit var publisherDateTV: TextView
@@ -60,12 +58,10 @@ class BookDetailsActivity : AppCompatActivity() {
 
                     if (userRole == "Admin") {
                         println("admin")
-                        // Jeśli użytkownik ma rolę "Admin", pokaż przycisk
                         addBtn.visibility = View.VISIBLE
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    // Obsługa błędów, jeśli to konieczne
                 }
             })
         }
@@ -90,7 +86,6 @@ class BookDetailsActivity : AppCompatActivity() {
         favBtn = findViewById(R.id.idBtnFav)
 
 
-        // getting the data which we have passed from our adapter class.
         val title = intent.getStringExtra("title")
         val id = intent.getStringExtra("id").toString()
         val olid = intent.getStringExtra("olid").toString()
@@ -107,12 +102,12 @@ class BookDetailsActivity : AppCompatActivity() {
         titleTV.text = title
         val authorsArrayList: ArrayList<String> = ArrayList()
         authors?.let {
-            val maxAuthors = minOf(authors.size, 4) // Ograniczenie do maksymalnie 4 autorów
+            val maxAuthors = minOf(authors.size, 4)
             for (j in 0 until maxAuthors) {
                 authorsArrayList.add(authors[j])
             }
         }
-        val authorsText = authorsArrayList.joinToString(", ") // Łączenie autorów przecinkami
+        val authorsText = authorsArrayList.joinToString(", ")
         authorsTV.text = authorsText
 
         val thumbnailUrl = "https://covers.openlibrary.org/b/id/${id}-L.jpg"
@@ -130,7 +125,7 @@ class BookDetailsActivity : AppCompatActivity() {
         descTV.text = description
 
         addBtn = findViewById(R.id.idBtnAdd)
-        addBtn.visibility = View.GONE // Ukryj przycisk domyślnie
+        addBtn.visibility = View.GONE
         addBtn.setOnClickListener {
             if (::adminCity.isInitialized) {
                 val databaseReference =
@@ -206,16 +201,12 @@ class BookDetailsActivity : AppCompatActivity() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        // Obsługa błędów, jeśli to konieczne
                     }
                 })
         }
         }
-        // adding on click listener for our preview button.
         previewBtn.setOnClickListener {
             if (previewLink.isNullOrEmpty()) {
-                // below toast message is displayed
-                // when preview link is not present.
                 Toast.makeText(
                     this@BookDetailsActivity,
                     "No preview Link present",
@@ -223,8 +214,6 @@ class BookDetailsActivity : AppCompatActivity() {
                 )
                     .show()
             }
-            // if the link is present we are opening
-            // that link via an intent.
             val uri: Uri = Uri.parse(previewLink)
             val i = Intent(Intent.ACTION_VIEW, uri)
             startActivity(i)
@@ -242,7 +231,6 @@ class BookDetailsActivity : AppCompatActivity() {
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu w bazie danych
                 Toast.makeText(
                     this@BookDetailsActivity,
                     "Error: ${databaseError.message}",

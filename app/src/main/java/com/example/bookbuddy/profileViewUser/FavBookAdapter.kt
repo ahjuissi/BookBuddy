@@ -51,7 +51,6 @@ class FavBookAdapter(private val mList: MutableList<FavBookViewModel>) : Recycle
         private val titleView: TextView = itemView.findViewById(R.id.titleView)
         private val authorView :TextView = itemView.findViewById(R.id.publisherView)
         private val idIVBook: ImageView = itemView.findViewById(R.id.idIVBook)
-      //  private var loadingPB: ProgressBar = itemView.findViewById(R.id.idLoadingPB)
         private val context = itemView.context
 
         init {
@@ -96,12 +95,10 @@ class FavBookAdapter(private val mList: MutableList<FavBookViewModel>) : Recycle
                                 )
                             }
                         }
-                    //    loadingPB.visibility = View.GONE
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                 //   loadingPB.visibility = View.GONE
                 }
             })
         }

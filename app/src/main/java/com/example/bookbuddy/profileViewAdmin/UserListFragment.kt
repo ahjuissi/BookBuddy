@@ -35,8 +35,6 @@ class UserListFragment : Fragment() {
 
         bindingUserList = FragmentUserListBinding.inflate(inflater, container, false)
         val adminFragment= AdminFragment()
-            //    val db = FirebaseFirestore.getInstance()
-      //  val firebaseAuth = FirebaseAuth.getInstance()
         val userId = firebaseAuth.currentUser?.uid
 
         if (userId != null) {
@@ -49,12 +47,10 @@ class UserListFragment : Fragment() {
                         val userCity = dataSnapshot.child("city").getValue(String::class.java)
                         bindingUserList.userList.text = "User List of $userCity"
                     } else {
-                        // Handle situation where data doesn't exist
                     }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Handle error
                 }
             })
         }
@@ -64,10 +60,7 @@ class UserListFragment : Fragment() {
         }
 
         userList()
-        // Inflate the layout for this fragment
         return bindingUserList.root
-        //return inflater.inflate(R.layout.fragment_user_list, container, false)
-
 
     }
 
@@ -131,11 +124,6 @@ class UserListFragment : Fragment() {
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
-          //  addToBackStack(null)
             commit()
         }
-
-
-
-
     }

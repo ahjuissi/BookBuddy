@@ -42,13 +42,12 @@ class VotingAdapter(private var mList: MutableList<VotingViewModel>,
         private val publisherView: TextView = itemView.findViewById(R.id.publisherView)
         private val bookLayout: LinearLayout = itemView.findViewById(R.id.Book)
         init {
-            // Ustawienie nasłuchiwania kliknięć na przycisku delButton
             itemView.findViewById<ImageView>(R.id.delButton).setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val item = mList[position]
-                    mList.removeAt(position) // Usunięcie elementu z listy
-                    notifyDataSetChanged() // Odświeżenie widoku RecyclerView
+                    mList.removeAt(position)
+                    notifyDataSetChanged()
                     onDeleteClick.invoke(item) // Wywoł
                 }
             }
@@ -76,7 +75,6 @@ class VotingAdapter(private var mList: MutableList<VotingViewModel>,
                 titleView.text = item.title
                 publisherView.text = item.publisher
                 itemView.setOnClickListener {
-                    // Zaznacz wybrany element
                     selectedItem = item
                     onItemClick(item)
                 }

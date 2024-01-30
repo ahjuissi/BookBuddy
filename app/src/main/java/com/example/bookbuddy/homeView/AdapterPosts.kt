@@ -70,7 +70,6 @@ class AdapterPosts(private val context: Context,
             comment.setOnClickListener {
                 val postDetailsFragment = PostDetailsFragment()
                 val bundle = Bundle()
-                // Przekazanie ID posta do PostDetailsFragment
                 bundle.putString("pid", post.ptime)
                 bundle.putString("uid", post.uid)
                 postDetailsFragment.arguments = bundle
@@ -97,7 +96,6 @@ class AdapterPosts(private val context: Context,
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu
                 likeCountTextView.text = "Error"
             }
         })
@@ -117,7 +115,6 @@ class AdapterPosts(private val context: Context,
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu w bazie danych
                 Toast.makeText(context, "Error: ${databaseError.message}", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -131,17 +128,13 @@ class AdapterPosts(private val context: Context,
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     val imgUri = dataSnapshot.child("imgUrl").value.toString()
-                    // Jeśli istnieje skrót do zdjęcia w Storage
                     if (imgUri.isNotEmpty()) {
-                        // Pobierz adres URI obrazu z Firebase Storage
                         Glide.with(context)
                             .load(imgUri)
                             .into(imageView)
                         println(imgUri)
                     }
                 } else {
-                    // Ustaw domyślny obraz, jeśli brak skrótu do zdjęcia
-                    // imageView.setImageResource(R.drawable.default_image)
                 }
             }
 
@@ -161,7 +154,6 @@ class AdapterPosts(private val context: Context,
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu
                 commentsCountTextView.text = "Error"
             }
         })
@@ -171,7 +163,6 @@ class AdapterPosts(private val context: Context,
         likesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Użytkownik już polubił post, usuń polubienie
                     likesRef.removeValue()
                         .addOnSuccessListener {
                             Toast.makeText(context, "Unliked", Toast.LENGTH_SHORT).show()
@@ -180,7 +171,6 @@ class AdapterPosts(private val context: Context,
                             Toast.makeText(context, "Failed to unlike: $e", Toast.LENGTH_SHORT).show()
                         }
                 } else {
-                    // Użytkownik nie polubił jeszcze postu, polub post
                     likesRef.setValue(true)
                         .addOnSuccessListener {
                             Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show()
@@ -207,7 +197,6 @@ class AdapterPosts(private val context: Context,
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu w bazie danych
                 Toast.makeText(context, "Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -217,7 +206,6 @@ class AdapterPosts(private val context: Context,
         popupMenu.menu.add(android.view.Menu.NONE, 0, 0, "DELETE")
         popupMenu.setOnMenuItemClickListener { item ->
             if (item.itemId == 0) {
-                // Delete the post from the database
                 val postIdToDelete = modelPosts!![position]?.ptime ?: ""
                 deletePost(postIdToDelete)
             }

@@ -45,7 +45,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         bindingHome = FragmentHomeBinding.inflate(inflater, container, false)
         recyclerViewPosts = bindingHome.recyclerviewPosts
         recyclerViewPosts.setHasFixedSize(true)
@@ -54,7 +53,6 @@ class HomeFragment : Fragment() {
         layoutManager.stackFromEnd = true
         recyclerViewPosts.layoutManager = layoutManager
 
-        // Inicjalizacja i połączenie adaptera z RecyclerView
         adapterPosts = AdapterPosts(requireActivity(), posts)
         recyclerViewPosts.adapter = adapterPosts
 
@@ -78,10 +76,7 @@ class HomeFragment : Fragment() {
             setCurrentFragment(addPostFragment)
         }
         swipeRefreshLayout.setOnRefreshListener {
-            // on below line we are setting is refreshing to false.
             swipeRefreshLayout.isRefreshing = false
-            // on below line we are notifying adapter
-            // that data has changed in recycler view.
             recyclerViewPosts.adapter = adapterPosts
             adapterPosts.notifyDataSetChanged()
 
@@ -100,7 +95,6 @@ class HomeFragment : Fragment() {
                     if (isMeetingDateInPast(meetingDate)) {
                         dateTV?.text = "No meeting scheduled"
                     } else {
-                        // Wyświetlenie daty i godziny spotkania w dateTV
                         dateTV?.text = "$meetingDate $meetingTime"
                     }
                 } else {
@@ -115,7 +109,6 @@ class HomeFragment : Fragment() {
         })
     }
     private fun isMeetingDateInPast(meetingDate: String?): Boolean {
-        // Sprawdź, czy data spotkania jest wcześniejsza niż dzisiaj
         meetingDate?.let {
             val currentDate = DateFormat.format("dd/MM/yyyy", Calendar.getInstance().time).toString()
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
@@ -134,7 +127,7 @@ class HomeFragment : Fragment() {
                 loadDate()
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                // Obsługa błędu pobierania danych użytkownika
+
                 activity?.let {
                     Toast.makeText(it, databaseError.message, Toast.LENGTH_LONG).show()
                 }
@@ -150,12 +143,10 @@ class HomeFragment : Fragment() {
                     val modelPost = dataSnapshot1.getValue(ModelPost::class.java)
                     val postCity = modelPost?.city
 
-                    // Sprawdź, czy miasto postu zgadza się z miastem zalogowanego użytkownika
                     if (postCity == myuCity) {
                         posts?.add(modelPost)
                     }
                 }
-                // Aktualizacja danych w adapterze
                 adapterPosts.updateData(posts)
             }
 
@@ -169,7 +160,6 @@ class HomeFragment : Fragment() {
     private fun setCurrentFragment(fragment: Fragment)=
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
-            //    addToBackStack(null)
             commit()
         }
 

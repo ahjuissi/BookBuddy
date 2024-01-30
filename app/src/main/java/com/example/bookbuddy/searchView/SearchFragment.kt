@@ -32,7 +32,6 @@ import java.io.IOException
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
-    //    private lateinit var bindingSearch: FragmentSearchBinding
     lateinit var sendButton: FloatingActionButton
     private lateinit var bindingSearch: FragmentSearchBinding
     lateinit var mRequestQueue: RequestQueue
@@ -57,7 +56,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     val userRole = snapshot.child("role").getValue(String::class.java)
 
                     if (userRole == "Admin") {
-                        // Jeśli użytkownik ma rolę "Admin", pokaż przycisk
                         sendButton.visibility = View.VISIBLE
                     }
                 }
@@ -87,17 +85,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // adding click listener for search button
         searchBtn.setOnClickListener {
             loadingPB.visibility = View.VISIBLE
             val searchTerm = searchEdt.text.toString()
-            // checking if our edittext field is empty or not.
             if (searchTerm.isEmpty()) {
-                searchEdt.error = "Please enter a search query" // Ustawienie błędu dla pola wyszukiwania
-                loadingPB.visibility = View.GONE // Ukrycie wskaźnika ładowania, ponieważ nie ma żadnego zapytania
+                searchEdt.error = "Please enter a search query"
+                loadingPB.visibility = View.GONE
             } else {
                 println("edit nie pusty leciiiii")
-                getBooksData(searchTerm) // Wywołanie funkcji, jeśli pole wyszukiwania nie jest puste
+                getBooksData(searchTerm)
 
             }
         }
@@ -108,7 +104,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val request = Request.Builder().url(url).build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                // Handle errors
                 Log.w("TAG", "onFailure")
                 requireActivity().runOnUiThread {
                     loadingPB.visibility = View.GONE
@@ -118,10 +113,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun onResponse(call: Call, response: Response) {
                 if (!response.isSuccessful) {
                     Log.e("TAG", "Non-successful response: ${response.code}")
-                    // Handle non-successful response (e.g., display an error message)
                     requireActivity().runOnUiThread {
                         loadingPB.visibility = View.GONE
-                        // You might want to update your UI to indicate the error here
                     }
                     return
                 }
@@ -133,8 +126,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     Log.e("TAG", "Empty response data")
                     requireActivity().runOnUiThread {
                         loadingPB.visibility = View.GONE
-                        // Handle the case when the response data is empty
-                        // You might want to update your UI to indicate that the response data is empty here
                     }
                     return
                 }
@@ -145,10 +136,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 } catch (e: JSONException) {
                     Log.e("TAG", "JSON Parsing Error: ${e.message}")
                     e.printStackTrace()
-                    // Handle JSON parsing error
                     requireActivity().runOnUiThread {
                         loadingPB.visibility = View.GONE
-                        // You might want to update your UI to indicate the parsing error here
                     }
                 }
             }
@@ -172,7 +161,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     val authorsArray = bookObject.optJSONArray("author_name")
                     val authorsArrayList: ArrayList<String> = ArrayList()
                     if (authorsArray!!.length() != 0) {
-                        val maxAuthors = minOf(authorsArray.length(), 4) // Ograniczenie do maksymalnie 4 autorów
+                        val maxAuthors = minOf(authorsArray.length(), 4)
                         for (j in 0 until maxAuthors) {
                             authorsArrayList.add(authorsArray.optString(j))
                         }
@@ -189,7 +178,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         "",
                         ""
                     )
-                    fetchBookDetailsAndUpdateList(bookInfo, olid, booksList) //test
+                    fetchBookDetailsAndUpdateList(bookInfo, olid, booksList)
                     fetchBookDescriptionAndUpdateList(bookInfo, olid, booksList)
                     booksList.add(bookInfo)
                 }
@@ -203,7 +192,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun updateListWithData(booksList: List<BookDetailsRVModel>) {
         val adapter = BookRVAdapter(booksList, requireContext())
         val layoutManager = GridLayoutManager(requireContext(), 3)
-        // Aktualizacja widoku RecyclerView na wątku głównym
         requireActivity().runOnUiThread {
             val mRecyclerView = requireView().findViewById<RecyclerView>(R.id.idRVBooks)
             mRecyclerView.layoutManager = layoutManager
@@ -218,7 +206,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         client.newCall(descriptionRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                // Handle description request failure
                 Log.e("TAG", "Details request failed: ${e.message}")
             }
 
@@ -283,7 +270,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         client.newCall(descriptionRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                // Handle description request failure
                 Log.e("TAG", "Description request failed: ${e.message}")
             }
 
@@ -291,7 +277,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 override fun onResponse(call: Call, response: Response) {
             if (!response.isSuccessful) {
                 Log.e("TAG", "Non-successful response: ${response.code}")
-                // Handle non-successful response (e.g., display an error message)
                 return
             }
 
@@ -299,11 +284,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             try {
                 val descriptionJsonObject = JSONObject(descriptionResponseData!!)
                 val description = descriptionJsonObject.optString("description")
-                // Clean up the description text
                 val cleanDescription = description
-                    .replace("\\r\\n", "\n") // Replace "\r\n" with newline
-                    .replace(Regex("\\{.*?\\}"), "") // Remove text inside curly braces
-                    .trim() // Remove leading and trailing whitespaces
+                    .replace("\\r\\n", "\n")
+                    .replace(Regex("\\{.*?\\}"), "")
+                    .trim()
 
                 val updatedDescription = if (cleanDescription.startsWith("{")) {
                     cleanDescription.substringAfter("\"value\":").trim()
@@ -318,7 +302,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             } catch (e: JSONException) {
                 Log.e("TAG", "JSON Parsing Error: ${e.message}")
                 e.printStackTrace()
-                // Handle JSON parsing error
             }
         }
     })
@@ -326,7 +309,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun setCurrentFragment(fragment: Fragment) =
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, fragment)
-            //    addToBackStack(null)
             commit()
         }
 }

@@ -46,7 +46,6 @@ class UserVoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        // Initialize loading indicator
         loadingDialog = createLoadingDialog()
         bindingUserVoting = FragmentUserVotingBinding.inflate(inflater, container, false)
         bindingVoteDesigne = UserVotingViewDesignBinding.inflate(inflater, container, false)
@@ -60,7 +59,7 @@ class UserVoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showLoadingDialog() // Show loading indicator before making the database query
+        showLoadingDialog()
         val firebaseAuth = FirebaseAuth.getInstance()
         val userId = firebaseAuth.currentUser?.uid
 
@@ -71,12 +70,11 @@ class UserVoteFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         userCity = snapshot.child("city").getValue(String::class.java).toString()
-                        // Move the following logic inside this block
                         val winnerReference =
                             FirebaseDatabase.getInstance().getReference("Winner").child(userCity)
                         winnerReference.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
-                                dismissLoadingDialog() // Hide loading indicator once the data is retrieved
+                                dismissLoadingDialog()
                                 if (snapshot.exists()) {
                                     bindingUserVoting.userVotingWinner.visibility = View.VISIBLE
                                     fetchWinner()
@@ -94,20 +92,19 @@ class UserVoteFragment : Fragment() {
                         })
                     } else {
                         println("User info not found")
-                        dismissLoadingDialog() // Dismiss loading dialog if user info is not found
+                        dismissLoadingDialog()
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     println("Error fetching user info: ${error.message}")
-                    dismissLoadingDialog() // Dismiss loading dialog in case of error
+                    dismissLoadingDialog()
                 }
             })
         }
     }
 
 
-    // Helper method to create loading indicator dialog
     private fun createLoadingDialog(): AlertDialog {
         val builder = AlertDialog.Builder(requireContext())
         builder.setView(R.layout.loading_indicator)
@@ -115,12 +112,12 @@ class UserVoteFragment : Fragment() {
         return builder.create()
     }
 
-    // Helper method to show loading indicator
+
     private fun showLoadingDialog() {
         loadingDialog.show()
     }
 
-    // Helper method to dismiss loading indicator
+
     private fun dismissLoadingDialog() {
         if (loadingDialog.isShowing) {
             loadingDialog.dismiss()
@@ -179,9 +176,9 @@ class UserVoteFragment : Fragment() {
         val templist: List<VotingViewModel> = emptyList()
         val data: MutableList<VotingViewModel> = templist.toMutableList()
         adapter = UserVoteAdapter(data,requireContext(),
-            onItemClick = { selectedItem -> /* Obsługa kliknięcia elementu */ },
-            onNegativeVoteClick = { selectedItem -> /* Obsługa kliknięcia negatywnego głosu */ },
-            onPositiveVoteClick = { selectedItem -> /* Obsługa kliknięcia pozytywnego głosu */ }
+            onItemClick = { selectedItem ->  },
+            onNegativeVoteClick = { selectedItem ->  },
+            onPositiveVoteClick = { selectedItem -> }
         )
         recyclerView.adapter = adapter
     }
@@ -192,7 +189,6 @@ class UserVoteFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (childSnapshot in snapshot.children) {
                     val bookId = childSnapshot.key
-                    // bookId to nazwa (klucz) dziecka w węźle "Voting"
                     Log.d("ChildKey", bookId ?: "Key is null")
                 }
             }
