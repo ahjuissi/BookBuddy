@@ -25,7 +25,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
-//TODO: imie + nazwisko , to samo w postDetailsFr
+
 
 class AdapterPosts(private val context: Context,
                    private var modelPosts: MutableList<ModelPost?>?) :
@@ -139,7 +139,7 @@ class AdapterPosts(private val context: Context,
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
 

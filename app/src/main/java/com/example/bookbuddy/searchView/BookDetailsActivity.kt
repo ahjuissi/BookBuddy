@@ -73,7 +73,6 @@ class BookDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_book_details)
         val firebaseAuth = FirebaseAuth.getInstance()
         userId = firebaseAuth.currentUser?.uid.toString()
-        // initializing our variables.
         bookIV = findViewById(R.id.idIVbook)
         authorsTV = findViewById(R.id.idTVauthors)
         publisherDateTV = findViewById(R.id.idTVPublishDate)

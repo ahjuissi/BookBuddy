@@ -176,7 +176,7 @@ class PostDetailsFragment : Fragment() {
                 }
             }
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
         })
     }
@@ -223,7 +223,7 @@ class PostDetailsFragment : Fragment() {
         }
     }
     private fun loadPostInfo() {
-        //TODO: pPicture profilowe
+
         val databaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         val query: Query = databaseReference.orderByChild("ptime").equalTo(postId)
         query.addValueEventListener(object : ValueEventListener {
@@ -249,7 +249,6 @@ class PostDetailsFragment : Fragment() {
                 }
             }
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Obsługa błędów związanych z anulowaniem operacji odczytu z bazy danych
                 }
 
         })

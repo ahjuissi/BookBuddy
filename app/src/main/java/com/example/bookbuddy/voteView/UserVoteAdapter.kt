@@ -1,4 +1,5 @@
 package com.example.bookbuddy.voteView
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -164,6 +165,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
             }
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         private fun handleVoteButtonClick(position: Int, voteValue: Int) {
             if (position != RecyclerView.NO_POSITION) {
                 val item = mList[position]
@@ -176,6 +178,7 @@ class UserVoteAdapter(private var mList: MutableList<VotingViewModel>,
                     onPositiveVoteClick.invoke(item)
             }
         }
+
 
         private fun updateVotesInDatabase(item: VotingViewModel, voteValue: Int) {
             val bookId = item.id

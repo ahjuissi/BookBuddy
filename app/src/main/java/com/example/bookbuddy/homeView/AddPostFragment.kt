@@ -1,14 +1,6 @@
 package com.example.bookbuddy.homeView
 
-import android.Manifest
-import android.app.Activity
-import android.app.ProgressDialog
-import android.content.ContentValues
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
+
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
@@ -37,7 +29,7 @@ import com.google.firebase.storage.UploadTask
 import java.io.ByteArrayOutputStream
 
 class AddPostFragment : Fragment() {
-    // Deklaracje zmiennych
+
     private lateinit var bindingAddPost: FragmentAddPostBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var title: EditText
@@ -49,7 +41,6 @@ class AddPostFragment : Fragment() {
     private  var uid: String=""
     private lateinit var dp: String
     private lateinit var databaseReference: DatabaseReference
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

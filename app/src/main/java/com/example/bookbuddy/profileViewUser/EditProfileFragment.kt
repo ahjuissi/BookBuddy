@@ -58,7 +58,7 @@ class EditProfileFragment : Fragment() {
         imageDialog = Dialog(requireActivity())
 
         val userId = firebaseAuth.currentUser?.uid
-        userId?.let {}  //TODO
+        userId?.let {}
         return bindingEditProfile.root
     }
 
@@ -134,7 +134,6 @@ class EditProfileFragment : Fragment() {
         val keySurname = "surname"
         builder.setTitle("Update $keyName and $keySurname")
 
-        // Tworzenie układu do wprowadzenia nowej nazwy
         val layout = LinearLayout(requireContext())
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(10, 10, 10, 10)
@@ -145,7 +144,6 @@ class EditProfileFragment : Fragment() {
         textInputLayoutName.addView(editTextName)
         layout.addView(textInputLayoutName)
 
-        // Dodane
         val textInputLayoutSurname = TextInputLayout(requireContext())
         val editTextSurname = EditText(requireContext())
         textInputLayoutSurname.hint = "Enter surname"
@@ -210,7 +208,6 @@ class EditProfileFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Change password.")
 
-        // Tworzenie układu do wprowadzenia nowej nazwy
         val layout = LinearLayout(requireContext())
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(10, 10, 10, 10)

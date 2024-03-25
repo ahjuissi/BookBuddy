@@ -48,7 +48,7 @@ class VotingAdapter(private var mList: MutableList<VotingViewModel>,
                     val item = mList[position]
                     mList.removeAt(position)
                     notifyDataSetChanged()
-                    onDeleteClick.invoke(item) // Wywoł
+                    onDeleteClick.invoke(item)
                 }
             }
             itemView.findViewById<LinearLayout>(R.id.Book).setOnClickListener {
